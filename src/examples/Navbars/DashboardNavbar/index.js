@@ -154,7 +154,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               />
             </SuiBox>
             <SuiBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in">
+              {/* <Link to="/authentication/sign-in">
                 <IconButton sx={navbarIconButton} size="small">
                   <Icon
                     sx={({ palette: { dark, white } }) => ({
@@ -171,7 +171,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                     Sign in
                   </SuiTypography>
                 </IconButton>
-              </Link>
+              </Link> */}
               <IconButton
                 size="small"
                 color="inherit"
