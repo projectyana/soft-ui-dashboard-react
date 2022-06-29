@@ -37,6 +37,8 @@ Coded by www.creative-tim.com
 
 // Soft UI Dashboard React layouts
 import Dashboard from "layouts/dashboard";
+import Posts from "pages/posts";
+
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
 import VirtualReality from "layouts/virtual-reality";
@@ -131,4 +133,18 @@ const routes = [
   },
 ];
 
-export default routes;
+// Customer Routes
+const appRoutes = [
+  {
+    type: "collapse",
+    name: "Posts",
+    key: "posts",
+    route: "/posts",
+    icon: <Shop size="12px" />,
+    component: <Posts />,
+    noCollapse: true,
+  },
+  ...routes,
+];
+
+export default appRoutes;
