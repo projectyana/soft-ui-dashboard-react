@@ -1,3 +1,5 @@
+/*eslint-disable */
+
 /**
 =========================================================
 * Soft UI Dashboard React - v3.1.0
@@ -21,11 +23,17 @@ import App from "App";
 // Soft UI Dashboard React Context Provider
 import { SoftUIControllerProvider } from "context";
 
+// Redux Store
+import { Provider } from "react-redux";
+import store from "store";
+
 ReactDOM.render(
   <BrowserRouter>
-    <SoftUIControllerProvider>
-      <App />
-    </SoftUIControllerProvider>
+    <Provider store={store}>
+      <SoftUIControllerProvider>
+        <App />
+      </SoftUIControllerProvider>
+    </Provider>
   </BrowserRouter>,
   document.getElementById("root")
 );

@@ -14,6 +14,8 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { authLogin, authLogout } from "store/authSlice";
 
 // react-router components
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
@@ -42,7 +44,23 @@ export default function App() {
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, direction, layout, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
+  const [appRoutes, setAppRoutes] = useState([]);
   const { pathname } = useLocation();
+  const reduxDispatch = useDispatch();
+
+  const storageToken = localStorage.getItem("token");
+  const { token } = useSelector((state) => state.auth);
+
+  // Check if authentication
+  const checkAuth = () => {
+    if (!storageToken) {
+      setAppRoutes(routes.publicPath);
+      return reduxDispatch(authLogout());
+    }
+
+    setAppRoutes(routes.protectedPath);
+    return reduxDispatch(authLogin({ token: storageToken }));
+  };
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -71,8 +89,13 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
+  // Check token and setup routes
+  useEffect(() => {
+    checkAuth();
+  }, [storageToken, token]);
+
   const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
+    allRoutes?.map((route) => {
       if (route.collapse) {
         return getRoutes(route.collapse);
       }
@@ -87,24 +110,21 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {layout === "dashboard" && (
+      {storageToken && layout === "dashboard" && (
         <>
           <Sidenav
             color={sidenavColor}
             brand={brand}
             brandName="Test Project"
-            routes={routes}
+            routes={appRoutes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
           <Configurator />
-          {/* {configsButton} */}
         </>
       )}
-      <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
-      </Routes>
+
+      <Routes> {getRoutes(appRoutes)} </Routes>
     </ThemeProvider>
   );
 }
