@@ -23,50 +23,62 @@ import SuiInputRoot from "components/SuiInput/SuiInputRoot";
 import SuiInputWithIconRoot from "components/SuiInput/SuiInputWithIconRoot";
 import SuiInputIconBoxRoot from "components/SuiInput/SuiInputIconBoxRoot";
 import SuiInputIconRoot from "components/SuiInput/SuiInputIconRoot";
+import SuiTypography from "components/SuiTypography";
 
 // Soft UI Dashboard React contexts
 import { useSoftUIController } from "context";
 
-const SuiInput = forwardRef(({ size, icon, error, success, disabled, ...rest }, ref) => {
-  let template;
-  const [controller] = useSoftUIController();
-  const { direction } = controller;
-  const iconDirection = icon.direction;
+const SuiInput = forwardRef(
+  ({ size, icon, error, errorMessage, success, disabled, ...rest }, ref) => {
+    let template;
+    const [controller] = useSoftUIController();
+    const { direction } = controller;
+    const iconDirection = icon.direction;
 
-  if (icon.component && icon.direction === "left") {
-    template = (
-      <SuiInputWithIconRoot ref={ref} ownerState={{ error, success, disabled }}>
-        <SuiInputIconBoxRoot ownerState={{ size }}>
-          <SuiInputIconRoot fontSize="small" ownerState={{ size }}>
-            {icon.component}
-          </SuiInputIconRoot>
-        </SuiInputIconBoxRoot>
-        <SuiInputRoot
-          {...rest}
-          ownerState={{ size, error, success, iconDirection, direction, disabled }}
-        />
-      </SuiInputWithIconRoot>
-    );
-  } else if (icon.component && icon.direction === "right") {
-    template = (
-      <SuiInputWithIconRoot ref={ref} ownerState={{ error, success, disabled }}>
-        <SuiInputRoot
-          {...rest}
-          ownerState={{ size, error, success, iconDirection, direction, disabled }}
-        />
-        <SuiInputIconBoxRoot ownerState={{ size }}>
-          <SuiInputIconRoot fontSize="small" ownerState={{ size }}>
-            {icon.component}
-          </SuiInputIconRoot>
-        </SuiInputIconBoxRoot>
-      </SuiInputWithIconRoot>
-    );
-  } else {
-    template = <SuiInputRoot {...rest} ref={ref} ownerState={{ size, error, success, disabled }} />;
+    if (icon.component && icon.direction === "left") {
+      template = (
+        <SuiInputWithIconRoot ref={ref} ownerState={{ error, success, disabled }}>
+          <SuiInputIconBoxRoot ownerState={{ size }}>
+            <SuiInputIconRoot fontSize="small" ownerState={{ size }}>
+              {icon.component}
+            </SuiInputIconRoot>
+          </SuiInputIconBoxRoot>
+          <SuiInputRoot
+            {...rest}
+            ownerState={{ size, error, success, iconDirection, direction, disabled }}
+          />
+        </SuiInputWithIconRoot>
+      );
+    } else if (icon.component && icon.direction === "right") {
+      template = (
+        <SuiInputWithIconRoot ref={ref} ownerState={{ error, success, disabled }}>
+          <SuiInputRoot
+            {...rest}
+            ownerState={{ size, error, success, iconDirection, direction, disabled }}
+          />
+          <SuiInputIconBoxRoot ownerState={{ size }}>
+            <SuiInputIconRoot fontSize="small" ownerState={{ size }}>
+              {icon.component}
+            </SuiInputIconRoot>
+          </SuiInputIconBoxRoot>
+        </SuiInputWithIconRoot>
+      );
+    } else {
+      template = (
+        <>
+          <SuiInputRoot {...rest} ref={ref} ownerState={{ size, error, success, disabled }} />
+          {error && (
+            <SuiTypography variant="overline" color="error" fontWeight="light">
+              {errorMessage}
+            </SuiTypography>
+          )}
+        </>
+      );
+    }
+
+    return template;
   }
-
-  return template;
-});
+);
 
 // Setting default values for the props of SuiInput
 SuiInput.defaultProps = {
@@ -76,6 +88,7 @@ SuiInput.defaultProps = {
     direction: "none",
   },
   error: false,
+  errorMessage: "",
   success: false,
   disabled: false,
 };
@@ -88,6 +101,7 @@ SuiInput.propTypes = {
     direction: PropTypes.oneOf(["none", "left", "right"]),
   }),
   error: PropTypes.bool,
+  errorMessage: PropTypes.string,
   success: PropTypes.bool,
   disabled: PropTypes.bool,
 };
