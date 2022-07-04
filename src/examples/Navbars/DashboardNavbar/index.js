@@ -14,9 +14,11 @@ Coded by www.creative-tim.com
 */
 
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { authLogout } from "store/authSlice";
 
 // react-router components
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -59,10 +61,12 @@ import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 
 function DashboardNavbar({ absolute, light, isMini }) {
+  const reduxDispatch = useDispatch();
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
+  const [openUserSettings, setOpenUserSettings] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
 
   useEffect(() => {
@@ -93,8 +97,42 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
+
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
+
+  const handleOpenSettings = (event) => setOpenUserSettings(event.currentTarget);
+  const handleCloseSettings = () => setOpenUserSettings(false);
+
+  const handleUserLogout = () => reduxDispatch(authLogout());
+
+  // Render the settings menu
+  const renderSettings = () => (
+    <Menu
+      anchorEl={openUserSettings}
+      anchorReference={null}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "left",
+      }}
+      open={Boolean(openUserSettings)}
+      onClose={handleCloseSettings}
+      sx={{ mt: 2 }}
+    >
+      <IconButton sx={navbarIconButton} onClick={() => handleUserLogout()}>
+        <Icon
+          sx={({ palette: { dark, white } }) => ({
+            color: light ? white.main : dark.main,
+          })}
+        >
+          account_circle
+        </Icon>
+        <SuiTypography variant="button" fontWeight="medium" color={light ? "white" : "dark"}>
+          Sign out
+        </SuiTypography>
+      </IconButton>
+    </Menu>
+  );
 
   // Render the notifications menu
   const renderMenu = () => (
@@ -147,31 +185,13 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </SuiBox>
         {isMini ? null : (
           <SuiBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <SuiBox pr={1}>
+            {/* <SuiBox pr={1}>
               <SuiInput
                 placeholder="Type here..."
                 icon={{ component: "search", direction: "left" }}
               />
-            </SuiBox>
+            </SuiBox> */}
             <SuiBox color={light ? "white" : "inherit"}>
-              {/* <Link to="/authentication/sign-in">
-                <IconButton sx={navbarIconButton} size="small">
-                  <Icon
-                    sx={({ palette: { dark, white } }) => ({
-                      color: light ? white.main : dark.main,
-                    })}
-                  >
-                    account_circle
-                  </Icon>
-                  <SuiTypography
-                    variant="button"
-                    fontWeight="medium"
-                    color={light ? "white" : "dark"}
-                  >
-                    Sign in
-                  </SuiTypography>
-                </IconButton>
-              </Link> */}
               <IconButton
                 size="small"
                 color="inherit"
@@ -186,14 +206,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 size="small"
                 color="inherit"
                 sx={navbarIconButton}
-                onClick={handleConfiguratorOpen}
-              >
-                <Icon>settings</Icon>
-              </IconButton>
-              <IconButton
-                size="small"
-                color="inherit"
-                sx={navbarIconButton}
                 aria-controls="notification-menu"
                 aria-haspopup="true"
                 variant="contained"
@@ -201,7 +213,19 @@ function DashboardNavbar({ absolute, light, isMini }) {
               >
                 <Icon className={light ? "text-white" : "text-dark"}>notifications</Icon>
               </IconButton>
+              <IconButton
+                size="small"
+                color="inherit"
+                sx={navbarIconButton}
+                aria-controls="settings-menu"
+                aria-haspopup="true"
+                variant="contained"
+                onClick={handleOpenSettings}
+              >
+                <Icon className={light ? "text-white" : "text-dark"}>settings</Icon>
+              </IconButton>
               {renderMenu()}
+              {renderSettings()}
             </SuiBox>
           </SuiBox>
         )}
