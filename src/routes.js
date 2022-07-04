@@ -35,116 +35,99 @@ Coded by www.creative-tim.com
   10. The `component` key is used to store the component of its route.
 */
 
+import { Navigate } from "react-router-dom";
+
 // Soft UI Dashboard React layouts
 import Dashboard from "layouts/dashboard";
-import Posts from "pages/posts";
-
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
-import VirtualReality from "layouts/virtual-reality";
-import RTL from "layouts/rtl";
 import Profile from "layouts/profile";
-import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 
 // Soft UI Dashboard React icons
 import Shop from "examples/Icons/Shop";
 import Office from "examples/Icons/Office";
-import Settings from "examples/Icons/Settings";
 import Document from "examples/Icons/Document";
 import SpaceShip from "examples/Icons/SpaceShip";
 import CustomerSupport from "examples/Icons/CustomerSupport";
 import CreditCard from "examples/Icons/CreditCard";
-import Cube from "examples/Icons/Cube";
 
-const routes = [
+// App Pages
+import AppDashboard from "pages/dashboard";
+import SignIn from "pages/auth/sign-in";
+import RolePage from "pages/role";
+import UserPage from "pages/user";
+
+// Dashboard sidebar menu
+const sideNav = [
   {
     type: "collapse",
     name: "Dashboard",
     key: "dashboard",
-    route: "/dashboard",
-    icon: <Shop size="12px" />,
-    component: <Dashboard />,
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "Tables",
-    key: "tables",
-    route: "/tables",
-    icon: <Office size="12px" />,
-    component: <Tables />,
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "Billing",
-    key: "billing",
-    route: "/billing",
-    icon: <CreditCard size="12px" />,
-    component: <Billing />,
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "Virtual Reality",
-    key: "virtual-reality",
-    route: "/virtual-reality",
-    icon: <Cube size="12px" />,
-    component: <VirtualReality />,
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "RTL",
-    key: "rtl",
-    route: "/rtl",
-    icon: <Settings size="12px" />,
-    component: <RTL />,
-    noCollapse: true,
-  },
-  { type: "title", title: "Account Pages", key: "account-pages" },
-  {
-    type: "collapse",
-    name: "Profile",
-    key: "profile",
-    route: "/profile",
-    icon: <CustomerSupport size="12px" />,
-    component: <Profile />,
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "Sign In",
-    key: "sign-in",
-    route: "/authentication/sign-in",
     icon: <Document size="12px" />,
+    route: "/dashboard",
+    component: <AppDashboard />,
+    // component: <Tables />,
+  },
+  {
+    type: "collapse",
+    name: "Role",
+    key: "role",
+    icon: <Document size="12px" />,
+    route: "/role",
+    component: <RolePage />,
+  },
+  {
+    type: "collapse",
+    name: "User",
+    key: "user",
+    icon: <Document size="12px" />,
+    route: "/user",
+    component: <UserPage />,
+  },
+  {
+    type: "collapse",
+    name: "Header Nav",
+    key: "header-nav",
+    icon: <Document size="12px" />,
+    route: "/header",
+    component: <RolePage />,
+  },
+];
+
+// Unauthenticated routes
+const publicPath = [
+  {
+    name: "sign-in",
+    key: "sign-in",
+    route: "/sign-in",
     component: <SignIn />,
-    noCollapse: true,
   },
   {
-    type: "collapse",
-    name: "Sign Up",
-    key: "sign-up",
-    route: "/authentication/sign-up",
-    icon: <SpaceShip size="12px" />,
-    component: <SignUp />,
-    noCollapse: true,
+    name: "wildcard",
+    key: "wildcard",
+    route: "*",
+    component: <Navigate replace to="/sign-in" />,
   },
 ];
 
-// Customer Routes
-const appRoutes = [
+// Require authentication routes
+const protectedPath = sideNav.concat([
+  // create post
   {
-    type: "collapse",
-    name: "Posts",
-    key: "posts",
-    route: "/posts",
-    icon: <Shop size="12px" />,
-    component: <Posts />,
-    noCollapse: true,
+    name: "post/create",
+    key: "post/create",
+    route: "/posts/create",
+    component: <RolePage />,
   },
-  ...routes,
-];
+  {
+    name: "protected-wildcard",
+    key: "protected-wildcard",
+    route: "*",
+    component: <Navigate replace to="/dashboard" />,
+  },
+]);
 
-export default appRoutes;
+const routes = { publicPath, protectedPath };
+
+export default routes;
