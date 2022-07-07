@@ -57,6 +57,7 @@ import AppDashboard from "pages/dashboard";
 import SignIn from "pages/auth/sign-in";
 import RolePage from "pages/role";
 import UserPage from "pages/user";
+import PageMenu from "pages/page";
 
 // Dashboard sidebar menu
 const sideNav = [
@@ -92,6 +93,14 @@ const sideNav = [
     icon: <Document size="12px" />,
     route: "/header",
     component: <RolePage />,
+  },
+  {
+    type: "collapse",
+    name: "Page",
+    key: "page",
+    icon: <Document size="12px" />,
+    route: "/page",
+    component: <PageMenu />,
   },
 ];
 

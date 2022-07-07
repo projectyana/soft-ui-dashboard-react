@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import jwtDecode from "jwt-decode";
 
 const initialState = { isAuthenticated: false, token: null };
 
@@ -8,13 +9,16 @@ export const authSlice = createSlice({
   reducers: {
     authLogin: (state, action) => {
       localStorage.setItem("token", action.payload.token);
+      const decode = jwtDecode(action.payload.token);
+      const { username, email, name } = decode;
+
       return {
         ...state,
         isAuthenticated: true,
         token: action.payload.token,
-        name: action.payload.name,
-        username: action.payload.username,
-        email: action.payload.email,
+        name,
+        username,
+        email,
       };
     },
 

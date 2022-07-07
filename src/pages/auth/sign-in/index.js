@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { authLogin } from "store/authSlice";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import jwtDecode from "jwt-decode";
 
 // Soft UI Dashboard React components
 import SuiBox from "components/SuiBox";
@@ -28,10 +27,7 @@ function SignIn() {
   const formSubmitHandler = (values, { setSubmitting }) => {
     AuthApi.signIn(values).then(({ data }) => {
       const token = data?.data?.token;
-      const decode = jwtDecode(token);
-      const { username, email, name } = decode;
-
-      dispatchToken({ token, name, username, email });
+      dispatchToken({ token });
       navigate("/dashboard", { replace: true });
     });
   };
