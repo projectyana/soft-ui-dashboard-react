@@ -4,7 +4,8 @@
  * Role Page
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Axios from "axios";
 
 import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";
@@ -24,40 +25,53 @@ import {
   CircularProgress
 } from "@mui/material";
 
+import UserApi from "apis/User";
+import RoleApi from "apis/Role";
+
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
-import PageLoading from "components/Custom/PageLoading";
+import { PageLoading } from "components/Custom/Loading";
 
 import ModalCreate from "./components/ModalCreate";
 import ModalEdit from "./components/ModalEdit";
+import ModalDelete from "./components/ModalDelete";
 
 export default function UserPage() {
-  const [loading, setLoading] = useState(false);
+  const [fetchStatus, setFetchStatus] = useState({ loading: false });
+  const [data, setData] = useState([]);
+  const [roles, setRoles] = useState([]);
   const [modalConfig, setModalConfig] = useState({
     type: 'create',    // create | edit 
     show: false,
     data: null
   });
 
-  const fakeData = [
-    {
-      "id": 1,
-      "role_id": 1,
-      "username": "user",
-      "email": "user@email.com",
-      "name": "Test User",
-    },
-    {
-      "id": 2,
-      "role_id": 1,
-      "username": "admin",
-      "email": "admin@email.com",
-      "name": "Administrator",
-    }
-  ];
+  const fetchData = () => {
+    setFetchStatus({ loading: true });
 
-  if (loading) {
+    Axios.all([UserApi.get(), RoleApi.get()])
+      .then((Axios.spread((resUser, resRoles) => {
+        const mapRoles = resRoles.data.data.map(({ id, name }) => ({ value: id, label: name }));
+
+        setData(resUser.data.data ?? []);
+        setRoles(mapRoles ?? []);
+      })))
+      .catch(() => window.alert('Error connect to server'))
+      .finally(() => setFetchStatus(false));
+  };
+
+  useEffect(() => {
+    fetchData();
+
+    return () => {
+      setData([]);
+      setRoles([]);
+    };
+  }, []);
+
+
+  if (fetchStatus.loading) {
     return <PageLoading />;
   }
 
@@ -92,7 +106,7 @@ export default function UserPage() {
             </TableCell>
           </TableRow>
           <TableBody>
-            {fakeData.map((row) => (
+            {data?.map((row) => (
               <TableRow key={row.id} >
                 <TableCell component="th" scope="row">
                   <SuiTypography variant="caption">{row.name}</SuiTypography>
@@ -113,13 +127,18 @@ export default function UserPage() {
                         size="small"
                         variant="text"
                         color="dark"
-                        onClick={() => setModalConfig({ show: true, type: "edit" })}
+                        onClick={() => setModalConfig({ show: true, type: "edit", data: row })}
                       >
                         <Icon>edit</Icon>&nbsp;edit
                       </SuiButton>
                     </SuiBox>
                     <SuiBox mr={1}>
-                      <SuiButton size="small" variant="text" color="error">
+                      <SuiButton
+                        size="small"
+                        variant="text"
+                        color="error"
+                        onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
+                      >
                         <Icon>delete</Icon>&nbsp;delete
                       </SuiButton>
                     </SuiBox>
@@ -148,10 +167,24 @@ export default function UserPage() {
       </SuiBox>
 
       {/* Modal  Create */}
-      {modalConfig.show && modalConfig.type === "create" && <ModalCreate modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "create" && <ModalCreate
+        fetchData={fetchData}
+        roles={roles}
+        modalConfig={modalConfig}
+        setModalConfig={setModalConfig} />}
 
       {/* Modal Edit */}
-      {modalConfig.show && modalConfig.type === "edit" && <ModalEdit modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "edit" && <ModalEdit
+        fetchData={fetchData}
+        roles={roles}
+        modalConfig={modalConfig}
+        setModalConfig={setModalConfig} />}
+
+      {/* Modal Delete */}
+      {modalConfig.show && modalConfig.type === "delete" && <ModalDelete
+        fetchData={fetchData}
+        modalConfig={modalConfig}
+        setModalConfig={setModalConfig} />}
     </DashboardLayout>
   );
 }

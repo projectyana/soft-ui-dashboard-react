@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -7,36 +9,38 @@ import SuiInput from "components/SuiInput";
 
 import UserApi from "apis/User";
 import CustomModal from "components/Custom/Modal";
+import Select from "components/Custom/Select";
 
-const ModalEdit = ({ modalConfig, setModalConfig }) => {
+const ModalEdit = ({ fetchData, roles, modalConfig, setModalConfig }) => {
+  const { id, username, name, email, password, role_id } = modalConfig.data;
 
   // Submit to server
   const formSubmitHandler = (values, { setSubmitting }) => {
-    console.log(values);
-    UserApi.create(values)
+    UserApi.update(id, values)
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
-      });
+        fetchData();
+      })
+      .catch((err) => window.alert("Error connect to server"));
   };
 
   const formik = useFormik({
     initialValues: {
-      username: "",
-      name: "",
-      email: "",
-      password: ""
-
+      username: username ?? "",
+      name: name ?? "",
+      email: email ?? "",
+      role_id: role_id ?? ""
     },
     validationSchema: yup.object().shape({
       username: yup.string().required("Username is required!"),
       name: yup.string().required("Name is required!"),
       email: yup.string().email("Email format isn't valid").required("Name is required!"),
-      password: yup.string().required("Password is required!"),
+      role_id: yup.string().required("User Role is required!"),
     }),
     onSubmit: formSubmitHandler,
   });
 
-  const { values, errors, touched, handleChange, isSubmitting, handleSubmit } = formik;
+  const { values, errors, touched, handleChange, setFieldValue, handleSubmit } = formik;
 
   return (
     <CustomModal
@@ -78,13 +82,14 @@ const ModalEdit = ({ modalConfig, setModalConfig }) => {
       </SuiBox>
 
       <SuiBox mb={2}>
-        <SuiInput
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          value={values.password}
-          error={Boolean(errors.password && touched.password)}
-          errorMessage={errors?.password ?? ""}
+        <Select
+          key={values.role_id}
+          placeholder="Select Role"
+          defaultValue={values.role_id ? roles?.find(role => role?.value === values.role_id) : ""}
+          option={roles}
+          onChange={(option) => setFieldValue('role_id', option.value)}
+          error={Boolean(errors.role_id && touched.role_id)}
+          errorMessage={errors?.role_id ?? ""}
         />
       </SuiBox>
 
