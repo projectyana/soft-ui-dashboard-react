@@ -8,15 +8,16 @@ import SuiInput from "components/SuiInput";
 import RoleApi from "apis/Role";
 import CustomModal from "components/Custom/Modal";
 
-const ModalCreate = ({ modalConfig, setModalConfig }) => {
+const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
   // Submit to server
   const formSubmitHandler = (values, { setSubmitting }) => {
-    console.log(values);
     RoleApi.create(values)
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
-      });
+        fetchData();
+      })
+      .catch((err) => window.alert("Error connect to server"));
   };
 
   const formik = useFormik({

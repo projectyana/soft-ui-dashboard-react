@@ -9,28 +9,25 @@ import SuiInput from "components/SuiInput";
 import RoleApi from "apis/Role";
 import CustomModal from "components/Custom/Modal";
 
-const ModalEdit = ({ modalConfig, setModalConfig }) => {
-
-  // Fetch data from server
-  const fetchData = () => {
-
-  };
+const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
+  const { id, code, name, description } = modalConfig.data;
 
   // Submit to server
   const formSubmitHandler = (values, { setSubmitting }) => {
-    console.log(values);
-    RoleApi.create(values)
+    RoleApi.update(id, values)
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
-      });
+        fetchData();
+      })
+      .catch((err) => window.alert("Error connect to server"));
   };
 
   // Formik
   const formik = useFormik({
     initialValues: {
-      code: "",
-      name: "",
-      description: ""
+      code: code ?? "",
+      name: name ?? "",
+      description: description ?? ""
     },
     validationSchema: yup.object().shape({
       code: yup.string().required("Code is required!"),

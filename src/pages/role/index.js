@@ -2,7 +2,7 @@
  * Role Page
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";
@@ -24,26 +24,46 @@ import {
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
+import { PageLoading } from "components/Custom/Loading";
+
+import RoleApi from "apis/Role";
+
 import ModalCreate from "./components/ModalCreate";
 import ModalEdit from "./components/ModalEdit";
 import ModalConfigure from "./components/ModalConfigure";
+import ModalDelete from "./components/ModalDelete";
 
 export default function RolePage() {
+  const [fetchStatus, setFetchStatus] = useState({ loading: false });
+  const [data, setData] = useState([]);
   const [modalConfig, setModalConfig] = useState({
-    type: 'create',    // create | edit | configure
+    type: "create",    // create | edit | delete | configure
     show: false,
     data: null
   });
 
-  const fakeData = [
-    { code: 'SUPERADMIN', name: 'superadmin', description: 'test' },
-    { code: 'ADMIN', name: 'admin', description: 'test2' },
-  ];
+  const fetchData = () => {
+    setFetchStatus({ loading: true });
+
+    RoleApi.get()
+      .then((res) => setData(res.data.data ?? []))
+      .catch((err) => window.alert(err.message))
+      .finally(() => setFetchStatus({ loading: false }));
+  };
+
+  useEffect(() => {
+    fetchData();
+
+    return () => { setData([]); };
+  }, []);
+
+  if (fetchStatus.loading) {
+    return <PageLoading />;
+  }
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
-
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
         {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
         <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
@@ -68,7 +88,7 @@ export default function RolePage() {
             </TableCell>
           </TableRow>
           <TableBody>
-            {fakeData.map((row) => (
+            {data?.length > 0 ? data.map((row) => (
               <TableRow key={row.code} >
                 <TableCell component="th" scope="row">
                   <SuiTypography variant="caption">{row.code}</SuiTypography>
@@ -86,7 +106,7 @@ export default function RolePage() {
                         size="small"
                         variant="text"
                         color="info"
-                        onClick={() => setModalConfig({ show: true, type: "configure" })}
+                        onClick={() => setModalConfig({ show: true, type: "configure", data: row })}
                       >
                         <Icon>settings</Icon>&nbsp;configure
                       </SuiButton>
@@ -96,20 +116,31 @@ export default function RolePage() {
                         size="small"
                         variant="text"
                         color="dark"
-                        onClick={() => setModalConfig({ show: true, type: "edit" })}
+                        onClick={() => setModalConfig({ show: true, type: "edit", data: row })}
                       >
                         <Icon>edit</Icon>&nbsp;edit
                       </SuiButton>
                     </SuiBox>
                     <SuiBox mr={1}>
-                      <SuiButton size="small" variant="text" color="error">
+                      <SuiButton
+                        size="small"
+                        variant="text"
+                        color="error"
+                        onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
+                      >
                         <Icon>delete</Icon>&nbsp;delete
                       </SuiButton>
                     </SuiBox>
                   </SuiBox>
                 </TableCell>
               </TableRow>
-            ))}
+            )) : (
+              <TableRow>
+                <TableCell align="center" colSpan={4}>
+                  <SuiTypography variant="h6">Tidak ada data</SuiTypography>
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -131,13 +162,16 @@ export default function RolePage() {
       </SuiBox>
 
       {/* Modal  Create */}
-      {modalConfig.show && modalConfig.type === "create" && <ModalCreate modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
 
       {/* Modal Edit */}
-      {modalConfig.show && modalConfig.type === "edit" && <ModalEdit modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "edit" && <ModalEdit fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
 
       {/* Modal Configure */}
-      {modalConfig.show && modalConfig.type === "configure" && <ModalConfigure modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "configure" && <ModalConfigure fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+
+      {/* Modal Delete */}
+      {modalConfig.show && modalConfig.type === "delete" && <ModalDelete fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
     </DashboardLayout>
   );
 }
