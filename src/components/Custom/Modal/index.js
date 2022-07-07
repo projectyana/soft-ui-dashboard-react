@@ -9,12 +9,15 @@ import SuiTypography from "components/SuiTypography";
 // @mui material components
 import {
   Divider,
-  Modal
+  Modal,
+  Dialog
 } from "@mui/material";
 
-const CustomModal = ({ title, open, setModalConfig, children }) => {
+const CustomModal = ({ fullwidth = true, maxWidth = "md", title, open, setModalConfig, children }) => {
   return (
-    <Modal
+    <Dialog
+      fullWidth={fullwidth}
+      maxWidth={maxWidth}
       open={open}
       onClose={() => setModalConfig(prev => ({ ...prev, show: false }))}
     >
@@ -28,7 +31,7 @@ const CustomModal = ({ title, open, setModalConfig, children }) => {
           {children}
         </SuiBox>
       </SuiBox>
-    </Modal>
+    </Dialog>
   );
 };
 

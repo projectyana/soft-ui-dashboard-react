@@ -7,7 +7,7 @@ import { CircularProgress } from "@mui/material";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
-const PageLoading = () => {
+export const PageLoading = () => {
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -20,4 +20,13 @@ const PageLoading = () => {
   );
 };
 
-export default PageLoading;
+export const LoadingState = () => {
+  return (
+    <SuiBox display="flex" justifyContent="center" alignItems="center">
+      <SuiBox>
+        <CircularProgress color="info" />
+      </SuiBox>
+    </SuiBox>
+  );
+};
+
