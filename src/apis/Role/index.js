@@ -1,8 +1,8 @@
 import { Service } from "services";
 
 class RoleApi {
-  get(params) {
-    return Service.get("/bo/access", { params });
+  get(data) {
+    return Service.get("/bo/role", data);
   }
 
   create(data) {
@@ -13,8 +13,16 @@ class RoleApi {
     return Service.put(`/bo/role/${id}`, data);
   }
 
-  delete(params) {
-    return Service.delete("/bo/role/", { params });
+  getRoleAccess(id) {
+    return Service.get(`/bo/role/${id}/access`);
+  }
+
+  setRoleAccess(id, data) {
+    return Service.get(`/bo/role/${id}/access`, data);
+  }
+
+  delete(id) {
+    return Service.delete(`/bo/role/${id}`);
   }
 }
 

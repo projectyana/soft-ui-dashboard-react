@@ -14,10 +14,9 @@ class UserApi {
     return Service.put(`/bo/user/${id}`, data);
   }
 
-  delete(params) {
-    return Service.delete("/bo/user/", { params });
+  delete(id) {
+    return Service.delete(`/bo/user/${id}`);
   }
 }
-
 
 export default new UserApi();
