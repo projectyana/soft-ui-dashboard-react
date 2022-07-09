@@ -18,7 +18,7 @@ class RoleApi {
   }
 
   setRoleAccess(id, data) {
-    return Service.get(`/bo/role/${id}/access`, data);
+    return Service.post(`/bo/role/${id}/access`, data);
   }
 
   delete(id) {

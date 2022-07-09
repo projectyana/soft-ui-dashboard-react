@@ -55,7 +55,15 @@ const ModalConfigure = ({ fetchData, modalConfig, setModalConfig }) => {
 
   // Handle Submit to Server
   const handleSubmit = () => {
+    const finalValue = { access_id: {} };
 
+    // map data to final value
+    data?.forEach((item) => finalValue.access_id[item.id] = item.abilities);
+
+    // Submit to server
+    RoleApi.setRoleAccess(id, finalValue)
+      .then(() => { setModalConfig((prev) => ({ ...prev, show: false })); })
+      .catch(() => window.alert("Error connect to server"));
   };
 
   useEffect(() => {
@@ -114,7 +122,7 @@ const ModalConfigure = ({ fetchData, modalConfig, setModalConfig }) => {
               </TableContainer>
             </SuiBox>
             <SuiBox display="flex" justifyContent="flex-end" mt={2}>
-              <SuiButton mt={2} size="medium" color="info" onClick={() => setModalConfig({ show: true })}>
+              <SuiButton mt={2} size="medium" color="info" onClick={() => handleSubmit()}>
                 Save
               </SuiButton>
             </SuiBox>
