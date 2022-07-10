@@ -57,7 +57,14 @@ import AppDashboard from "pages/dashboard";
 import SignIn from "pages/auth/sign-in";
 import RolePage from "pages/role";
 import UserPage from "pages/user";
+import MenuConfigurationPage from "pages/menu";
+
+// Page menu 
 import PageMenu from "pages/page";
+import PageEditor from "pages/page/editor";
+
+// Blog menu
+import BlogPage from "pages/blog";
 
 // Dashboard sidebar menu
 const sideNav = [
@@ -88,11 +95,11 @@ const sideNav = [
   },
   {
     type: "collapse",
-    name: "Header Nav",
-    key: "header-nav",
+    name: "Menu Configuration",
+    key: "menu-configuration",
     icon: <Document size="12px" />,
-    route: "/header",
-    component: <RolePage />,
+    route: "/menu-configuration",
+    component: <MenuConfigurationPage />,
   },
   {
     type: "collapse",
@@ -101,6 +108,14 @@ const sideNav = [
     icon: <Document size="12px" />,
     route: "/page",
     component: <PageMenu />,
+  },
+  {
+    type: "collapse",
+    name: "Blog",
+    key: "blog",
+    icon: <Document size="12px" />,
+    route: "/blog",
+    component: <BlogPage />,
   },
 ];
 
@@ -124,10 +139,10 @@ const publicPath = [
 const protectedPath = sideNav.concat([
   // create post
   {
-    name: "post/create",
-    key: "post/create",
-    route: "/posts/create",
-    component: <RolePage />,
+    name: "Page Editor",
+    key: "page-editor",
+    route: "/page/editor/:action", // action : create | edit
+    component: <PageEditor />,
   },
   {
     name: "protected-wildcard",

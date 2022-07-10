@@ -44,12 +44,12 @@ export default function App() {
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, direction, layout, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
-  const [appRoutes, setAppRoutes] = useState([]);
+  const [appRoutes, setAppRoutes] = useState(routes?.publicPath ?? []);
   const { pathname } = useLocation();
   const reduxDispatch = useDispatch();
 
   const storageToken = localStorage.getItem("token");
-  const { token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state?.auth);
 
   // Check if authentication
   const checkAuth = () => {

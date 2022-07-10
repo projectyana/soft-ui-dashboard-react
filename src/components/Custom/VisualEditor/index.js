@@ -1,36 +1,51 @@
 /* eslint-disable */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+import SuiBox from "components/SuiBox";
+import SuiButton from "components/SuiButton";
+
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
 import 'grapesjs/dist/grapes.min.js';
 import 'grapesjs-preset-webpage/dist/grapesjs-preset-webpage.min.css';
 import 'grapesjs-preset-webpage/dist/grapesjs-preset-webpage.min.js';
-import { defaultHTML, defultStyle } from './defaultTemplate';
+import { defaultHTML, defaultStyle } from './defaultTemplate';
 
-const VisualEditor = () => {
-  let editor;
+/**
+ * @required formik props
+ * @required action with value "create" or "edit"
+ */
 
-  const handleLog = () => {
-    console.log(editor.getHtml());
-    console.log(editor.getCss());
+const VisualEditor = ({ action = "create", formik }) => {
+  const [myEditor, setMyEditor] = useState(null);
+
+  const { values, setValues, handleSubmit } = formik;
+
+  const onClickSubmit = () => {
+    const html = myEditor.getHtml();
+    const css = myEditor.getCss();
+
+    setValues({ ...values, html_content: html, css_content: css });
+
+    handleSubmit();
   };
 
   useEffect(() => {
-    editor = grapesjs.init({
+    const editor = grapesjs.init({
       container: '#gjs',
       height: '700px',
       width: '100%',
       plugins: ['gjs-preset-webpage'],
-      // storageManager: {
-      //   id: 'gjs-',
-      //   type: 'local',
-      //   autosave: true,
-      //   storeComponents: true,
-      //   storeStyles: true,
-      //   storeHtml: true,
-      //   storeCss: true,
-      // },
+      storageManager: {
+        id: 'gjs-',
+        type: 'local',
+        autosave: true,
+        storeComponents: true,
+        storeStyles: true,
+        storeHtml: true,
+        storeCss: true,
+      },
       storageManager: false,
       deviceManager: {
         devices:
@@ -63,18 +78,27 @@ const VisualEditor = () => {
           blocks: ['link-block', 'quote', 'text-basic'],
         },
       },
-      components: defaultHTML,
-      style: defultStyle,
+      components: action === "edit" ? values?.html_content : defaultHTML,
+      style: action === "edit" ? values?.css_content : defaultStyle,
     });
+
+    setMyEditor(editor);
   }, []);
+
   return (
     <>
       <div id="gjs"></div>
-      <button onClick={() => handleLog()}></button>
+      <SuiBox display="flex" justifyContent="flex-start" mt={2}>
+        <SuiButton
+          mt={2}
+          size="medium"
+          color="info"
+          onClick={() => onClickSubmit()}>
+          {action === "edit" ? "Save Update" : "Create"}
+        </SuiButton>
+      </SuiBox>
     </>
-
   );
-
 };
 
 export default VisualEditor;

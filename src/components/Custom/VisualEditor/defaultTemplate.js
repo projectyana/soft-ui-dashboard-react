@@ -172,9 +172,9 @@ export const defaultHTML = `
       </div>
     </div>
   </section>
-</body>`
+</body>`;
 
-export const defultStyle = `
+export const defaultStyle = `
 * {
   box-sizing: border-box;
 }
@@ -625,4 +625,4 @@ body{
   padding:10px 40px 10px 40px;
   text-decoration: none;
 }
-`
+`;
