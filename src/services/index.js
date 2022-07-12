@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://73ec-120-188-81-173.ap.ngrok.io/api";
+const baseURL = "https://9b15-182-253-182-32.ap.ngrok.io/api";
 
 const Service = axios.create({ baseURL });
 

@@ -1,6 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@editorjs/editorjs': ^2.25.0
+  '@editorjs/header': ^2.6.2
+  '@editorjs/image': ^2.6.2
+  '@editorjs/link': ^2.4.1
+  '@editorjs/list': ^1.7.0
+  '@editorjs/paragraph': ^2.8.0
   '@emotion/cache': 11.7.1
   '@emotion/react': 11.8.1
   '@emotion/styled': 11.8.1
@@ -32,6 +38,7 @@ specifiers:
   react-chartjs-2: 3.0.4
   react-countup: 6.1.1
   react-dom: 17.0.2
+  react-editor-js: ^2.1.0
   react-flatpickr: 3.10.7
   react-github-btn: 1.2.1
   react-redux: ^8.0.2
@@ -45,6 +52,12 @@ specifiers:
   yup: ^0.32.11
 
 dependencies:
+  '@editorjs/editorjs': 2.25.0
+  '@editorjs/header': 2.6.2
+  '@editorjs/image': 2.6.2
+  '@editorjs/link': 2.4.1
+  '@editorjs/list': 1.7.0
+  '@editorjs/paragraph': 2.8.0
   '@emotion/cache': 11.7.1
   '@emotion/react': 11.8.1_on4pwhjuscz2cucak6hkhs726q
   '@emotion/styled': 11.8.1_j2zc6bdamhs6on3quvwexpy7eq
@@ -67,6 +80,7 @@ dependencies:
   react-chartjs-2: 3.0.4_27meab5fhv4bvzi564ylv3zhtm
   react-countup: 6.1.1_react@17.0.2
   react-dom: 17.0.2_react@17.0.2
+  react-editor-js: 2.1.0_5nqabvyy7cdfyepattmhvo7ray
   react-flatpickr: 3.10.7_react@17.0.2
   react-github-btn: 1.2.1
   react-redux: 8.0.2_ykxqnxanlq42xavzz22bjdrwni
@@ -1610,6 +1624,36 @@ packages:
       postcss-selector-parser: 6.0.10
     dev: false
 
+  /@editorjs/editorjs/2.25.0:
+    resolution: {integrity: sha512-TEu7h7EPh6Lx2VGIM1jVn2dky23TbpVJBd3AGvXcam1lyHuJwZ1iydbsQGF9pFkHSCiaQptTfIjZ8Y24v47Wag==}
+    dependencies:
+      codex-notifier: 1.1.2
+      codex-tooltip: 1.0.5
+      nanoid: 3.3.4
+    dev: false
+
+  /@editorjs/header/2.6.2:
+    resolution: {integrity: sha512-U1dnT+KGjwFmpWneEEyR2Nqp42hn9iKwQDgRHWQM+y6qx82pg+eAyuIf0QWt2Mluu9uPD2CzNfvJ+pxIuwX8Lw==}
+    dev: false
+
+  /@editorjs/image/2.6.2:
+    resolution: {integrity: sha512-lai6LFJ8m3qRmSjio66o0CX7/75OupC3FQ5JWrV/biRT6GvUHtRNWKaMowKcC2ndXtfs4w6WwRxcXlB4WhUAdg==}
+    dev: false
+
+  /@editorjs/link/2.4.1:
+    resolution: {integrity: sha512-AqudulnZT/E5RO7itgentDedX25PGGvNmkbkdUXn8SuMKeYzfZ0hWAcgKLNNQHHCHm59F6AQz7JcXwfQuYhxyg==}
+    dependencies:
+      '@babel/runtime': 7.18.6
+    dev: false
+
+  /@editorjs/list/1.7.0:
+    resolution: {integrity: sha512-0k0RKbQqfV32u24UYHHz5mrmSu4wr246qqXBT7xQiS533Bfd4hzki6UGzvy4f275ULzi+egbjI3BXLkpoTh9iQ==}
+    dev: false
+
+  /@editorjs/paragraph/2.8.0:
+    resolution: {integrity: sha512-z6w5ZR0ru3p/IjxJW/tb7OcSnVttkZukQMIsnBMX1FIKc1BNdr7NwM1YoCyTl4OnC90YfL0xgES6/20/W267pw==}
+    dev: false
+
   /@emotion/babel-plugin/11.9.2_@babel+core@7.18.6:
     resolution: {integrity: sha512-Pr/7HGH6H6yKgnVFNEj2MVlreu3ADqftqjqwUvDy/OJzKFgxKeTQ+eeUf20FOTuHVkDON2iNa25rAXVYtWJCjw==}
     peerDependencies:
@@ -2296,6 +2340,42 @@ packages:
 
   /@popperjs/core/2.11.5:
     resolution: {integrity: sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==}
+    dev: false
+
+  /@react-editor-js/client/2.1.0_5nqabvyy7cdfyepattmhvo7ray:
+    resolution: {integrity: sha512-X/OwqY2KKUUVIy24zvubHTI4qhiVIWMxGlU/Bc6tkf9gcsWgQjPvn75DwrQ5SIGBOYpSBcHY01JX0RRtJHRumw==}
+    peerDependencies:
+      '@editorjs/editorjs': '*'
+      '@editorjs/paragraph': '*'
+      react: '*'
+    dependencies:
+      '@editorjs/editorjs': 2.25.0
+      '@editorjs/paragraph': 2.8.0
+      '@react-editor-js/core': 2.1.0_fl4niolhxzsbo25nzu6o3el3ri
+      react: 17.0.2
+    dev: false
+
+  /@react-editor-js/core/2.1.0_fl4niolhxzsbo25nzu6o3el3ri:
+    resolution: {integrity: sha512-6h98D5g2RatdCDQRW/+N+eiMtjoq0n1n02m8oA7FrlEzEaOUyV+J+rmtmRS8OexLVOiNeWaSPDpVJ3MNiVLq8Q==}
+    peerDependencies:
+      '@editorjs/editorjs': '*'
+      react: '*'
+    dependencies:
+      '@editorjs/editorjs': 2.25.0
+      react: 17.0.2
+    dev: false
+
+  /@react-editor-js/server/2.1.0_5nqabvyy7cdfyepattmhvo7ray:
+    resolution: {integrity: sha512-RnTbCmzCHbjcjPNKhr9FaehItHgAZyd47Lq+iIGynFqWSsrwGy46LgOXSvb50DYbwDyT0GtxaXBIk6aiFki1Dg==}
+    peerDependencies:
+      '@editorjs/editorjs': '*'
+      '@editorjs/paragraph': '*'
+      react: '*'
+    dependencies:
+      '@editorjs/editorjs': 2.25.0
+      '@editorjs/paragraph': 2.8.0
+      '@react-editor-js/core': 2.1.0_fl4niolhxzsbo25nzu6o3el3ri
+      react: 17.0.2
     dev: false
 
   /@reduxjs/toolkit/1.8.3_thunyjspsylz6iliyoygaytnnq:
@@ -3900,6 +3980,14 @@ packages:
 
   /codemirror/5.65.6:
     resolution: {integrity: sha512-zNihMSMoDxK9Gqv9oEyDT8oM51rcRrQ+IEo2zyS48gJByBq5Fj8XuNEguMra+MuIOuh6lkpnLUJeL70DoTt6yw==}
+    dev: false
+
+  /codex-notifier/1.1.2:
+    resolution: {integrity: sha512-DCp6xe/LGueJ1N5sXEwcBc3r3PyVkEEDNWCVigfvywAkeXcZMk9K41a31tkEFBW0Ptlwji6/JlAb49E3Yrxbtg==}
+    dev: false
+
+  /codex-tooltip/1.0.5:
+    resolution: {integrity: sha512-IuA8LeyLU5p1B+HyhOsqR6oxyFQ11k3i9e9aXw40CrHFTRO2Y1npNBVU3W1SvhKAbUU7R/YikUBdcYFP0RcJag==}
     dev: false
 
   /collect-v8-coverage/1.0.1:
@@ -8651,6 +8739,18 @@ packages:
       object-assign: 4.1.1
       react: 17.0.2
       scheduler: 0.20.2
+    dev: false
+
+  /react-editor-js/2.1.0_5nqabvyy7cdfyepattmhvo7ray:
+    resolution: {integrity: sha512-unI9D2pTH/2gBenc6LgCXJm8iqnrzB71CHgfjQmaB+lGR0Njx+ZXydgUQm1VofMmvF6vcCNVDE1Eb47zQbm14g==}
+    dependencies:
+      '@react-editor-js/client': 2.1.0_5nqabvyy7cdfyepattmhvo7ray
+      '@react-editor-js/core': 2.1.0_fl4niolhxzsbo25nzu6o3el3ri
+      '@react-editor-js/server': 2.1.0_5nqabvyy7cdfyepattmhvo7ray
+    transitivePeerDependencies:
+      - '@editorjs/editorjs'
+      - '@editorjs/paragraph'
+      - react
     dev: false
 
   /react-error-overlay/6.0.11:
