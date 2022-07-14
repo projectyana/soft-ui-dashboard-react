@@ -59,12 +59,15 @@ import RolePage from "pages/role";
 import UserPage from "pages/user";
 import MenuConfigurationPage from "pages/menu";
 
-// Page menu 
+// Page 
 import PageMenu from "pages/page";
 import PageEditor from "pages/page/editor";
 
-// Blog menu
-import BlogPage from "pages/blog";
+// Blog 
+import BlogMenu from "pages/blog";
+import BlogEditor from "pages/blog/editor";
+
+import CarouselPage from "pages/carousel";
 
 // Dashboard sidebar menu
 const sideNav = [
@@ -95,14 +98,6 @@ const sideNav = [
   },
   {
     type: "collapse",
-    name: "Menu Configuration",
-    key: "menu-configuration",
-    icon: <Document size="12px" />,
-    route: "/menu-configuration",
-    component: <MenuConfigurationPage />,
-  },
-  {
-    type: "collapse",
     name: "Page",
     key: "page",
     icon: <Document size="12px" />,
@@ -115,7 +110,23 @@ const sideNav = [
     key: "blog",
     icon: <Document size="12px" />,
     route: "/blog",
-    component: <BlogPage />,
+    component: <BlogMenu />,
+  },
+  {
+    type: "collapse",
+    name: "Carousel",
+    key: "carousel",
+    icon: <Document size="12px" />,
+    route: "/carousel",
+    component: <CarouselPage />,
+  },
+  {
+    type: "collapse",
+    name: "Menu Configuration",
+    key: "menu-configuration",
+    icon: <Document size="12px" />,
+    route: "/menu-configuration",
+    component: <MenuConfigurationPage />,
   },
 ];
 
@@ -137,12 +148,18 @@ const publicPath = [
 
 // Require authentication routes
 const protectedPath = sideNav.concat([
-  // create post
+  // create or edit page 
   {
     name: "Page Editor",
     key: "page-editor",
     route: "/page/editor/:action", // action : create | edit
     component: <PageEditor />,
+  },
+  {
+    name: "Blog Editor",
+    key: "blog-editor",
+    route: "/blog/editor/:action", // action : create | edit
+    component: <BlogEditor />,
   },
   {
     name: "protected-wildcard",

@@ -19,7 +19,6 @@ import { PageLoading } from "components/Custom/Loading";
 
 import BlogApi from "apis/Blog";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 import ModalDelete from "./components/ModalDelete";
 
@@ -52,7 +51,6 @@ const BlogMenu = () => {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
         {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
         <SuiButton size="medium" color="info" onClick={() => navigate("editor/create")}>

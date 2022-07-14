@@ -11,7 +11,6 @@ import SuiInput from "components/SuiInput";
 import { useSoftUIController, setMiniSidenav } from "context";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 import VisualEditor from "components/Custom/VisualEditor";
 
@@ -70,7 +69,6 @@ const PageEditor = () => {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
       <>
         <SuiBox mt={2} mb={2} display="flex" justifyContent="flex-start" >
           <SuiBox mr={2}>

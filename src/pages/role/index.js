@@ -22,7 +22,6 @@ import {
 } from "@mui/material";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 import { PageLoading } from "components/Custom/Loading";
 
@@ -63,7 +62,6 @@ export default function RolePage() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
         {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
         <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>

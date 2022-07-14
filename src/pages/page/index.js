@@ -18,7 +18,6 @@ import { PageLoading } from "components/Custom/Loading";
 
 import PageApi from "apis/Page";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 import ModalDelete from "./components/ModalDelete";
 
@@ -51,7 +50,6 @@ const PageMenu = () => {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
         {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
         <SuiButton size="medium" color="info" onClick={() => navigate("editor/create")}>

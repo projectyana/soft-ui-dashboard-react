@@ -57,7 +57,7 @@ const Select = ({
             onChange={onChange}
             classNamePrefix={error ? "react-select-invalid" : "react-select"}
             defaultValue={defaultValue}
-            noOptionsMessage={() => "Tidak ada data"}
+            noOptionsMessage={() => "No Data"}
             isDisabled={isDisabled}
             theme={(theme) => ({
               ...theme,

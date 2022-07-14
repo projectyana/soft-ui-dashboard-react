@@ -14,27 +14,41 @@ Coded by www.creative-tim.com
 */
 
 import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 // react-router-dom components
 import { useLocation } from "react-router-dom";
+
+// import mui components
+import { Alert } from "@mui/material";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
 
 // Soft UI Dashboard React components
 import SuiBox from "components/SuiBox";
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 // Soft UI Dashboard React context
 import { useSoftUIController, setLayout } from "context";
+import { setAlert } from "store/alertSlice";
 
 function DashboardLayout({ children }) {
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav } = controller;
   const { pathname } = useLocation();
+  const reduxDispatch = useDispatch();
+  const { show, severity, message } = useSelector(state => state.alert);
 
   useEffect(() => {
     setLayout(dispatch, "dashboard");
   }, [pathname]);
+
+  useEffect(() => {
+    if (show) {
+      setTimeout(() => reduxDispatch(setAlert({ show: false, severity: "info", message: "" })), 5000);
+    }
+  }, [show]);
 
   return (
     <SuiBox
@@ -51,6 +65,10 @@ function DashboardLayout({ children }) {
         },
       })}
     >
+      <DashboardNavbar />
+      <SuiBox mb={2}>
+        {show && (<Alert severity={severity}>{message}</Alert>)}
+      </SuiBox>
       {children}
     </SuiBox>
   );

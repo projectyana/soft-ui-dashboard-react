@@ -77,8 +77,6 @@ export default function UserPage() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
-
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
         {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
         <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
