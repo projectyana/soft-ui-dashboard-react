@@ -18,7 +18,9 @@ import {
   TableContainer,
   TableRow,
   Paper,
-  Icon
+  Icon,
+  Switch,
+  Tooltip
 } from "@mui/material";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -33,7 +35,7 @@ import ModalConfigure from "./components/ModalConfigure";
 import ModalDelete from "./components/ModalDelete";
 
 export default function CarouselPage() {
-  const [fetchStatus, setFetchStatus] = useState({ loading: false });
+  const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [modalConfig, setModalConfig] = useState({
     type: "create",    // create | edit | delete | configure
@@ -45,9 +47,21 @@ export default function CarouselPage() {
     setFetchStatus({ loading: true });
 
     CarouselApi.get()
-      .then((res) => setData(res.data.data ?? []))
+      .then((res) => {
+        const mapData = res?.data?.data?.map((item) => ({
+          ...item,
+          link: `https://rokom.xyz/${item.url}`
+        }));
+        setData(mapData ?? []);
+      })
       .catch((err) => window.alert(err.message))
       .finally(() => setFetchStatus({ loading: false }));
+  };
+
+  const handleToggleActive = (row) => {
+    CarouselApi.update(row.id, { ...row, active: !row.active })
+      .then(() => fetchData())
+      .catch(() => window.alert("Error connect to server"));
   };
 
   useEffect(() => {
@@ -93,6 +107,14 @@ export default function CarouselPage() {
                 </TableCell>
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
+                    <SuiBox mr={1}>
+                      <Tooltip title={row?.active ? 'Carousel is enabled' : 'Carousel is disabled'}>
+                        <Switch
+                          checked={row?.active ?? false}
+                          onChange={() => handleToggleActive(row)}
+                        />
+                      </Tooltip>
+                    </SuiBox>
                     <SuiBox mr={1}>
                       <SuiButton
                         size="small"

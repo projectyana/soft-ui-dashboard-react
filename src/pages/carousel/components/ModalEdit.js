@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { useState } from 'react';
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -6,32 +7,54 @@ import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiInput from "components/SuiInput";
 
-import RoleApi from "apis/Role";
+import CarouselApi from "apis/Carousel";
 import CustomModal from "components/Custom/Modal";
+import InputImage from "./InputImage";
 
 const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
-  const { id, code, name, description } = modalConfig.data;
+  const { id, link, title, slug, body, url, image } = modalConfig?.data ?? {};
+  const [dataGambar, setDataGambar] = useState([{ link }]);
+
+  const handleUploadImage = async () => {
+    const formData = new FormData();
+    formData.append("image", dataGambar[0]?.data);
+
+    return CarouselApi.upload(formData)
+      .then((res) => res?.data?.data)
+      .catch((err) => console.log(err));
+  };
 
   // Submit to server
-  const formSubmitHandler = (values, { setSubmitting }) => {
-    RoleApi.update(id, values)
+  const formSubmitHandler = async (values, { setSubmitting }) => {
+    const finalValue = { ...values };
+
+    if (dataGambar[0]?.data) {
+      const imageLink = await handleUploadImage();
+      finalValue.image = dataGambar[0]?.nama;
+      finalValue.url = imageLink;
+    }
+
+    CarouselApi.update(id, finalValue)
       .then(({ data }) => {
+        console.log(data);
         setModalConfig(prev => ({ ...prev, show: false }));
         fetchData();
       })
       .catch((err) => window.alert("Error connect to server"));
   };
 
-  // Formik
   const formik = useFormik({
     initialValues: {
-      code: code ?? "",
-      name: name ?? "",
-      description: description ?? ""
+      title: title ?? "",
+      slug: slug ?? "",
+      body: body ?? "",
+      url: url ?? "",
+      image: image ?? ""
     },
     validationSchema: yup.object().shape({
-      code: yup.string().required("Code is required!"),
-      name: yup.string().required("Name is required!"),
+      title: yup.string().required("Title is required!"),
+      slug: yup.string().required("Slug is required!"),
+      body: yup.string().required("Body is required!"),
     }),
     onSubmit: formSubmitHandler,
   });
@@ -40,40 +63,53 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title="Edit Role"
+      title="Edit Carousel"
       open={modalConfig.show && modalConfig.type === 'edit'}
       setModalConfig={setModalConfig}
     >
-      <SuiBox mb={2}>
+      <InputImage dataGambar={dataGambar} setDataGambar={setDataGambar} />
+
+      <SuiBox mt={3} mb={2}>
         <SuiInput
-          name="code"
-          placeholder="Code"
+          name="title"
+          placeholder="Title"
           onChange={handleChange}
-          value={values.code}
-          error={Boolean(errors.code && touched.code)}
-          errorMessage={errors?.code ?? ""}
+          value={values.title}
+          error={Boolean(errors.title && touched.title)}
+          errorMessage={errors?.title ?? ""}
         />
       </SuiBox>
 
       <SuiBox mb={2}>
         <SuiInput
-          name="name"
-          placeholder="Name"
+          name="slug"
+          placeholder="Slug"
           onChange={handleChange}
-          value={values.name}
-          error={Boolean(errors.name && touched.name)}
-          errorMessage={errors?.name ?? ""}
+          value={values.slug}
+          error={Boolean(errors.slug && touched.slug)}
+          errorMessage={errors?.slug ?? ""}
         />
       </SuiBox>
+
+      {/* <SuiBox mb={2}>
+        <SuiInput
+          name="url"
+          placeholder="https://www.example.com"
+          onChange={handleChange}
+          value={values.url}
+          error={Boolean(errors.url && touched.url)}
+          errorMessage={errors?.url ?? ""}
+        />
+      </SuiBox> */}
 
       <SuiBox mb={2}>
         <SuiInput
           multiline
           rows={5}
-          name="description"
-          placeholder="Description"
+          name="body"
+          placeholder="Body"
           onChange={handleChange}
-          value={values.description}
+          value={values.body}
         />
       </SuiBox>
 

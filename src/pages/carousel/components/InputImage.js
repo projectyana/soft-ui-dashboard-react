@@ -14,7 +14,7 @@ const Image = ({ imageText, imageUrl, onView, onDownload, onDelete }) => {
 
   return (
     <SuiBox
-      style={{ position: 'relative', cursor: 'zoom-in', objectFit: 'cover' }}
+      style={{ position: 'relative', objectFit: 'cover' }}
     // onClick={onView}
     // onMouseEnter={() => setIsHover(true)}
     // onMouseLeave={() => setIsHover(false)}
@@ -31,7 +31,7 @@ const Image = ({ imageText, imageUrl, onView, onDownload, onDelete }) => {
         </ActionButton> */}
 
       {/* Delete Button */}
-      <button style={{ position: 'absolute', zIndex: 1, top: 15, right: 20 }} >Delete</button>
+      {/* <button style={{ position: 'absolute', zIndex: 1, top: 15, right: 20 }} >Delete</button> */}
       {/* {TYPE !== 'DETAIL' &&
           <ActionButton
             size="sm"
@@ -74,6 +74,7 @@ const InputImage = ({ dataGambar, setDataGambar }) => {
       const finalValue = { data: file, nama: generateName, link: generateLink };
 
       setDataGambar([finalValue]);
+      console.log(finalValue);
     } else {
       window.alert('Image does not supported (.jpg, .png, .gif, .jpeg)');
     }

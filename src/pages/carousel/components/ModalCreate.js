@@ -16,34 +16,29 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
   const handleUploadImage = async () => {
     const formData = new FormData();
-    formData.append("image", dataGambar[0]);
-
-    for (const pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
-    }
+    formData.append("image", dataGambar[0]?.data);
 
     return CarouselApi.upload(formData)
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => { console.log(err); });
+      .then((res) => res?.data?.data)
+      .catch((err) => console.log(err));
   };
 
   // Submit to server
   const formSubmitHandler = async (values, { setSubmitting }) => {
     const imageLink = await handleUploadImage();
+    const finalValue = {
+      ...values,
+      image: dataGambar[0]?.nama,
+      url: imageLink,
+    };
 
-    console.log(imageLink);
-    console.log({ ...values });
-    console.log(dataGambar);
-
-    // CarouselApi.create(values)
-    //   .then(({ data }) => {
-    //     setModalConfig(prev => ({ ...prev, show: false }));
-    //     fetchData();
-    //   })
-    //   .catch((err) => window.alert("Error connect to server"));
+    CarouselApi.create(finalValue)
+      .then(({ data }) => {
+        console.log(data);
+        setModalConfig(prev => ({ ...prev, show: false }));
+        fetchData();
+      })
+      .catch((err) => window.alert("Error connect to server"));
   };
 
   const formik = useFormik({
@@ -51,9 +46,6 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
       title: "",
       slug: "",
       body: "",
-      url: "https://google.com",
-      active: true,
-      order: 0
     },
     validationSchema: yup.object().shape({
       title: yup.string().required("Title is required!"),
@@ -95,16 +87,16 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
         />
       </SuiBox>
 
-      <SuiBox mb={2}>
+      {/* <SuiBox mb={2}>
         <SuiInput
           name="url"
-          placeholder="Link"
+          placeholder="https://www.example.com"
           onChange={handleChange}
           value={values.url}
           error={Boolean(errors.url && touched.url)}
           errorMessage={errors?.url ?? ""}
         />
-      </SuiBox>
+      </SuiBox> */}
 
       <SuiBox mb={2}>
         <SuiInput
