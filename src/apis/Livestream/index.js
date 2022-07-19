@@ -10,7 +10,7 @@ class LivestreamApi {
   }
 
   end() {
-    return Service.put("/bo/livestream/end");
+    return Service.post("/bo/livestream/end");
   }
 }
 

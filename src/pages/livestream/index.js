@@ -30,7 +30,7 @@ export default function LivestreamPage() {
 
     LivestreamApi.get()
       .then((res) => setData(res.data.data ?? {}))
-      .catch((err) => window.alert(err.message ?? "Error connecting to server"))
+      .catch(() => setData({}))
       .finally(() => setFetchStatus({ loading: false }));
   };
 

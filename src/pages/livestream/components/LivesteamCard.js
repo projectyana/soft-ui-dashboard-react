@@ -22,9 +22,9 @@ const LivesteamCard = ({ data, fetchData }) => {
               Live Stream
             </SuiTypography>
           </SuiBox>
-          <SuiBox display="flex" alignItems="center" py={1} mb={1}>
-            <SuiBox mr={2}>
-              <SuiAvatar src={data?.thumbnail ?? "https://thumbs.dreamstime.com/b/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.jpg"} size="xl" variant="rounded" style={{ objectFit: 'cover' }} alt="something here" />
+          <SuiBox alignItems="center" py={1} mb={1}>
+            <SuiBox mb={2} mr={2}>
+              <SuiAvatar src={data?.thumbnail ?? "https://thumbs.dreamstime.com/b/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.jpg"} size="xl" shadow="sm" variant="circle" style={{ objectFit: 'cover' }} alt="livestream" />
             </SuiBox>
             <SuiBox display="flex" flexDirection="column" alignItems="flex-start" justifyContent="center">
               <SuiTypography variant="button" fontWeight="medium">
