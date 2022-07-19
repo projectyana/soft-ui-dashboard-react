@@ -96,7 +96,13 @@ export default function RolePage() {
                   <SuiTypography variant="caption">{row.slug}</SuiTypography>
                 </TableCell>
                 <TableCell>
-                  <SuiTypography variant="caption">{row.description ?? ""}</SuiTypography>
+                  <SuiTypography variant="caption">
+                    {row.sub_header_navs?.length > 0 && (
+                      <ul>
+                        {row.sub_header_navs.map((sub) => (<li key={sub.slug}> {sub.name} {sub.url ? `| ${sub.url}` : ""}</li>))}
+                      </ul>
+                    )}
+                  </SuiTypography>
                 </TableCell>
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
