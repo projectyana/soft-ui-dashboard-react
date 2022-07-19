@@ -21,7 +21,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
     return CarouselApi.upload(formData)
       .then((res) => res?.data?.data)
-      .catch((err) => console.log(err));
+      .catch((err) => { });
   };
 
   // Submit to server
@@ -36,7 +36,6 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
     CarouselApi.update(id, finalValue)
       .then(({ data }) => {
-        console.log(data);
         setModalConfig(prev => ({ ...prev, show: false }));
         fetchData();
       })

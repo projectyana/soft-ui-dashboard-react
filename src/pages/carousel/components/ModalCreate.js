@@ -20,7 +20,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
     return CarouselApi.upload(formData)
       .then((res) => res?.data?.data)
-      .catch((err) => console.log(err));
+      .catch((err) => { });
   };
 
   // Submit to server
@@ -34,7 +34,6 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
     CarouselApi.create(finalValue)
       .then(({ data }) => {
-        console.log(data);
         setModalConfig(prev => ({ ...prev, show: false }));
         fetchData();
       })

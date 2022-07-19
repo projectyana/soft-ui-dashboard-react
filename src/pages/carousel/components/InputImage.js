@@ -74,7 +74,6 @@ const InputImage = ({ dataGambar, setDataGambar }) => {
       const finalValue = { data: file, nama: generateName, link: generateLink };
 
       setDataGambar([finalValue]);
-      console.log(finalValue);
     } else {
       window.alert('Image does not supported (.jpg, .png, .gif, .jpeg)');
     }
