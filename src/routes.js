@@ -68,6 +68,7 @@ import BlogMenu from "pages/blog";
 import BlogEditor from "pages/blog/editor";
 
 import CarouselPage from "pages/carousel";
+import LivestreamPage from "pages/livestream";
 
 // Dashboard sidebar menu
 const sideNav = [
@@ -75,7 +76,7 @@ const sideNav = [
     type: "collapse",
     name: "Dashboard",
     key: "dashboard",
-    icon: <Document size="12px" />,
+    icon: <Office size="12px" />,
     route: "/dashboard",
     component: <AppDashboard />,
     // component: <Tables />,
@@ -127,6 +128,14 @@ const sideNav = [
     icon: <Document size="12px" />,
     route: "/menu-configuration",
     component: <MenuConfigurationPage />,
+  },
+  {
+    type: "collapse",
+    name: "Livestream",
+    key: "livestream",
+    icon: <Document size="12px" />,
+    route: "livestream",
+    component: <LivestreamPage />,
   },
 ];
 
