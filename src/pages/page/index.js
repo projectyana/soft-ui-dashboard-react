@@ -23,7 +23,7 @@ import ModalDelete from "./components/ModalDelete";
 
 const PageMenu = () => {
   const navigate = useNavigate();
-  const [fetchStatus, setFetchStatus] = useState({ loading: false });
+  const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [modalConfig, setModalConfig] = useState({
     type: "delete",

@@ -35,13 +35,13 @@ const ModalDelete = ({ fetchData, modalConfig, setModalConfig }) => {
       </SuiTypography>
 
       <SuiBox display="flex" justifyContent="flex-end" mt={2}>
-        <SuiButton
+        {/* <SuiButton
           mt={2}
           sx={{ mr: 2 }}
           size="small"
           color="info" >
           Cancel
-        </SuiButton>
+        </SuiButton> */}
         <SuiButton
           ml={1}
           size="small"

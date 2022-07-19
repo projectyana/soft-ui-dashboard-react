@@ -33,7 +33,7 @@ import ModalConfigure from "./components/ModalConfigure";
 import ModalDelete from "./components/ModalDelete";
 
 export default function RolePage() {
-  const [fetchStatus, setFetchStatus] = useState({ loading: false });
+  const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [modalConfig, setModalConfig] = useState({
     type: "create",    // create | edit | delete | configure

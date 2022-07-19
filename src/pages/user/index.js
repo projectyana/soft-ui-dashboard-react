@@ -38,7 +38,7 @@ import ModalEdit from "./components/ModalEdit";
 import ModalDelete from "./components/ModalDelete";
 
 export default function UserPage() {
-  const [fetchStatus, setFetchStatus] = useState({ loading: false });
+  const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [roles, setRoles] = useState([]);
   const [modalConfig, setModalConfig] = useState({
