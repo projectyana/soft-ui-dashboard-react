@@ -39,6 +39,7 @@ import { useSoftUIController, setMiniSidenav } from "context";
 
 // Image
 import brand from "assets/images/logo-ct.png";
+import kemenkes from "assets/images/logos/kemenkes-transparent.png";
 
 export default function App() {
   const [controller, dispatch] = useSoftUIController();
@@ -114,7 +115,7 @@ export default function App() {
         <>
           <Sidenav
             color={sidenavColor}
-            brand={brand}
+            brand={kemenkes}
             brandName="Back Office"
             routes={appRoutes}
             onMouseEnter={handleOnMouseEnter}
