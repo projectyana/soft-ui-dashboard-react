@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://rokom.xyz";
+const baseURL = "https://api.rokom.xyz";
 
 const Service = axios.create({ baseURL });
 
