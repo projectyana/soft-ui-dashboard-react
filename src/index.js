@@ -28,7 +28,7 @@ import { Provider } from "react-redux";
 import store from "store";
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter basename="/admin">
     <Provider store={store}>
       <SoftUIControllerProvider>
         <App />
