@@ -32,6 +32,7 @@ import ModalCreate from "./components/ModalCreate";
 import ModalEdit from "./components/ModalEdit";
 import ModalConfigure from "./components/ModalConfigure";
 import ModalDelete from "./components/ModalDelete";
+import ModalCreatePage from "./components/ModalCreatePage";
 
 export default function RolePage() {
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
@@ -41,6 +42,7 @@ export default function RolePage() {
     show: false,
     data: null
   });
+  const [modalCreate, setModalCreate] = useState({ show: false });
 
   const fetchData = () => {
     setFetchStatus({ loading: true });
@@ -167,7 +169,7 @@ export default function RolePage() {
       </SuiBox>
 
       {/* Modal  Create */}
-      {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} modalCreate={modalCreate} setModalCreate={setModalCreate} />}
 
       {/* Modal Edit */}
       {modalConfig.show && modalConfig.type === "edit" && <ModalEdit fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
@@ -177,6 +179,9 @@ export default function RolePage() {
 
       {/* Modal Delete */}
       {modalConfig.show && modalConfig.type === "delete" && <ModalDelete fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+
+      {/* Modal Create */}
+      {modalCreate.show && <ModalCreatePage modalCreate={modalCreate} setModalCreate={setModalCreate} />}
     </DashboardLayout>
   );
 }
