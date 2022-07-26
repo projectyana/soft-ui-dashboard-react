@@ -58,9 +58,15 @@ export default function CarouselPage() {
       .finally(() => setFetchStatus({ loading: false }));
   };
 
-  const handleToggleActive = (row) => {
+  const handleToggleActive = (row, index) => {
     CarouselApi.update(row.id, { ...row, active: !row.active })
-      .then(() => fetchData())
+      .then(() => {
+        const newData = [...data];
+        const value = newData[index];
+        value.active = !row.active;
+
+        setData(newData);
+      })
       .catch(() => window.alert("Error connect to server"));
   };
 
@@ -97,7 +103,7 @@ export default function CarouselPage() {
             </TableCell>
           </TableRow>
           <TableBody>
-            {data?.length > 0 ? data.map((row) => (
+            {data?.length > 0 ? data.map((row, index) => (
               <TableRow key={row.code} >
                 <TableCell component="th" scope="row">
                   <SuiTypography variant="caption">{row.title}</SuiTypography>
@@ -111,7 +117,7 @@ export default function CarouselPage() {
                       <Tooltip title={row?.active ? 'Carousel is enabled' : 'Carousel is disabled'}>
                         <Switch
                           checked={row?.active ?? false}
-                          onChange={() => handleToggleActive(row)}
+                          onChange={() => handleToggleActive(row, index)}
                         />
                       </Tooltip>
                     </SuiBox>
