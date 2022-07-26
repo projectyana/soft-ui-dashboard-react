@@ -43,12 +43,10 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   const formik = useFormik({
     initialValues: {
       title: "",
-      slug: "",
       body: "",
     },
     validationSchema: yup.object().shape({
       title: yup.string().required("Title is required!"),
-      slug: yup.string().required("Slug is required!"),
       body: yup.string().required("Body is required!"),
     }),
     onSubmit: formSubmitHandler,
@@ -74,28 +72,6 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
           errorMessage={errors?.title ?? ""}
         />
       </SuiBox>
-
-      <SuiBox mb={2}>
-        <SuiInput
-          name="slug"
-          placeholder="Slug"
-          onChange={handleChange}
-          value={values.slug}
-          error={Boolean(errors.slug && touched.slug)}
-          errorMessage={errors?.slug ?? ""}
-        />
-      </SuiBox>
-
-      {/* <SuiBox mb={2}>
-        <SuiInput
-          name="url"
-          placeholder="https://www.example.com"
-          onChange={handleChange}
-          value={values.url}
-          error={Boolean(errors.url && touched.url)}
-          errorMessage={errors?.url ?? ""}
-        />
-      </SuiBox> */}
 
       <SuiBox mb={2}>
         <SuiInput
