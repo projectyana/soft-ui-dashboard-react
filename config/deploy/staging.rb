@@ -6,13 +6,6 @@
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
-
-set :user,        'deploy'
-set :deploy_to,    "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
-set :yarn_flags,   %w[--silent --no-progress]
-set :ssh_options,  { forward_agent: true, auth_methods: %w(publickey) }
-
-
 # http://stackoverflow.com/questions/21036175/how-to-deploy-a-specific-revision-with-capistrano-3
 set :branch, 'dev'
 server '108.136.166.220', user: "#{fetch(:user)}", roles: %w{web}

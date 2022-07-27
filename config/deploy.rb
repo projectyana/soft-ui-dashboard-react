@@ -3,15 +3,14 @@ lock "~> 3.17.0"
 
 set :repo_url, "git@github.com:projectyana/rokom-back-office.git"
 
-set :user,        'deploy'
+set :application,   'rokom-back-office'
+set :user,          'deploy'
 set :deploy_to,    "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
-set :yarn_flags,   %w[--silent --no-progress]
-set :npm_target_path, -> { release_path.join('subdir') } # default not set
-set :npm_flags,   '--production --silent --no-progress'  # default
-set :npm_roles, :all                                     # default
-set :npm_env_variables, {}                               # default
-set :npm_method, 'install'                               # default
-set :ssh_options,  { forward_agent: true, auth_methods: %w(publickey) }
+set :npm_flags,     '--production'  # default
+set :npm_roles,     :all            # default
+set :npm_env_variables, {}          # default
+set :npm_method,    'install'       # default
+set :ssh_options,   { forward_agent: true, auth_methods: %w(publickey) }
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 # append :linked_files, '.env'
@@ -19,15 +18,15 @@ set :ssh_options,  { forward_agent: true, auth_methods: %w(publickey) }
 # Default deploy_to directory is /var/www/my_app_name
 
 namespace :deploy do
-  task :yarn_deploy do
-    on roles fetch(:yarn_roles) do
-      within fetch(:yarn_target_path, release_path) do
-        execute fetch(:yarn_bin), 'build'
+  task :npm_deploy do
+    on roles fetch(:npm_roles) do
+      within fetch(:npm_target_path, release_path) do
+        execute fetch(:npm_bin), 'build'
       end
     end
   end
 
-  before "symlink:release", :yarn_deploy
+  before "symlink:release", :npm_deploy
 end
 
 # Default branch is :master
