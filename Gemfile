@@ -8,7 +8,7 @@ group :development do
   gem 'capistrano-bundler',       require: false
   gem 'capistrano',               require: false
   gem 'capistrano-yarn'
-  gem 'capistrano-nvm'
+  gem 'capistrano-npm'
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
 end
