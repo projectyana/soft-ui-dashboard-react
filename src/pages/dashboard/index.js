@@ -20,7 +20,7 @@ export default function AppDashboard() {
           Welcome back, <strong>{name}</strong>
         </SuiTypography>
         <SuiTypography variant="subtitle2">
-          {email}
+          Hola {email} 👋🏻
         </SuiTypography>
       </SuiBox>
     </DashboardLayout>
