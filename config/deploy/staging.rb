@@ -7,27 +7,15 @@
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-set :application,       'rokom-back-office'
-set :stage,             :staging
-set :deploy_env,        :staging
-set :user,              'deploy'
-set :puma_env,          'staging'
-set :full_app_name,     "#{fetch(:applicaton)}-#{fetch(:stage)}"
-set :ssh_options,       { forward_agent: true, auth_methods: %w[publickey] }
-set :deploy_to,         "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
-set :server_name,       "rokom.xyz/admin"
-set :puma_bind,         ["unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"]
-set :puma_state,        "#{shared_path}/tmp/pids/puma.state"
-set :puma_pid,          "#{shared_path}/tmp/pids/puma.pid"
-set :puma_access_log,   "#{release_path}/log/puma.error.log"
-set :puma_error_log,    "#{release_path}/log/puma.access.log"
+set :user,        'deploy'
+set :deploy_to,    "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
+set :yarn_flags,   %w[--silent --no-progress]
+set :ssh_options,  { forward_agent: true, auth_methods: %w(publickey) }
+
 
 # http://stackoverflow.com/questions/21036175/how-to-deploy-a-specific-revision-with-capistrano-3
-set :branch, 'staging'
-
-role :app, %w["#{fetch(:user)@ec2-108-136-166-220.ap-southeast-3.compute.amazonaws.com}"]
-role :web, %w["#{fetch(:user)@ec2-108-136-166-220.ap-southeast-3.compute.amazonaws.com}"]
-server 'ec2-108-136-166-220.ap-southeast-3.compute.amazonaws.com', user: fetch(:user), roles: %w[web app]
+set :branch, 'dev'
+server '108.136.166.220', user: "#{fetch(:user)}", roles: %w{web}
 #
 # role :app, %w{admin@104.168.96.55}
 # role :web, %w{admin@104.168.96.55}

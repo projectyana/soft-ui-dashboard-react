@@ -1,16 +1,16 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.17.0"
 
-set :application, "rokom-back-office"
 set :repo_url, "git@github.com:projectyana/rokom-back-office.git"
 
-
 set :user,        'deploy'
-set :nvm_type,    :user
-set :nvm_node,    'v14.20.0'
-set :nvm_map_bins, %w[node npm yarn]
 set :deploy_to,    "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
 set :yarn_flags,   %w[--silent --no-progress]
+set :npm_target_path, -> { release_path.join('subdir') } # default not set
+set :npm_flags,   '--production --silent --no-progress'  # default
+set :npm_roles, :all                                     # default
+set :npm_env_variables, {}                               # default
+set :npm_method, 'install'                               # default
 set :ssh_options,  { forward_agent: true, auth_methods: %w(publickey) }
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
