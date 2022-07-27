@@ -17,18 +17,6 @@ set :ssh_options,   { forward_agent: true, auth_methods: %w(publickey) }
 # append :linked_dirs, 'node_modules'
 # Default deploy_to directory is /var/www/my_app_name
 
-namespace :deploy do
-  task :npm_deploy do
-    on roles fetch(:npm_roles) do
-      within fetch(:npm_target_path, release_path) do
-        execute fetch(:npm_bin), 'build'
-      end
-    end
-  end
-
-  before "symlink:release", :npm_deploy
-end
-
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
