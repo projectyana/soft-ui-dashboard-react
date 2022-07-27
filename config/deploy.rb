@@ -10,6 +10,7 @@ set :npm_flags,     '--production'  # default
 set :npm_roles,     :all            # default
 set :npm_env_variables, {}          # default
 set :npm_method,    'install'       # default
+set :npm_prune_flags, '--production'
 set :ssh_options,   { forward_agent: true, auth_methods: %w(publickey) }
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
