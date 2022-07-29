@@ -44,6 +44,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
     initialValues: {
       title: "",
       body: "",
+      description: ""
     },
     validationSchema: yup.object().shape({
       title: yup.string().required("Title is required!"),
@@ -70,6 +71,17 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
           value={values.title}
           error={Boolean(errors.title && touched.title)}
           errorMessage={errors?.title ?? ""}
+        />
+      </SuiBox>
+
+      <SuiBox mb={2}>
+        <SuiInput
+          name="description"
+          placeholder="Description"
+          onChange={handleChange}
+          value={values.description}
+          error={Boolean(errors.description && touched.description)}
+          errorMessage={errors?.description ?? ""}
         />
       </SuiBox>
 

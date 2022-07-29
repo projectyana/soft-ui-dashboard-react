@@ -46,6 +46,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
     initialValues: {
       title: title ?? "",
       body: body ?? "",
+      description: description ?? "",
       url: url ?? "",
       image: image ?? ""
     },
@@ -74,6 +75,17 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
           value={values.title}
           error={Boolean(errors.title && touched.title)}
           errorMessage={errors?.title ?? ""}
+        />
+      </SuiBox>
+
+      <SuiBox mb={2}>
+        <SuiInput
+          name="description"
+          placeholder="Description"
+          onChange={handleChange}
+          value={values.description}
+          error={Boolean(errors.description && touched.description)}
+          errorMessage={errors?.description ?? ""}
         />
       </SuiBox>
 
