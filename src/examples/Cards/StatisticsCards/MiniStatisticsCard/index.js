@@ -54,7 +54,7 @@ function MiniStatisticsCard({ bgColor, title, count, percentage, icon, direction
             <Grid item xs={8}>
               <SuiBox ml={direction === "left" ? 2 : 0} lineHeight={1}>
                 <SuiTypography
-                  variant="button"
+                  variant="h5"
                   color={bgColor === "white" ? "text" : "white"}
                   opacity={bgColor === "white" ? 1 : 0.7}
                   textTransform="capitalize"
