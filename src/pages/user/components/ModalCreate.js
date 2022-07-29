@@ -9,7 +9,7 @@ import SuiInput from "components/SuiInput";
 import UserApi from "apis/User";
 
 import CustomModal from "components/Custom/Modal";
-import Select from "components/Custom/Select";
+import { Select } from "components/Custom/Select";
 
 const ModalCreate = ({ fetchData, modalConfig, setModalConfig, roles }) => {
 
