@@ -4,6 +4,7 @@
  */
 
 import React, { useEffect, useState } from "react";
+import { Card } from "@mui/material";
 
 import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";
@@ -37,7 +38,7 @@ export default function LivestreamPage() {
   useEffect(() => {
     fetchData();
 
-    return () => { setData([]); };
+    return () => { setData({}); };
   }, []);
 
   if (fetchStatus.loading) {
@@ -50,22 +51,25 @@ export default function LivestreamPage() {
         {/* Create livestream button */}
         {!data?.url && (
           <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
-            Create
+            Start
           </SuiButton>
         )}
       </SuiBox>
 
       {/* No Streaming Found */}
       {!data?.url && (
-        <SuiBox display="flex" justifyContent="center" alignItems="start">
-          <SuiTypography >
-            No streaming found
-          </SuiTypography>
-        </SuiBox>
+
+        <Card sx={{ width: '100%', height: 100 }}>
+          <SuiBox display="flex" justifyContent="center" alignItems="center">
+            <SuiTypography mt={4} >
+              No streaming found
+            </SuiTypography>
+          </SuiBox>
+        </Card>
       )}
 
       {/* Livestream card */}
-      {data?.url && <LivesteamCard data={data} fetchData={fetchData} />}
+      {data?.url && <LivesteamCard data={data} setData={setData} fetchData={fetchData} />}
 
       {/* Modal  Create */}
       {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
