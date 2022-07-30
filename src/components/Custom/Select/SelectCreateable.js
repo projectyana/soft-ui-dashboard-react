@@ -15,12 +15,15 @@ export const SelectCreateable = ({
   placeholder,
   error,
   defaultValue,
-  isDisabled
+  isDisabled,
+  value,
+  onChange,
+  onCreateOption
 }) => {
   const options = option ?? [];
   const [cacheUniq, setCacheUniq] = useState(0);
   const [isAddingInProgress, setIsAddingInProgress] = useState(false);
-  const [value, onChange] = useState([]);
+  const [values, onChanges] = useState([]);
 
   const loadOptions = async (search, prevOptions) => {
     let filteredOptions;
@@ -54,7 +57,7 @@ export const SelectCreateable = ({
   };
 
   // 1. Handle Create New Option 
-  const onCreateOption = useCallback(async (inputValue) => {
+  const onCreateOptions = useCallback(async (inputValue) => {
     setIsAddingInProgress(true);
 
     const newOption = await addNewOption(inputValue);
