@@ -47,7 +47,7 @@ export default function AppDashboard() {
           Hola {email} 👋🏻
         </SuiTypography>
 
-        <Grid container mt={2} spacing={3}>
+        {/* <Grid container mt={2} spacing={3}>
           <Grid item xs={12} sm={6} xl={3}>
             <MiniStatisticsCard
               title={{ text: "Admin" }}
@@ -82,6 +82,9 @@ export default function AppDashboard() {
 
           <Grid item xs={12} sm={12} xl={6}>
             <Card>
+              <SuiTypography variant="h5" mx={2} mt={2}>
+                Recent Blogs
+              </SuiTypography>
               <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                   <TableRow>
@@ -146,7 +149,7 @@ export default function AppDashboard() {
               </TableContainer>
             </Card>
           </Grid>
-        </Grid>
+        </Grid> */}
       </SuiBox>
     </DashboardLayout>
   );
