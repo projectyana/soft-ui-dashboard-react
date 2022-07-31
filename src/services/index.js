@@ -9,6 +9,7 @@ Service.interceptors.request.use((config) => {
 
   config.headers = {
     Authorization: token ? `Bearer ${token}` : null,
+    "X-Requested-With": "XMLHttpRequest",
     "Content-Type": "application/json",
   };
 
