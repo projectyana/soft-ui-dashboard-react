@@ -2,13 +2,14 @@
  * Create Custom Dashboard Component
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import {
   Grid,
   Card,
+  CardActions,
   Icon,
   Paper,
   Table,
@@ -25,17 +26,34 @@ import {
   SupervisorAccount
 } from '@mui/icons-material';
 
+import DashboardApi from "apis/Dashboard";
 import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiTypography from "components/SuiTypography";
+import ImageCard from "components/Custom/Card/ImageCard";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import MiniStatisticsCard from "examples/Cards/StatisticsCards/MiniStatisticsCard";
 
 export default function AppDashboard() {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
+  const [dashboard, setDashboard] = useState({});
   const { name, email } = useSelector(state => state.auth);
+
+  const fetchData = () => {
+    DashboardApi.get()
+      .then(({ data }) => {
+        const mapBlog = data?.data?.recent_blogs?.map(blog => ({ ...blog, link: blog?.thumbnail ? `https://api.rokom.xyz/${blog.thumbnail}` : null}));
+        setDashboard({ ...data?.data, recent_blogs: mapBlog ?? [] } ?? {});
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+
+    return () => setDashboard({});
+  }, []);
+
 
   return (
     <DashboardLayout>
@@ -47,11 +65,11 @@ export default function AppDashboard() {
           Hola {email} 👋🏻
         </SuiTypography>
 
-        {/* <Grid container mt={2} spacing={3}>
+        <Grid container mt={2} spacing={3}>
           <Grid item xs={12} sm={6} xl={3}>
             <MiniStatisticsCard
               title={{ text: "Admin" }}
-              count="2"
+              count={dashboard?.admin_count}
               icon={{ color: "info", component: <SupervisorAccount /> }}
             />
           </Grid>
@@ -59,7 +77,7 @@ export default function AppDashboard() {
           <Grid item xs={12} sm={6} xl={3}>
             <MiniStatisticsCard
               title={{ text: "Page" }}
-              count="2"
+              count={dashboard?.page_count}
               icon={{ color: "info", component: <Web /> }}
             />
           </Grid>
@@ -67,7 +85,7 @@ export default function AppDashboard() {
           <Grid item xs={12} sm={6} xl={3}>
             <MiniStatisticsCard
               title={{ text: "Blog" }}
-              count="2"
+              count={dashboard?.blog_count}
               icon={{ color: "info", component: <Article /> }}
             />
           </Grid>
@@ -75,82 +93,43 @@ export default function AppDashboard() {
           <Grid item xs={12} sm={6} xl={3}>
             <MiniStatisticsCard
               title={{ text: "Carousel" }}
-              count="2"
+              count={dashboard?.carousel_count}
               icon={{ color: "info", component: <Landscape /> }}
             />
           </Grid>
+        </Grid>
 
-          <Grid item xs={12} sm={12} xl={6}>
-            <Card>
-              <SuiTypography variant="h5" mx={2} mt={2}>
-                Recent Blogs
-              </SuiTypography>
-              <TableContainer component={Paper}>
-                <Table aria-label="simple table">
-                  <TableRow>
-                    <TableCell>
-                      <SuiTypography variant="h6">Title</SuiTypography>
-                    </TableCell>
-                    <TableCell>
-                      <SuiTypography variant="h6">Slug</SuiTypography>
-                    </TableCell>
-                    <TableCell>
-                      <SuiTypography variant="h6">Tags</SuiTypography>
-                    </TableCell>
-                    <TableCell>
-                      <SuiTypography variant="h6">Action</SuiTypography>
-                    </TableCell>
-                  </TableRow>
-                  <TableBody>
-                    {data?.length > 0 ? data.map((row) => (
-                      <TableRow key={row.title} >
-                        <TableCell component="th" scope="row">
-                          <SuiTypography variant="caption">{row?.title}</SuiTypography>
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          <SuiTypography variant="caption">{row.slug}</SuiTypography>
-                        </TableCell>
-                        <TableCell>
-                          <SuiTypography variant="caption">{row.tags}</SuiTypography>
-                        </TableCell>
-                        <TableCell>
-                          <SuiBox display="flex" alignItems="center">
-                            <SuiBox mr={1}>
-                              <SuiButton
-                                size="small"
-                                variant="text"
-                                color="dark"
-                                onClick={() => navigate("editor/edit", { state: { ...row } })}
-                              >
-                                <Icon>edit</Icon>&nbsp;edit
-                              </SuiButton>
-                            </SuiBox>
-                            <SuiBox mr={1}>
-                              <SuiButton
-                                size="small"
-                                variant="text"
-                                color="error"
-                              >
-                                <Icon>delete</Icon>&nbsp;delete
-                              </SuiButton>
-                            </SuiBox>
-                          </SuiBox>
-                        </TableCell>
-                      </TableRow>
-                    )) : (
-                      <TableRow>
-                        <TableCell align="center" colSpan={4}>
-                          <SuiTypography variant="h6">No data</SuiTypography>
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Card>
-          </Grid>
-        </Grid> */}
+        <SuiTypography mt={4} mb={1} variant="h4">Recent Blogs</SuiTypography>
+        <Grid container spacing={2} >
+          {dashboard?.recent_blogs?.length > 0 && dashboard?.recent_blogs?.map((row, index) => (
+            <Grid
+              style={{ pointer: 'cursor' }}
+              key={row.title} item xs={6} md={4}>
+              <ImageCard
+                style={{ marginRight: 2 }}
+                alt={row.title}
+                image={row.link ?? null}
+                title={row.title}
+                description={row.description}
+              >
+                <CardActions>
+                  <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end" alignItems="end" >
+                    <SuiButton
+                      size="small"
+                      variant="text"
+                      color="dark"
+                      onClick={() => navigate("/blog/editor/edit", { state: { ...row } })}
+                    >
+                      <Icon>edit</Icon> &nbsp;edit
+                    </SuiButton>
+                  </SuiBox>
+                </CardActions>
+              </ImageCard>
+            </Grid>
+          ))
+          }
+        </Grid>
       </SuiBox>
-    </DashboardLayout>
+    </DashboardLayout >
   );
 }
