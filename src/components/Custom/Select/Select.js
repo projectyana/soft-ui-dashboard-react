@@ -15,6 +15,7 @@ export const Select = ({
   error,
   errorMessage,
   onChange,
+  ...rest
 }) => {
   const options = option;
 
@@ -45,6 +46,7 @@ export const Select = ({
       ) : (
         <>
           <AsyncPaginate
+            {...rest}
             name={name}
             loadOptions={loadOptions}
             placeholder={placeholder}

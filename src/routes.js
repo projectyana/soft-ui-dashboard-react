@@ -70,6 +70,9 @@ import BlogEditor from "pages/blog/editor";
 import CarouselPage from "pages/carousel";
 import LivestreamPage from "pages/livestream";
 import PressRelease from "pages/press_release";
+import RecentInfoCategoryPage from "pages/recent_info_category";
+import RecentInfoPage from "pages/recent_info";
+import HealthComicPage from "pages/health_comic";
 
 // Dashboard sidebar menu
 const sideNav = [
@@ -146,6 +149,30 @@ const sideNav = [
     route: "press-release",
     component: <PressRelease />,
   },
+  {
+    type: "collapse",
+    name: "Recent Info Category",
+    key: "recent-info-cat",
+    icon: <Document size="12px" />,
+    route: "recent-info-category",
+    component: <RecentInfoCategoryPage />,
+  },
+  {
+    type: "collapse",
+    name: "Recent Info",
+    key: "recent-info",
+    icon: <Document size="12px" />,
+    route: "recent-info",
+    component: <RecentInfoPage />,
+  },
+  {
+    type: "collapse",
+    name: "Health Comic",
+    key: "health-comic",
+    icon: <Document size="12px" />,
+    route: "health-comic",
+    component: <HealthComicPage />,
+  }
 ];
 
 // Unauthenticated routes
