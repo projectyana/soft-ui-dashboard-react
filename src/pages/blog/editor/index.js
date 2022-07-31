@@ -23,31 +23,50 @@ const BlogEditor = () => {
   const {
     id = null,
     title = "",
-    slug = "",
     tags = "",
-    content = ""
+    content = "",
+    link = ""
   } = useLocation()?.state || {};
+  const [dataGambar, setDataGambar] = useState([]);
+
+  const handleUploadImage = async () => {
+    const formData = new FormData();
+    formData.append("image", dataGambar[0]?.data);
+
+    return BlogApi.upload(formData)
+      .then((res) => res?.data?.data)
+      .catch((err) => { });
+  };
 
   // Submit to server
-  const formSubmitHandler = (values, { setSubmitting }) => {
+  const formSubmitHandler = async (values, { setSubmitting }) => {
+    if (dataGambar.length > 0) {
+      const imageLink = await handleUploadImage();
+      const finalValue = {
+        ...values,
+        thumbnail: imageLink,
+      };
 
-    action === "create"
-      ? BlogApi.create(values)
-        .then((res) => {
-          navigate(-1, { replace: true });
-        })
-        .catch((err) => window.alert("Error connect to server"))
-      : BlogApi.update(id, values)
-        .then((res) => {
-          navigate(-1, { replace: true });
-        })
-        .catch((err) => window.alert("Error connect to server"));
+      action === "create"
+        ? BlogApi.create(finalValue)
+          .then((res) => {
+            navigate(-1, { replace: true });
+          })
+          .catch((err) => window.alert("Error connect to server"))
+        : BlogApi.update(id, finalValue)
+          .then((res) => {
+            navigate(-1, { replace: true });
+          })
+          .catch((err) => window.alert("Error connect to server"));
+    }
+    else {
+      window.alert("Blog thumbnail is required!");
+    }
   };
 
   const formik = useFormik({
     initialValues: {
       title: action === "edit" ? title : "",
-      slug: action === "edit" ? slug : "",
       tags: action === "edit" ? tags : "",
       content: action === "edit" ? content : "",
     },
@@ -55,6 +74,13 @@ const BlogEditor = () => {
   });
 
   const { values, errors, touched, handleChange } = formik;
+
+  useEffect(() => {
+    if (action === "edit") setDataGambar([{ link }]);
+
+    return () => { };
+  }, []);
+
 
   return (
     <DashboardLayout>
@@ -71,17 +97,6 @@ const BlogEditor = () => {
             />
           </SuiBox>
 
-          <SuiBox mr={2}>
-            <SuiInput
-              name="slug"
-              placeholder="Slug"
-              onChange={handleChange}
-              value={values.slug}
-              error={Boolean(errors.slug && touched.slug)}
-              errorMessage={errors?.slug ?? ""}
-            />
-          </SuiBox>
-
           <SuiBox>
             <SuiInput
               name="tags"
@@ -93,7 +108,7 @@ const BlogEditor = () => {
             />
           </SuiBox>
         </SuiBox>
-        <TextEditor action={action} formik={formik} />
+        <TextEditor action={action} formik={formik} dataGambar={dataGambar} setDataGambar={setDataGambar} />
       </>
     </DashboardLayout>
   );

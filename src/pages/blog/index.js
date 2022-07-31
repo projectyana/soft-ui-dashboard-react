@@ -3,7 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import {
+  Grid,
   Paper,
+  CardActions,
   Table,
   TableContainer,
   TableBody,
@@ -16,6 +18,7 @@ import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiTypography from "components/SuiTypography";
 import { PageLoading } from "components/Custom/Loading";
+import BlogCard from "components/Custom/Card/BlogCard";
 
 import BlogApi from "apis/Blog";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -36,7 +39,10 @@ const BlogMenu = () => {
     setFetchStatus({ loading: true });
 
     BlogApi.get()
-      .then((res) => setData(res.data.data ?? []))
+      .then((res) => {
+        const mapData = res.data.data.map((item) => ({ ...item, link: item.thumbnail ? `https://api.rokom.xyz/${item.thumbnail}` : null })).reverse();
+        setData(mapData ?? []);
+      })
       .catch((err) => window.alert("Error connect to server!"))
       .finally(() => setFetchStatus({ loading: false }));
   };
@@ -58,69 +64,46 @@ const BlogMenu = () => {
         </SuiButton>
       </SuiBox>
 
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableRow>
-            <TableCell>
-              <SuiTypography variant="h6">Title</SuiTypography>
-            </TableCell>
-            <TableCell>
-              <SuiTypography variant="h6">Slug</SuiTypography>
-            </TableCell>
-            <TableCell>
-              <SuiTypography variant="h6">Tags</SuiTypography>
-            </TableCell>
-            <TableCell>
-              <SuiTypography variant="h6">Action</SuiTypography>
-            </TableCell>
-          </TableRow>
-          <TableBody>
-            {data?.length > 0 ? data.map((row) => (
-              <TableRow key={row.title} >
-                <TableCell component="th" scope="row">
-                  <SuiTypography variant="caption">{row?.title}</SuiTypography>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <SuiTypography variant="caption">{row.slug}</SuiTypography>
-                </TableCell>
-                <TableCell>
-                  <SuiTypography variant="caption">{row.tags}</SuiTypography>
-                </TableCell>
-                <TableCell>
-                  <SuiBox display="flex" alignItems="center">
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="dark"
-                        onClick={() => navigate("editor/edit", { state: { ...row } })}
-                      >
-                        <Icon>edit</Icon>&nbsp;edit
-                      </SuiButton>
-                    </SuiBox>
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="error"
-                        onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
-                      >
-                        <Icon>delete</Icon>&nbsp;delete
-                      </SuiButton>
-                    </SuiBox>
+      <Grid container spacing={2}>
+        {data?.length > 0 && data.map((row, index) => (
+          <Grid key={row.title} item xs={6} md={4}>
+            <BlogCard
+              style={{ marginRight: 2 }}
+              alt={row.title}
+              image={row.link}
+              title={row.title}
+              slug={row.slug}
+              tags={row.tags}
+            >
+              <CardActions>
+                <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end" alignItems="center">
+                  <SuiBox mr={1}>
+                    <SuiButton
+                      size="small"
+                      variant="text"
+                      color="dark"
+                      onClick={() => navigate("editor/edit", { state: { ...row } })}
+                    >
+                      <Icon>edit</Icon>&nbsp;edit
+                    </SuiButton>
                   </SuiBox>
-                </TableCell>
-              </TableRow>
-            )) : (
-              <TableRow>
-                <TableCell align="center" colSpan={4}>
-                  <SuiTypography variant="h6">Tidak ada data</SuiTypography>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                  <SuiBox mr={1}>
+                    <SuiButton
+                      size="small"
+                      variant="text"
+                      color="error"
+                      onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
+                    >
+                      <Icon>delete</Icon>&nbsp;delete
+                    </SuiButton>
+                  </SuiBox>
+                </SuiBox>
+              </CardActions>
+            </BlogCard>
+          </Grid>
+        ))
+        }
+      </Grid>
 
       {/* Modal Delete */}
       {modalConfig.show && modalConfig.type === "delete" && <ModalDelete fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}

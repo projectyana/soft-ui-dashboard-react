@@ -16,6 +16,10 @@ class BlogApi {
   delete(id) {
     return Service.delete(`/bo/blog/${id}`);
   }
+
+  upload(data) {
+    return Service.post("/bo/blog/upload", data);
+  }
 }
 
 export default new BlogApi();
