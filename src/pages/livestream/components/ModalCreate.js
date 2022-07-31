@@ -13,13 +13,10 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
   // Submit to server
   const formSubmitHandler = async (values, { setSubmitting }) => {
-
     LivestreamApi.start(values)
-      .then(({ data }) => {
-        setModalConfig(prev => ({ ...prev, show: false }));
-        fetchData();
-      })
-      .catch((err) => window.alert("Error connect to server"));
+      .then(({ data }) => setModalConfig(prev => ({ ...prev, show: false })))
+      .catch((err) => window.alert("Error connect to server"))
+      .finally(() => setTimeout(() => fetchData(), 1000));
   };
 
   const formik = useFormik({
