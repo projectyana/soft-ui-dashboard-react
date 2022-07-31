@@ -8,15 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 import {
   Grid,
-  Card,
   CardActions,
   Icon,
-  Paper,
-  Table,
-  TableContainer,
-  TableRow,
-  TableCell,
-  TableBody,
 } from "@mui/material";
 
 import {
@@ -30,20 +23,27 @@ import DashboardApi from "apis/Dashboard";
 import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiTypography from "components/SuiTypography";
-import ImageCard from "components/Custom/Card/ImageCard";
+import BlogCard from "components/Custom/Card/BlogCard";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import MiniStatisticsCard from "examples/Cards/StatisticsCards/MiniStatisticsCard";
 
+import ModalBlogDelete from "./components/ModalBlogDelete";
+
 export default function AppDashboard() {
   const navigate = useNavigate();
   const [dashboard, setDashboard] = useState({});
+  const [modalConfig, setModalConfig] = useState({
+    type: "delete",
+    show: false,
+    data: null
+  });
   const { name, email } = useSelector(state => state.auth);
 
   const fetchData = () => {
     DashboardApi.get()
       .then(({ data }) => {
-        const mapBlog = data?.data?.recent_blogs?.map(blog => ({ ...blog, link: blog?.thumbnail ? `https://api.rokom.xyz/${blog.thumbnail}` : null}));
+        const mapBlog = data?.data?.recent_blogs?.map(blog => ({ ...blog, link: blog?.thumbnail ? `https://api.rokom.xyz/${blog.thumbnail}` : null }));
         setDashboard({ ...data?.data, recent_blogs: mapBlog ?? [] } ?? {});
       });
   };
@@ -99,18 +99,20 @@ export default function AppDashboard() {
           </Grid>
         </Grid>
 
+        {/* Recent Blogs */}
         <SuiTypography mt={4} mb={1} variant="h4">Recent Blogs</SuiTypography>
         <Grid container spacing={2} >
           {dashboard?.recent_blogs?.length > 0 && dashboard?.recent_blogs?.map((row, index) => (
             <Grid
               style={{ pointer: 'cursor' }}
               key={row.title} item xs={6} md={4}>
-              <ImageCard
+              <BlogCard
                 style={{ marginRight: 2 }}
                 alt={row.title}
                 image={row.link ?? null}
                 title={row.title}
-                description={row.description}
+                tags={row.tags}
+                slug={row.slug}
               >
                 <CardActions>
                   <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end" alignItems="end" >
@@ -122,14 +124,28 @@ export default function AppDashboard() {
                     >
                       <Icon>edit</Icon> &nbsp;edit
                     </SuiButton>
+
+                    <SuiBox mr={1}>
+                      <SuiButton
+                        size="small"
+                        variant="text"
+                        color="error"
+                        onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
+                      >
+                        <Icon>delete</Icon>&nbsp;delete
+                      </SuiButton>
+                    </SuiBox>
                   </SuiBox>
                 </CardActions>
-              </ImageCard>
+              </BlogCard>
             </Grid>
           ))
           }
         </Grid>
       </SuiBox>
+
+      {/* Modal Blog Delete */}
+      {modalConfig.show && modalConfig.type === "delete" && <ModalBlogDelete fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
     </DashboardLayout >
   );
 }
