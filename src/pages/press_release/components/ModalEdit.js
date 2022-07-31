@@ -40,7 +40,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title="Edit Role"
+      title="Edit Press Release"
       open={modalConfig.show && modalConfig.type === 'edit'}
       setModalConfig={setModalConfig}
     >

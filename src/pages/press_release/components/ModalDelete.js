@@ -22,7 +22,7 @@ const ModalDelete = ({ fetchData, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title="Delete Role"
+      title="Delete Press Release"
       maxWidth="sm"
       open={modalConfig.show && modalConfig.type === "delete"}
       setModalConfig={setModalConfig}
