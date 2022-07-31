@@ -41,6 +41,22 @@ const BlogMenu = () => {
       .finally(() => setFetchStatus({ loading: false }));
   };
 
+  const getBlogRawContent = (content) => {
+    const parseContent = JSON.parse(content);
+    let blogContentText = "";
+
+    if (parseContent?.blocks?.length > 0) {
+      parseContent?.blocks?.forEach((item, index) => {
+        if (item.type === "header" || item.type === "paragraph") {
+          console.log(index, blogContentText.length, blogContentText);
+          blogContentText += `${item.data.text ?? ""}. `;
+        }
+      });
+    }
+
+    return `${blogContentText.slice(0, 125)}...`;
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -69,6 +85,7 @@ const BlogMenu = () => {
               slug={row.slug}
               tags={row.tags}
               author={row?.author?.name ?? ""}
+              content={getBlogRawContent(row.content)}
             >
               <CardActions>
                 <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end" alignItems="center">

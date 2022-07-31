@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import SuiBox from "components/SuiBox";
 
-const BlogCard = ({ children, style, image, alt, title, slug, tags, author }) => {
+const BlogCard = ({ children, style, image, alt, title, slug, tags, author, content }) => {
   return (
     <Card sx={{ ...style }}>
       {Boolean(image) && (<CardMedia
@@ -29,7 +29,7 @@ const BlogCard = ({ children, style, image, alt, title, slug, tags, author }) =>
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {tags}
+          {content}
         </Typography>
         {children}
       </CardContent>
