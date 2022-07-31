@@ -10,6 +10,7 @@ import LivestreamApi from "apis/Livestream";
 import CustomModal from "components/Custom/Modal";
 
 const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
+
   // Submit to server
   const formSubmitHandler = async (values, { setSubmitting }) => {
 
@@ -22,8 +23,9 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   };
 
   const formik = useFormik({
-    initialValues: { url: "" },
+    initialValues: { name: "", url: "" },
     validationSchema: yup.object().shape({
+      name: yup.string().required("Livestream Name is required!"),
       url: yup.string().required("Livestream URL is required!"),
     }),
     onSubmit: formSubmitHandler,
@@ -37,6 +39,17 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
       open={modalConfig.show && modalConfig.type === 'create'}
       setModalConfig={setModalConfig}
     >
+      <SuiBox mb={2}>
+        <SuiInput
+          name="name"
+          placeholder="Name"
+          onChange={handleChange}
+          value={values.name}
+          error={Boolean(errors.name && touched.name)}
+          errorMessage={errors?.name ?? ""}
+        />
+      </SuiBox>
+
       <SuiBox mb={2}>
         <SuiInput
           name="url"
