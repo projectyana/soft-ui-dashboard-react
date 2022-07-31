@@ -4,13 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import {
   Grid,
-  Paper,
   CardActions,
-  Table,
-  TableContainer,
-  TableBody,
-  TableRow,
-  TableCell,
   Icon
 } from "@mui/material";
 
@@ -74,6 +68,7 @@ const BlogMenu = () => {
               title={row.title}
               slug={row.slug}
               tags={row.tags}
+              author={row?.author?.name ?? ""}
             >
               <CardActions>
                 <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end" alignItems="center">

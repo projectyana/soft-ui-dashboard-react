@@ -113,6 +113,7 @@ export default function AppDashboard() {
                 title={row.title}
                 tags={row.tags}
                 slug={row.slug}
+                author={row?.author?.name ?? ""}
               >
                 <CardActions>
                   <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end" alignItems="end" >

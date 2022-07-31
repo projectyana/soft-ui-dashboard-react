@@ -1,11 +1,13 @@
 import {
+  Divider,
   Card,
   CardContent,
   CardMedia,
   Typography,
 } from "@mui/material";
+import SuiBox from "components/SuiBox";
 
-const BlogCard = ({ children, style, image, alt, title, slug, tags }) => {
+const BlogCard = ({ children, style, image, alt, title, slug, tags, author }) => {
   return (
     <Card sx={{ ...style }}>
       {Boolean(image) && (<CardMedia
@@ -17,6 +19,12 @@ const BlogCard = ({ children, style, image, alt, title, slug, tags }) => {
       )}
 
       <CardContent>
+        <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end">
+          <Typography gutterBottom variant="body2" component="div">
+            {author}
+          </Typography>
+        </SuiBox>
+        <Divider />
         <Typography gutterBottom variant="h5" component="div">
           {title}
         </Typography>
