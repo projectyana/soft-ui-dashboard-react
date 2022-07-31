@@ -16,7 +16,7 @@ import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiInput from "components/SuiInput";
 
-import Select from "components/Custom/Select";
+import { Select } from "components/Custom/Select";
 import CustomModal from "components/Custom/Modal";
 import SuiTypography from "components/SuiTypography";
 import { LoadingState } from "components/Custom/Loading";
@@ -37,12 +37,48 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   // Submit to server
   const formSubmitHandler = (values, { setSubmitting }) => {
     console.log(values);
-    // MenuApi.create(values)
-    //   .then(({ data }) => {
-    //     setModalConfig(prev => ({ ...prev, show: false }));
-    //     fetchData();
-    //   })
-    //   .catch((err) => window.alert("Error connect to server"));
+
+    const valueFormater = values => {
+      const finalValue = {
+        name: values.name,
+        type: values.menu_type
+      };
+
+      // if user  parent/sub menu as link
+      if (values.menu_type == "link") {
+        finalValue.content = { url: values.content };
+      }
+      else {
+        // if user create parent/sub menu as page/blog
+        finalValue.content = { [`${values.menu_type}_id`]: values.content };
+      }
+
+      return finalValue;
+    };
+
+    // if user create parent menu
+    if (values.menu_state === "parent") {
+      const finalValue = valueFormater(values);
+
+      MenuApi.create(finalValue)
+        .then(({ data }) => {
+          setModalConfig(prev => ({ ...prev, show: false }));
+          fetchData();
+        })
+        .catch(() => window.alert("Error connect to server"));
+    }
+
+    // if user create sub parent menu
+    if (values.menu_state === "sub") {
+      const finalValue = valueFormater(values);
+
+      MenuApi.createSubmenu(values.id_parent, finalValue)
+        .then(({ data }) => {
+          setModalConfig(prev => ({ ...prev, show: false }));
+          fetchData();
+        })
+        .catch(() => window.alert("Error connect to server"));
+    }
   };
 
   const formik = useFormik({
@@ -62,14 +98,15 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
         then: yup.string().required("Parent Menu is required!")
       }),
       menu_type: yup.string().required("Menu Type is required!"),
-      content: yup.string().when('menu_type', {
-        is: (menu_type) => Boolean(menu_type === 'page' || menu_type === 'blog'),
-        then: yup.string().required(`Content is required!`)
-      }),
-      link: yup.string().when('menu_type', {
-        is: (menu_type) => Boolean(menu_type === 'link'),
-        then: yup.string().required("Link is required!")
-      }),
+      content: yup.string().required("Content is required!"),
+      // content: yup.string().when('menu_type', {
+      //   is: (menu_type) => Boolean(menu_type === 'page' || menu_type === 'blog'),
+      //   then: yup.string().required(`Content is required!`)
+      // }),
+      // link: yup.string().when('menu_type', {
+      //   is: (menu_type) => Boolean(menu_type === 'link'),
+      //   then: yup.string().required("Link is required!")
+      // }),
     }),
     onSubmit: formSubmitHandler,
   });
@@ -79,16 +116,18 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   const getInitialData = () => {
 
     Axios.all([
+      MenuApi.getParent(),
       MenuApi.getPageUnlinked(),
       MenuApi.getBlogUnlinked()
     ])
-      .then((Axios.spread((resPage, resBlog) => {
+      .then((Axios.spread((resParent, resPage, resBlog) => {
+        const mapParent = resParent.data.data.map(item => ({ ...item, value: item.id, label: item.name }));
         const mapPage = resPage.data.data.map(item => ({ ...item, value: item.id, label: `${item.title} (Page)`, type: "page" }));
         const mapBlog = resBlog.data.data.map(item => ({ ...item, value: item.id, label: `${item.title} (Blog)`, type: "blog" }));
 
         console.log(mapPage, mapBlog);
 
-        setDropdown(prev => ({ ...prev, page: mapPage, blog: mapBlog }));
+        setDropdown(prev => ({ ...prev, parent_menu: mapParent, page: mapPage, blog: mapBlog }));
       })))
       .catch(() => window.alert("Error connect to server"))
       .finally(() => setFetchStatus({ loading: false }));
@@ -168,7 +207,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
                 aria-labelledby="menu_type"
                 name="menu_type"
                 value={values.menu_type}
-                onChange={(e) => setValues({ ...values, menu_type: e.target.value, content: "", link: "" })}
+                onChange={(e) => setValues({ ...values, menu_type: e.target.value, content: "" })}
               >
                 <FormControlLabel sx={{ marginX: 1 }} size="small" value="page" control={<Radio />} label="Page" />
                 <FormControlLabel sx={{ marginX: 1 }} size="small" value="blog" control={<Radio />} label="Blog" />
@@ -197,12 +236,12 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
             {values.menu_type === "link" && (
               <SuiInput
-                name="link"
+                name="content"
                 placeholder="https://"
                 onChange={handleChange}
-                value={values.link}
-                error={Boolean(errors.link && touched.link)}
-                errorMessage={errors?.link ?? ""}
+                value={values.content}
+                error={Boolean(errors.content && touched.content)}
+                errorMessage={errors?.contnet ?? ""}
               />
             )}
           </SuiBox>
