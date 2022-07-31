@@ -32,6 +32,8 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
       url: imageLink,
     };
 
+    console.log(finalValue)
+
     CarouselApi.create(finalValue)
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));

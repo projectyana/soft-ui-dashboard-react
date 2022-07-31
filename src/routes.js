@@ -58,6 +58,8 @@ import SignIn from "pages/auth/sign-in";
 import RolePage from "pages/role";
 import UserPage from "pages/user";
 import MenuConfigurationPage from "pages/menu";
+import GalleryPage from "pages/gallery";
+
 
 // Page 
 import PageMenu from "pages/page";
@@ -136,6 +138,14 @@ const sideNav = [
     icon: <Document size="12px" />,
     route: "livestream",
     component: <LivestreamPage />,
+  },
+  {
+    type: "collapse",
+    name: "Gallery",
+    key: "gallery",
+    icon: <Document size="12px" />,
+    route: "gallery",
+    component: <GalleryPage />,
   },
 ];
 

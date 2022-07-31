@@ -160,7 +160,9 @@ export default function RolePage() {
       </SuiBox>
 
       {/* Modal  Create */}
-      {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "create" &&
+        <ModalCreate fetchData={fetchData}
+          modalConfig={modalConfig} setModalConfig={setModalConfig} />}
 
       {/* Modal Edit */}
       {modalConfig.show && modalConfig.type === "edit" && <ModalEdit fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}

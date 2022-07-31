@@ -20,7 +20,6 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 import { PageLoading } from "components/Custom/Loading";
 import ImageCard from "components/Custom/Card/ImageCard";
-
 import CarouselApi from "apis/Carousel";
 
 import ModalCreate from "./components/ModalCreate";
@@ -66,6 +65,7 @@ export default function CarouselPage() {
 
   useEffect(() => {
     fetchData();
+    console.log(data)
 
     return () => { setData([]); };
   }, []);
