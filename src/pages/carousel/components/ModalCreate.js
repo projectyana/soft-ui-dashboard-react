@@ -25,19 +25,25 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
   // Submit to server
   const formSubmitHandler = async (values, { setSubmitting }) => {
-    const imageLink = await handleUploadImage();
-    const finalValue = {
-      ...values,
-      image: dataGambar[0]?.nama,
-      url: imageLink,
-    };
+    if (dataGambar.length > 0) {
+      const imageLink = await handleUploadImage();
+      const finalValue = {
+        ...values,
+        image: dataGambar[0]?.nama,
+        url: imageLink,
+      };
 
-    CarouselApi.create(finalValue)
-      .then(({ data }) => {
-        setModalConfig(prev => ({ ...prev, show: false }));
-        fetchData();
-      })
-      .catch((err) => window.alert("Error connect to server"));
+      CarouselApi.create(finalValue)
+        .then(({ data }) => {
+          setModalConfig(prev => ({ ...prev, show: false }));
+          fetchData();
+        })
+        .catch((err) => window.alert("Error connect to server"));
+    }
+    else {
+      window.alert("Image carousel is required!");
+      setSubmitting(false);
+    }
   };
 
   const formik = useFormik({
