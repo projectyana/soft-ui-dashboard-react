@@ -1,16 +1,13 @@
 {
-  "name": "soft-ui-dashboard-react",
+  "name": "rokom-back-office",
   "version": "3.1.0",
-  "author": "Creative Tim",
+  "author": "Yana",
   "license": "SEE LICENSE IN <https://www.creative-tim.com/license>",
-  "description": "ReactJS version of Soft UI Dashboard by Creative Tim",
+  "description": "Rokom back office / Admin",
   "homepage": "/admin",
-  "bugs": {
-    "url": "https://github.com/creativetimofficial/soft-ui-dashboard-react/issues"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/soft-ui-dashboard-react.git"
+    "url": "git+https://github.com/projectyana/rokom-back-office.git"
   },
   "engines": {
     "node": "14 || 15 || 16",
@@ -51,6 +48,7 @@
     "react-redux": "^8.0.2",
     "react-router-dom": "6.2.1",
     "react-scripts": "5.0.0",
+    "react-select": "^5.4.0",
     "react-select-async-paginate": "^0.6.1",
     "stylis": "4.0.13",
     "stylis-plugin-rtl": "2.1.1",
@@ -93,6 +91,9 @@
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.28.0",
     "eslint-plugin-react-hooks": "4.3.0",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-normalize": "^10.0.1",
+    "postcss-preset-env": "^7.7.2",
     "prettier": "2.5.1"
   }
 }

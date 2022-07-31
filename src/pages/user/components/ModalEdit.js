@@ -9,7 +9,7 @@ import SuiInput from "components/SuiInput";
 
 import UserApi from "apis/User";
 import CustomModal from "components/Custom/Modal";
-import Select from "components/Custom/Select";
+import { Select } from "components/Custom/Select";
 
 const ModalEdit = ({ fetchData, roles, modalConfig, setModalConfig }) => {
   const { id, username, name, email, password, role_id } = modalConfig.data;

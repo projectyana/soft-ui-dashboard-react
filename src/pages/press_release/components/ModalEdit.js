@@ -1,5 +1,4 @@
 /* eslint-disable */
-import { useState } from 'react';
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -7,34 +6,15 @@ import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiInput from "components/SuiInput";
 
-import CarouselApi from "apis/Carousel";
+import PressReleaseApi from "apis/PressRelease";
 import CustomModal from "components/Custom/Modal";
-import InputImage from "./InputImage";
 
 const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
-  const { id, link, title, slug, body, url, image } = modalConfig?.data ?? {};
-  const [dataGambar, setDataGambar] = useState([{ link }]);
-
-  const handleUploadImage = async () => {
-    const formData = new FormData();
-    formData.append("image", dataGambar[0]?.data);
-
-    return CarouselApi.upload(formData)
-      .then((res) => res?.data?.data)
-      .catch((err) => { });
-  };
+  const { id, title, category, description } = modalConfig.data;
 
   // Submit to server
-  const formSubmitHandler = async (values, { setSubmitting }) => {
-    const finalValue = { ...values };
-
-    if (dataGambar[0]?.data) {
-      const imageLink = await handleUploadImage();
-      finalValue.image = dataGambar[0]?.nama;
-      finalValue.url = imageLink;
-    }
-
-    CarouselApi.update(id, finalValue)
+  const formSubmitHandler = (values, { setSubmitting }) => {
+    PressReleaseApi.update(id, values)
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
         fetchData();
@@ -42,17 +22,16 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
       .catch((err) => window.alert("Error connect to server"));
   };
 
+  // Formik
   const formik = useFormik({
     initialValues: {
       title: title ?? "",
-      body: body ?? "",
-      description: description ?? "",
-      url: url ?? "",
-      image: image ?? ""
+      category: category ?? "",
+      description: description ?? ""
     },
     validationSchema: yup.object().shape({
       title: yup.string().required("Title is required!"),
-      body: yup.string().required("Body is required!"),
+      category: yup.string().required("Category is required!"),
     }),
     onSubmit: formSubmitHandler,
   });
@@ -61,13 +40,11 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title="Edit Carousel"
+      title="Edit Press Release"
       open={modalConfig.show && modalConfig.type === 'edit'}
       setModalConfig={setModalConfig}
     >
-      <InputImage dataGambar={dataGambar} setDataGambar={setDataGambar} />
-
-      <SuiBox mt={3} mb={2}>
+      <SuiBox mb={2}>
         <SuiInput
           name="title"
           placeholder="Title"
@@ -80,12 +57,12 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
       <SuiBox mb={2}>
         <SuiInput
-          name="description"
-          placeholder="Description"
+          name="category"
+          placeholder="Category"
           onChange={handleChange}
-          value={values.description}
-          error={Boolean(errors.description && touched.description)}
-          errorMessage={errors?.description ?? ""}
+          value={values.category}
+          error={Boolean(errors.category && touched.category)}
+          errorMessage={errors?.category ?? ""}
         />
       </SuiBox>
 
@@ -93,10 +70,10 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
         <SuiInput
           multiline
           rows={5}
-          name="body"
-          placeholder="Body"
+          name="description"
+          placeholder="Description"
           onChange={handleChange}
-          value={values.body}
+          value={values.description}
         />
       </SuiBox>
 

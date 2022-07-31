@@ -4,15 +4,15 @@ import SuiTypography from "components/SuiTypography";
 import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";
 
-import CarouselApi from "apis/Carousel";
+import PressReleaseApi from "apis/PressRelease";
 
 import CustomModal from "components/Custom/Modal";
 
 const ModalDelete = ({ fetchData, modalConfig, setModalConfig }) => {
-  const { id = "", title = "", link } = modalConfig?.data ?? {};
+  const { id = "", title = "" } = modalConfig?.data ?? {};
 
   const handleDeleteFromServer = () => {
-    CarouselApi.delete(id)
+    PressReleaseApi.delete(id)
       .then(() => {
         setModalConfig({ show: false, data: null });
         fetchData();
@@ -22,25 +22,14 @@ const ModalDelete = ({ fetchData, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title="Delete Carousel"
+      title="Delete Press Release"
       maxWidth="sm"
       open={modalConfig.show && modalConfig.type === "delete"}
       setModalConfig={setModalConfig}
     >
       <SuiTypography mt={2} variant="h6">
-        Carousel Title: {title}
+        Press Release Title: {title}
       </SuiTypography>
-      <SuiBox mt={2}>
-        <img
-          alt="carousel"
-          style={{
-            height: 200,
-            width: '100%',
-            objectFit: 'cover',
-          }}
-          src={link}
-        />
-      </SuiBox>
       <SuiTypography mt={2} color="error" variant="body2">
         This action cannot be undone.
       </SuiTypography>

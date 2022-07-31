@@ -13,7 +13,7 @@ import SuiInput from "components/SuiInput";
 import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiTypography from "components/SuiTypography";
-import Select from "components/Custom/Select";
+import { Select } from "components/Custom/Select";
 import { LoadingState } from "components/Custom/Loading";
 
 // @mui material components

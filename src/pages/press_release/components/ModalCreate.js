@@ -1,5 +1,3 @@
-/* eslint-disable */
-import { useState } from 'react';
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -7,32 +5,14 @@ import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiInput from "components/SuiInput";
 
-import CarouselApi from "apis/Carousel";
+import PressReleaseApi from "apis/PressRelease";
 import CustomModal from "components/Custom/Modal";
-import InputImage from "./InputImage";
 
 const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
-  const [dataGambar, setDataGambar] = useState([]);
-
-  const handleUploadImage = async () => {
-    const formData = new FormData();
-    formData.append("image", dataGambar[0]?.data);
-
-    return CarouselApi.upload(formData)
-      .then((res) => res?.data?.data)
-      .catch((err) => { });
-  };
 
   // Submit to server
-  const formSubmitHandler = async (values, { setSubmitting }) => {
-    const imageLink = await handleUploadImage();
-    const finalValue = {
-      ...values,
-      image: dataGambar[0]?.nama,
-      url: imageLink,
-    };
-
-    CarouselApi.create(finalValue)
+  const formSubmitHandler = (values, { setSubmitting }) => {
+    PressReleaseApi.create(values)
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
         fetchData();
@@ -43,12 +23,12 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   const formik = useFormik({
     initialValues: {
       title: "",
-      body: "",
+      category: "",
       description: ""
     },
     validationSchema: yup.object().shape({
       title: yup.string().required("Title is required!"),
-      body: yup.string().required("Body is required!"),
+      category: yup.string().required("Category is required!"),
     }),
     onSubmit: formSubmitHandler,
   });
@@ -57,13 +37,11 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title="Create New Carousel"
+      title="Create New Press Release"
       open={modalConfig.show && modalConfig.type === 'create'}
       setModalConfig={setModalConfig}
     >
-      <InputImage dataGambar={dataGambar} setDataGambar={setDataGambar} />
-
-      <SuiBox mt={3} mb={2}>
+      <SuiBox mb={2}>
         <SuiInput
           name="title"
           placeholder="Title"
@@ -76,12 +54,12 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
       <SuiBox mb={2}>
         <SuiInput
-          name="description"
-          placeholder="Description"
+          name="category"
+          placeholder="Category"
           onChange={handleChange}
-          value={values.description}
-          error={Boolean(errors.description && touched.description)}
-          errorMessage={errors?.description ?? ""}
+          value={values.category}
+          error={Boolean(errors.category && touched.category)}
+          errorMessage={errors?.category ?? ""}
         />
       </SuiBox>
 
@@ -89,10 +67,10 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
         <SuiInput
           multiline
           rows={5}
-          name="body"
-          placeholder="Body"
+          name="description"
+          placeholder="Description"
           onChange={handleChange}
-          value={values.body}
+          value={values.description}
         />
       </SuiBox>
 

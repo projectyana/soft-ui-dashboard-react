@@ -7,10 +7,10 @@ import SuiTypography from "components/SuiTypography";
 
 import LivestreamApi from "apis/Livestream";
 
-const LivesteamCard = ({ data, fetchData }) => {
+const LivesteamCard = ({ data, setData, fetchData }) => {
 
   const endLiveStream = () => {
-    LivestreamApi.end().then(() => fetchData());
+    LivestreamApi.end().then(() => setData({}));
   };
 
   return (
