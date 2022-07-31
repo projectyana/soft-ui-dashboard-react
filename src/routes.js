@@ -69,6 +69,7 @@ import BlogEditor from "pages/blog/editor";
 
 import CarouselPage from "pages/carousel";
 import LivestreamPage from "pages/livestream";
+import PressRelease from "pages/press_release";
 
 // Dashboard sidebar menu
 const sideNav = [
@@ -136,6 +137,14 @@ const sideNav = [
     icon: <Document size="12px" />,
     route: "livestream",
     component: <LivestreamPage />,
+  },
+  {
+    type: "collapse",
+    name: "Press Release",
+    key: "press-release",
+    icon: <Document size="12px" />,
+    route: "press-release",
+    component: <PressRelease />,
   },
 ];
 
