@@ -96,6 +96,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig, roles }) => {
       <SuiBox mb={2}>
         <SuiInput
           name="password"
+          type="password"
           placeholder="Password"
           onChange={handleChange}
           value={values.password}
