@@ -53,6 +53,22 @@ export default function AppDashboard() {
       .finally(() => setFetchStatus({ loading: false }));
   };
 
+  const getBlogRawContent = (content) => {
+    const parseContent = JSON.parse(content);
+    let blogContentText = "";
+
+    if (parseContent?.blocks?.length > 0) {
+      parseContent?.blocks?.forEach((item, index) => {
+        if (item.type === "header" || item.type === "paragraph") {
+          console.log(index, blogContentText.length, blogContentText);
+          blogContentText += `${item.data.text ?? ""}. `;
+        }
+      });
+    }
+
+    return `${blogContentText.slice(0, 125)}...`;
+  };
+
   useEffect(() => {
     fetchData();
 
@@ -122,6 +138,7 @@ export default function AppDashboard() {
                       tags={row.tags}
                       slug={row.slug}
                       author={row?.author?.name ?? ""}
+                      content={getBlogRawContent(row.content)}
                     >
                       <CardActions>
                         <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end" alignItems="end" >
