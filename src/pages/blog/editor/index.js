@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 
 import SuiBox from "components/SuiBox";
 import SuiInput from "components/SuiInput";
+import Grid from '@mui/material/Grid';
 
 // Soft UI Dashboard React contexts
 import { useSoftUIController, setMiniSidenav } from "context";
@@ -85,8 +86,8 @@ const BlogEditor = () => {
   return (
     <DashboardLayout>
       <>
-        <SuiBox mt={2} mb={2} display="flex" justifyContent="flex-start" >
-          <SuiBox mr={2}>
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+          <Grid item md={12}>
             <SuiInput
               name="title"
               placeholder="Title"
@@ -95,9 +96,8 @@ const BlogEditor = () => {
               error={Boolean(errors.title && touched.title)}
               errorMessage={errors?.title ?? ""}
             />
-          </SuiBox>
-
-          <SuiBox>
+          </Grid>
+          <Grid item md={12}>
             <SuiInput
               name="tags"
               placeholder="Tags"
@@ -106,9 +106,11 @@ const BlogEditor = () => {
               error={Boolean(errors.tags && touched.tags)}
               errorMessage={errors?.tags ?? ""}
             />
-          </SuiBox>
-        </SuiBox>
-        <TextEditor action={action} formik={formik} dataGambar={dataGambar} setDataGambar={setDataGambar} />
+          </Grid>
+          <Grid item md={12}>
+            <TextEditor action={action} formik={formik} dataGambar={dataGambar} setDataGambar={setDataGambar} />
+          </Grid>
+        </Grid>
       </>
     </DashboardLayout>
   );
