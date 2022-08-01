@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 
-import SuiBox from "components/SuiBox";
 import SuiInput from "components/SuiInput";
 import Grid from '@mui/material/Grid';
 
