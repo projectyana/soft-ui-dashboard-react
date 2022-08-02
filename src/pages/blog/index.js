@@ -5,14 +5,17 @@ import { useNavigate } from "react-router-dom";
 import {
   Grid,
   CardActions,
-  Icon
+  Icon,
 } from "@mui/material";
 
 import SuiBox from "components/SuiBox";
+import SuiInput from "components/SuiInput";
 import SuiButton from "components/SuiButton";
-import SuiTypography from "components/SuiTypography";
-import { PageLoading } from "components/Custom/Loading";
 import BlogCard from "components/Custom/Card/BlogCard";
+import Pagination from "components/Custom/Pagination";
+import { PageLoading } from "components/Custom/Loading";
+
+import useDebounce from "hooks/useDebounce";
 
 import BlogApi from "apis/Blog";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -21,6 +24,7 @@ import ModalDelete from "./components/ModalDelete";
 
 const BlogMenu = () => {
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [modalConfig, setModalConfig] = useState({
@@ -28,14 +32,19 @@ const BlogMenu = () => {
     show: false,
     data: null
   });
+  const [pagination, setPagination] = useState({ page: 0, rowsPerPage: 5, count: 0 });
+  const debounceSearch = useDebounce(search, 500);
 
   const fetchData = () => {
-    setFetchStatus({ loading: true });
-
-    BlogApi.get()
+    BlogApi.get({
+      page: parseInt(pagination.page) + 1,
+      per_page: pagination.rowsPerPage,
+      search: debounceSearch
+    })
       .then((res) => {
-        const mapData = res.data.data.map((item) => ({ ...item, link: item.thumbnail ? `https://api.rokom.xyz/${item.thumbnail}` : null })).reverse();
+        const mapData = res.data.data.map((item) => ({ ...item, link: item.thumbnail ? `https://api.rokom.xyz/${item.thumbnail}` : null }));
         setData(mapData ?? []);
+        setPagination(prev => ({ ...prev, count: res.data.pagination.total }));
       })
       .catch((err) => window.alert("Error connect to server!"))
       .finally(() => setFetchStatus({ loading: false }));
@@ -48,7 +57,6 @@ const BlogMenu = () => {
     if (parseContent?.blocks?.length > 0) {
       parseContent?.blocks?.forEach((item, index) => {
         if (item.type === "header" || item.type === "paragraph") {
-          console.log(index, blogContentText.length, blogContentText);
           blogContentText += `${item.data.text ?? ""}. `;
         }
       });
@@ -59,7 +67,7 @@ const BlogMenu = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [pagination.page, pagination.rowsPerPage, debounceSearch]);
 
   if (fetchStatus.loading) {
     return <PageLoading />;
@@ -67,18 +75,18 @@ const BlogMenu = () => {
 
   return (
     <DashboardLayout>
-      <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
-        {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
+      <SuiBox pb={2} display="flex" justifyContent="space-between" alignItems="center">
+        <SuiInput placeholder="Search..." icon={{ component: "search", direction: "left" }} onChange={(e) => setSearch(e.target.value ?? "")} />
         <SuiButton size="medium" color="info" onClick={() => navigate("editor/create")}>
           Create
         </SuiButton>
       </SuiBox>
 
+      {/* Blog Cards */}
       <Grid container spacing={2}>
         {data?.length > 0 && data.map((row, index) => (
           <Grid key={row.title} item xs={6} md={4}>
             <BlogCard
-              style={{ marginRight: 2 }}
               alt={row.title}
               image={row.link}
               title={row.title}
@@ -116,6 +124,14 @@ const BlogMenu = () => {
         ))
         }
       </Grid>
+
+      {/* Pagination  */}
+      <Pagination
+        count={pagination.count}
+        rowsPerPage={pagination.rowsPerPage}
+        page={pagination.page}
+        onPageChange={(e, newPage) => setPagination(prev => ({ ...prev, page: newPage }))}
+        onRowsPerPageChange={(e) => setPagination(prev => ({ ...prev, page: 0, rowsPerPage: parseInt(e.target.value, 10) }))} />
 
       {/* Modal Delete */}
       {modalConfig.show && modalConfig.type === "delete" && <ModalDelete fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
