@@ -1,6 +1,6 @@
 
 /**
- * Recent Infor Category Page
+ * Recent Info Page
  */
 
 import React, { useEffect, useState } from "react";
@@ -83,6 +83,9 @@ export default function RecentInfoPage() {
               <SuiTypography variant="h6">Info</SuiTypography>
             </TableCell>
             <TableCell>
+              <SuiTypography variant="h6">Description</SuiTypography>
+            </TableCell>
+            <TableCell>
               <SuiTypography variant="h6">Category</SuiTypography>
             </TableCell>
             <TableCell>
@@ -97,6 +100,9 @@ export default function RecentInfoPage() {
               <TableRow key={row.name} >
                 <TableCell component="th" scope="row">
                   <SuiTypography variant="caption">{row.info}</SuiTypography>
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <SuiTypography variant="caption">{row.description ?? ""}</SuiTypography>
                 </TableCell>
                 <TableCell>
                   <SuiTypography variant="caption">{dropdown?.find(i => i.value === row.recent_info_category_id)?.label ?? ""}</SuiTypography>

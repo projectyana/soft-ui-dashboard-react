@@ -11,7 +11,7 @@ import RecentInfoApi from "apis/RecentInfo";
 import CustomModal from "components/Custom/Modal";
 
 const ModalEdit = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
-  const { id, info, publish_date, recent_info_category_id } = modalConfig.data;
+  const { id, info, description, publish_date, recent_info_category_id } = modalConfig.data;
 
   // Submit to server
   const formSubmitHandler = (values, { setSubmitting }) => {
@@ -27,11 +27,13 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
   const formik = useFormik({
     initialValues: {
       info: info ?? "",
+      description: description ?? "",
       recent_info_category_id: recent_info_category_id ?? "",
       publish_date: publish_date ?? ""
     },
     validationSchema: yup.object().shape({
       info: yup.string().required("Info is required!"),
+      description: yup.string().required("Description is required!"),
       recent_info_category_id: yup.string().required("Recent Info Category is required!"),
       publish_date: yup.string().required("Publish Date is required!"),
     }),
@@ -55,6 +57,17 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
           defaultValue={values.info}
           error={Boolean(errors.info && touched.info)}
           errorMessage={errors?.info ?? ""}
+        />
+      </SuiBox>
+
+      <SuiBox mb={2}>
+        <SuiInput
+          name="description"
+          placeholder="Description"
+          onChange={handleChange}
+          value={values.description}
+          error={Boolean(errors.description && touched.description)}
+          errorMessage={errors?.description ?? ""}
         />
       </SuiBox>
 

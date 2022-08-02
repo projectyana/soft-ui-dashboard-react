@@ -24,11 +24,13 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
   const formik = useFormik({
     initialValues: {
       info: "",
+      description: "",
       recent_info_category_id: "",
       publish_date: ""
     },
     validationSchema: yup.object().shape({
       info: yup.string().required("Info is required!"),
+      description: yup.string().required("Description is required!"),
       recent_info_category_id: yup.string().required("Recent Info Category is required!"),
       publish_date: yup.string().required("Publish Date is required!"),
     }),
@@ -52,6 +54,17 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
           value={values.info}
           error={Boolean(errors.info && touched.info)}
           errorMessage={errors?.info ?? ""}
+        />
+      </SuiBox>
+
+      <SuiBox mb={2}>
+        <SuiInput
+          name="description"
+          placeholder="Description"
+          onChange={handleChange}
+          value={values.description}
+          error={Boolean(errors.description && touched.description)}
+          errorMessage={errors?.description ?? ""}
         />
       </SuiBox>
 
