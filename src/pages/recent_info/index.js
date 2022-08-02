@@ -1,3 +1,4 @@
+/* eslint-disable */
 
 /**
  * Recent Info Page
@@ -17,8 +18,12 @@ import Axios from "axios";
 
 import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";
+import SuiInput from "components/SuiInput";
 import SuiTypography from "components/SuiTypography";
+import Pagination from "components/Custom/Pagination";
 import { PageLoading } from "components/Custom/Loading";
+
+import useDebounce from "hooks/useDebounce";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
@@ -30,6 +35,7 @@ import ModalEdit from "./components/ModalEdit";
 import ModalDelete from "./components/ModalDelete";
 
 export default function RecentInfoPage() {
+  const [search, setSearch] = useState("");
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [dropdown, setDropdown] = useState([]);
@@ -38,12 +44,16 @@ export default function RecentInfoPage() {
     show: false,
     data: null
   });
+  const [pagination, setPagination] = useState({ page: 0, rowsPerPage: 5, count: 0 });
+  const debounceSearch = useDebounce(search, 500);
 
   const fetchData = () => {
-    setFetchStatus({ loading: true });
-
     Axios.all([
-      RecentInfoApi.get(),
+      RecentInfoApi.get({
+        page: parseInt(pagination.page) + 1,
+        per_page: pagination.rowsPerPage,
+        search: debounceSearch
+      }),
       RecentInfoCategoryApi.dropdown()
     ])
       .then(Axios.spread((resInfo, resDropdown) => {
@@ -51,6 +61,7 @@ export default function RecentInfoPage() {
 
         setData(resInfo.data.data ?? []);
         setDropdown(mapDropdown);
+        setPagination(prev => ({ ...prev, count: resInfo.data.pagination.total }));
       }))
       .catch((err) => window.alert(err.message ?? "Error connect to server"))
       .finally(() => setFetchStatus({ loading: false }));
@@ -62,7 +73,7 @@ export default function RecentInfoPage() {
     fetchData();
 
     return () => { setData([]); };
-  }, []);
+  }, [pagination.page, pagination.rowsPerPage, debounceSearch]);
 
   if (fetchStatus.loading) {
     return <PageLoading />;
@@ -70,7 +81,8 @@ export default function RecentInfoPage() {
 
   return (
     <DashboardLayout>
-      <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
+      <SuiBox pb={2} display="flex" justifyContent="space-between" alignItems="center">
+        <SuiInput placeholder="Search..." icon={{ component: "search", direction: "left" }} onChange={(e) => setSearch(e.target.value ?? "")} />
         <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
           Create
         </SuiButton>
@@ -145,6 +157,14 @@ export default function RecentInfoPage() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Pagination  */}
+      <Pagination
+        count={pagination.count}
+        rowsPerPage={pagination.rowsPerPage}
+        page={pagination.page}
+        onPageChange={(e, newPage) => setPagination(prev => ({ ...prev, page: newPage }))}
+        onRowsPerPageChange={(e) => setPagination(prev => ({ ...prev, page: 0, rowsPerPage: parseInt(e.target.value, 10) }))} />
 
       {/* Modal  Create */}
       {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} dropdown={dropdown} />}

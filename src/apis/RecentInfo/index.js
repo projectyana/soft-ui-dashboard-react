@@ -1,8 +1,8 @@
 import { Service } from "services";
 
 class RecentInfo {
-  get(data) {
-    return Service.get("/bo/recent_info", data);
+  get(params) {
+    return Service.get("/bo/recent_info", { params });
   }
 
   create(data) {
