@@ -15,28 +15,31 @@ import InputImage from "./InputImage";
 
 const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
   const [loading, setLoading] = useState(false);
-  const { id, link, title, icon, category, image } = modalConfig?.data ?? {};
+  const { id, link, title, icon, category, thumbnail } = modalConfig?.data ?? {};
   const [dataGambar, setDataGambar] = useState([{ link }]);
 
-  const handleUploadImage = async () => {
+  const handleUploadImage = async (item) => {
     const formData = new FormData();
-    formData.append("image", dataGambar[0]?.data);
+    formData.append("image", item?.data);
 
-    return HealthComicApi.upload(formData)
-      .then((res) => res?.data?.data)
-      .catch((err) => { });
+    return HealthComicApi
+      .upload(formData)
+      .then((res) => res?.data?.data);
   };
 
   // Submit to server
   const formSubmitHandler = async (values, { setSubmitting }) => {
     if (dataGambar.length > 0) {
-      const finalValue = { ...values };
+      const prev_assets = dataGambar?.filter(i => Boolean(i.relative_path))?.map(i => i.relative_path);
+      const filter_new_assets_path = await Promise.all(dataGambar?.filter(i => Boolean(i.data))?.map(async (item) => {
+        return await handleUploadImage(item);
+      }));
 
-      if (dataGambar[0]?.data) {
-        const imageLink = await handleUploadImage();
-        finalValue.image = dataGambar[0]?.nama;
-        finalValue.url = imageLink;
-      }
+      const finalValue = {
+        ...values,
+        thumbnail,
+        assets_path: prev_assets.concat(filter_new_assets_path)
+      };
 
       HealthComicApi.update(id, finalValue)
         .then(({ data }) => {
@@ -73,7 +76,8 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
     HealthComicApi.getSingle(id)
       .then((res) => {
         console.log(res);
-        const mapAssetPath = res?.data?.data?.assets_path?.map((item) => ({ link: `https://api.rokom.xyz/${item}` }));
+        const mapAssetPath = res?.data?.data?.assets_path?.map((item) => ({ relative_path: item, link: `https://api.rokom.xyz/${item}` }));
+        console.log(mapAssetPath);
         setDataGambar(mapAssetPath ?? []);
       })
       .finally(() => setLoading(false));
