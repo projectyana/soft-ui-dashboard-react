@@ -6,7 +6,6 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Divider,
   Card,
   Table,
   TableContainer,
@@ -19,9 +18,9 @@ import {
 import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";
 import SuiTypography from "components/SuiTypography";
+import { PageLoading } from "components/Custom/Loading";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import { PageLoading } from "components/Custom/Loading";
 
 import LivestreamApi from "apis/Livestream";
 
@@ -48,7 +47,7 @@ export default function LivestreamPage() {
 
   const fetchHistory = () => {
     LivestreamApi.history()
-      .then((res) => setHistory(res.data.data ?? []))
+      .then((res) => setHistory(res?.data?.data?.slice(0, 6) ?? []))
       .catch(() => setHistory([]));
   };
 
