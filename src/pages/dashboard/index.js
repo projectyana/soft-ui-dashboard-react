@@ -60,7 +60,6 @@ export default function AppDashboard() {
     if (parseContent?.blocks?.length > 0) {
       parseContent?.blocks?.forEach((item, index) => {
         if (item.type === "header" || item.type === "paragraph") {
-          console.log(index, blogContentText.length, blogContentText);
           blogContentText += `${item.data.text ?? ""}. `;
         }
       });
