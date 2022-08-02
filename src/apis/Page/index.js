@@ -2,8 +2,8 @@
 import { Service } from "services";
 
 class PageApi {
-  get(data) {
-    return Service.get("/bo/page", data);
+  get(params) {
+    return Service.get("/bo/page", { params });
   }
 
   create(data) {
