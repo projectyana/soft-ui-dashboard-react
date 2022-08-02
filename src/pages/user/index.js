@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 /**
- * Role Page
+ * User Page
  */
 
 import React, { useEffect, useState } from "react";
@@ -110,7 +110,7 @@ export default function UserPage() {
                   <SuiTypography variant="caption">{row.name}</SuiTypography>
                 </TableCell>
                 <TableCell>
-                  <SuiTypography variant="caption">{row.role_id}</SuiTypography>
+                  <SuiTypography variant="caption">{row?.role?.name}</SuiTypography>
                 </TableCell>
                 <TableCell>
                   <SuiTypography variant="caption">{row.username}</SuiTypography>
