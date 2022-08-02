@@ -1,8 +1,8 @@
 import { Service } from "services";
 
 class PressRelease {
-  get(data) {
-    return Service.get("/bo/press_release", data);
+  get(params) {
+    return Service.get("/bo/press_release", { params });
   }
 
   create(data) {

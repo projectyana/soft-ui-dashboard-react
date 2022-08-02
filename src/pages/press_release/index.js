@@ -1,17 +1,10 @@
+/* eslint-disable */
 
 /**
  * Press Release Page
  */
 
 import React, { useEffect, useState } from "react";
-
-import SuiButton from "components/SuiButton";
-import SuiBox from "components/SuiBox";
-import SuiInput from "components/SuiInput";
-import SuiPagination from "components/SuiPagination";
-import SuiTypography from "components/SuiTypography";
-
-// @mui material components
 import {
   Table,
   TableBody,
@@ -22,9 +15,16 @@ import {
   Icon
 } from "@mui/material";
 
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-
+import SuiButton from "components/SuiButton";
+import SuiBox from "components/SuiBox";
+import SuiInput from "components/SuiInput";
+import SuiTypography from "components/SuiTypography";
+import Pagination from "components/Custom/Pagination";
 import { PageLoading } from "components/Custom/Loading";
+
+import useDebounce from "hooks/useDebounce";
+
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 import PresReleaseApi from "apis/PressRelease";
 
@@ -39,7 +39,7 @@ const sliceText = (text, length) => {
   return text;
 };
 
-export default function RolePage() {
+export default function PressReleasePage() {
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [modalConfig, setModalConfig] = useState({
@@ -47,13 +47,21 @@ export default function RolePage() {
     show: false,
     data: null
   });
+  const [search, setSearch] = useState("");
+  const [pagination, setPagination] = useState({ page: 0, rowsPerPage: 5, count: 0 });
+  const debounceSearch = useDebounce(search, 500);
 
   const fetchData = () => {
-    setFetchStatus({ loading: true });
-
-    PresReleaseApi.get()
-      .then((res) => setData(res.data.data ?? []))
-      .catch((err) => window.alert(err.message))
+    PresReleaseApi.get({
+      page: parseInt(pagination.page) + 1,
+      per_page: pagination.rowsPerPage,
+      search: debounceSearch
+    })
+      .then((res) => {
+        setData(res.data.data ?? []);
+        setPagination(prev => ({ ...prev, count: res.data.pagination.total }));
+      })
+      .catch((err) => window.alert(err.message ?? "Error connect to server!"))
       .finally(() => setFetchStatus({ loading: false }));
   };
 
@@ -61,7 +69,7 @@ export default function RolePage() {
     fetchData();
 
     return () => { setData([]); };
-  }, []);
+  }, [pagination.page, pagination.rowsPerPage, debounceSearch]);
 
   if (fetchStatus.loading) {
     return <PageLoading />;
@@ -69,8 +77,14 @@ export default function RolePage() {
 
   return (
     <DashboardLayout>
-      <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
-        {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
+      <SuiBox pb={2} display="flex" justifyContent="space-between" alignItems="center">
+        <SuiBox display="flex">
+          <SuiInput placeholder="Search..." icon={{ component: "search", direction: "left" }} onChange={(e) => setSearch(e.target.value ?? "")} />
+          <SuiButton sx={{ marginLeft: 2 }} size="medium" color="warning" >
+            Export
+          </SuiButton>
+
+        </SuiBox>
         <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
           Create
         </SuiButton>
@@ -138,13 +152,21 @@ export default function RolePage() {
             )) : (
               <TableRow>
                 <TableCell align="center" colSpan={4}>
-                  <SuiTypography variant="h6">Tidak ada data</SuiTypography>
+                  <SuiTypography variant="h6">No data</SuiTypography>
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Pagination  */}
+      <Pagination
+        count={pagination.count}
+        rowsPerPage={pagination.rowsPerPage}
+        page={pagination.page}
+        onPageChange={(e, newPage) => setPagination(prev => ({ ...prev, page: newPage }))}
+        onRowsPerPageChange={(e) => setPagination(prev => ({ ...prev, page: 0, rowsPerPage: parseInt(e.target.value, 10) }))} />
 
       {/* Modal  Create */}
       {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
