@@ -7,6 +7,7 @@ import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiInput from "components/SuiInput";
 import SuiTypography from "components/SuiTypography";
+import { SelectIcon } from "components/Custom/Select";
 
 import HealthComicApi from "apis/HealthComic";
 import CustomModal from "components/Custom/Modal";
@@ -34,6 +35,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
       const finalValue = {
         ...values,
+        icon: values.icon.value,
         thumbnail: assets_path[0],
         assets_path
       };
@@ -59,13 +61,13 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
     },
     validationSchema: yup.object().shape({
       title: yup.string().required("Title is required!"),
-      icon: yup.string().required("Icon is required!"),
+      icon: yup.object().required("Icon is required!"),
       category: yup.string().required("Category is required!"),
     }),
     onSubmit: formSubmitHandler,
   });
 
-  const { values, errors, touched, handleChange, isSubmitting, handleSubmit } = formik;
+  const { values, errors, touched, setValues, handleChange, isSubmitting, handleSubmit } = formik;
 
   return (
     <CustomModal
@@ -87,15 +89,14 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
       </SuiBox>
 
       <SuiBox mb={2}>
-        <SuiInput
+        <SelectIcon
           name="icon"
-          placeholder="example icon: fas fa-cube"
-          onChange={handleChange}
+          placeholder="Select icon"
           value={values.icon}
+          onChange={(opt) => setValues({ ...values, icon: opt })}
           error={Boolean(errors.icon && touched.icon)}
           errorMessage={errors?.icon ?? ""}
         />
-        <SuiTypography mt={2} variant="caption">Find your icon at https://fontawesome.com/search?s=solid</SuiTypography>
       </SuiBox>
 
       <SuiBox mb={2}>
