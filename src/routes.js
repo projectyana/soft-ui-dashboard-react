@@ -44,6 +44,9 @@ import Billing from "layouts/billing";
 import Profile from "layouts/profile";
 import SignUp from "layouts/authentication/sign-up";
 
+// App svg
+import * as SVG from "assets/svg";
+
 // Soft UI Dashboard React icons
 import Shop from "examples/Icons/Shop";
 import Office from "examples/Icons/Office";
@@ -80,16 +83,15 @@ const sideNav = [
     type: "collapse",
     name: "Dashboard",
     key: "dashboard",
-    icon: <Office size="12px" />,
+    icon: <SVG.DashboardIcon />,
     route: "/dashboard",
     component: <AppDashboard />,
-    // component: <Tables />,
   },
   {
     type: "collapse",
     name: "Role",
     key: "role",
-    icon: <Document size="12px" />,
+    icon: <SVG.RoleIcon />,
     route: "/role",
     component: <RolePage />,
   },
@@ -97,7 +99,7 @@ const sideNav = [
     type: "collapse",
     name: "User",
     key: "user",
-    icon: <Document size="12px" />,
+    icon: <SVG.UserIcon />,
     route: "/user",
     component: <UserPage />,
   },
@@ -105,7 +107,7 @@ const sideNav = [
     type: "collapse",
     name: "Page",
     key: "page",
-    icon: <Document size="12px" />,
+    icon: <SVG.PageIcon />,
     route: "/page",
     component: <PageMenu />,
   },
@@ -113,7 +115,7 @@ const sideNav = [
     type: "collapse",
     name: "Blog",
     key: "blog",
-    icon: <Document size="12px" />,
+    icon: <SVG.BlogIcon />,
     route: "/blog",
     component: <BlogMenu />,
   },
@@ -121,7 +123,7 @@ const sideNav = [
     type: "collapse",
     name: "Carousel",
     key: "carousel",
-    icon: <Document size="12px" />,
+    icon: <SVG.CarouselIcon />,
     route: "/carousel",
     component: <CarouselPage />,
   },
@@ -129,7 +131,7 @@ const sideNav = [
     type: "collapse",
     name: "Menu Configuration",
     key: "menu-configuration",
-    icon: <Document size="12px" />,
+    icon: <SVG.MenuIcon />,
     route: "/menu-configuration",
     component: <MenuConfigurationPage />,
   },
@@ -137,7 +139,7 @@ const sideNav = [
     type: "collapse",
     name: "Livestream",
     key: "livestream",
-    icon: <Document size="12px" />,
+    icon: <SVG.LivestreamIcon />,
     route: "livestream",
     component: <LivestreamPage />,
   },
@@ -145,7 +147,7 @@ const sideNav = [
     type: "collapse",
     name: "Press Release",
     key: "press-release",
-    icon: <Document size="12px" />,
+    icon: <SVG.PressReleaseIcon />,
     route: "press-release",
     component: <PressRelease />,
   },
@@ -153,7 +155,7 @@ const sideNav = [
     type: "collapse",
     name: "Recent Info Category",
     key: "recent-info-cat",
-    icon: <Document size="12px" />,
+    icon: <SVG.RecentInfoCategoryIcon />,
     route: "recent-info-category",
     component: <RecentInfoCategoryPage />,
   },
@@ -161,7 +163,7 @@ const sideNav = [
     type: "collapse",
     name: "Recent Info",
     key: "recent-info",
-    icon: <Document size="12px" />,
+    icon: <SVG.RecentInfoIcon />,
     route: "recent-info",
     component: <RecentInfoPage />,
   },
@@ -169,7 +171,7 @@ const sideNav = [
     type: "collapse",
     name: "Health Comic",
     key: "health-comic",
-    icon: <Document size="12px" />,
+    icon: <SVG.ComicIcon />,
     route: "health-comic",
     component: <HealthComicPage />,
   }
