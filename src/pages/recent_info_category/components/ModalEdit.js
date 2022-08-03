@@ -5,8 +5,8 @@ import * as yup from "yup";
 import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiInput from "components/SuiInput";
-import SuiTypography from "components/SuiTypography";
 import CustomModal from "components/Custom/Modal";
+import { SelectIcon } from "components/Custom/Select";
 
 import RecentInfoCategoryApi from "apis/RecentInfoCategory";
 
@@ -15,7 +15,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
   // Submit to server
   const formSubmitHandler = (values, { setSubmitting }) => {
-    RecentInfoCategoryApi.update(id, values)
+    RecentInfoCategoryApi.update(id, { name: values.name, icon: values.icon.value ?? values.icon })
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
         fetchData();
@@ -25,18 +25,19 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
   // Formik
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       name: name ?? "",
-      icon: icon ?? "",
+      icon: icon ? { value: icon, label: icon } : "",
     },
     validationSchema: yup.object().shape({
       name: yup.string().required("Name is required!"),
-      icon: yup.string().required("Icon is required!"),
+      icon: yup.object().required("Icon is required!"),
     }),
     onSubmit: formSubmitHandler,
   });
 
-  const { values, errors, touched, handleChange, isSubmitting, handleSubmit } = formik;
+  const { values, errors, touched, handleChange, setValues, isSubmitting, handleSubmit } = formik;
 
   return (
     <CustomModal
@@ -56,15 +57,14 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
       </SuiBox>
 
       <SuiBox mb={2}>
-        <SuiInput
+        <SelectIcon
           name="icon"
-          placeholder="Icon"
-          onChange={handleChange}
+          placeholder="Select icon"
           value={values.icon}
+          onChange={(opt) => setValues({ ...values, icon: opt })}
           error={Boolean(errors.icon && touched.icon)}
           errorMessage={errors?.icon ?? ""}
         />
-        <SuiTypography mt={2} variant="caption">Find your icon at https://fontawesome.com/search?s=solid</SuiTypography>
       </SuiBox>
 
       <SuiBox display="flex" justifyContent="flex-end" mt={2}>
@@ -77,7 +77,6 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
         </SuiButton>
       </SuiBox>
     </CustomModal>);
-
 };
 
 export default ModalEdit;

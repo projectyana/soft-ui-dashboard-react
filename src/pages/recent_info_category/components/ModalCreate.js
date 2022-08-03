@@ -1,21 +1,22 @@
 /* eslint-disable */
-import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
 import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiInput from "components/SuiInput";
-import { Select } from "components/Custom/Select";
+import { SelectIcon } from "components/Custom/Select";
 
 import RecentInfoCategoryApi from "apis/RecentInfoCategory";
 import CustomModal from "components/Custom/Modal";
-import SuiTypography from "components/SuiTypography";
 
 const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   // Submit to server
   const formSubmitHandler = (values, { setSubmitting }) => {
-    RecentInfoCategoryApi.create(values)
+    RecentInfoCategoryApi.create({
+      ...values,
+      icon: values.icon.value
+    })
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
         fetchData();
@@ -30,12 +31,12 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
     },
     validationSchema: yup.object().shape({
       name: yup.string().required("Name is required!"),
-      icon: yup.string().required("Icon is required!"),
+      icon: yup.object().required("Icon is required!"),
     }),
     onSubmit: formSubmitHandler,
   });
 
-  const { values, errors, touched, handleChange, isSubmitting, handleSubmit } = formik;
+  const { values, errors, touched, setValues, handleChange, isSubmitting, handleSubmit } = formik;
 
   return (
     <CustomModal
@@ -56,17 +57,15 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
       </SuiBox>
 
       <SuiBox mb={2}>
-        <SuiInput
+        <SelectIcon
           name="icon"
-          placeholder="example icon: fas fa-cube"
-          onChange={handleChange}
+          placeholder="Select icon"
           value={values.icon}
+          onChange={(opt) => setValues({ ...values, icon: opt })}
           error={Boolean(errors.icon && touched.icon)}
           errorMessage={errors?.icon ?? ""}
         />
-        <SuiTypography mt={2} variant="caption">Find your icon at https://fontawesome.com/search?s=solid</SuiTypography>
       </SuiBox>
-
       <SuiBox display="flex" justifyContent="flex-end" mt={2}>
         <SuiButton
           mt={2}
@@ -77,7 +76,6 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
         </SuiButton>
       </SuiBox>
     </CustomModal>);
-
 };
 
 export default ModalCreate;
