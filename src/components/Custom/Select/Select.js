@@ -15,6 +15,8 @@ export const Select = ({
   error,
   errorMessage,
   onChange,
+  value,
+  getOptionLabel,
   ...rest
 }) => {
   const options = option;
@@ -46,15 +48,17 @@ export const Select = ({
       ) : (
         <>
           <AsyncPaginate
-            {...rest}
             name={name}
             loadOptions={loadOptions}
             placeholder={placeholder}
+            defaultValue={defaultValue}
+            value={value}
             onChange={onChange}
             classNamePrefix={error ? "react-select-invalid" : "react-select"}
-            defaultValue={defaultValue}
             noOptionsMessage={() => "No Data"}
             isDisabled={isDisabled}
+            getOptionLabel={getOptionLabel}
+            {...rest}
             {...selectConfig}
           />
           <SuiTypography variant="overline" color="error" fontWeight="light">
