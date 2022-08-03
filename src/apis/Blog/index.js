@@ -1,8 +1,8 @@
 import { Service } from "services";
 
 class BlogApi {
-  get(data) {
-    return Service.get("/bo/blog", data);
+  get(params) {
+    return Service.get("/bo/blog", { params });
   }
 
   create(data) {
@@ -19,6 +19,10 @@ class BlogApi {
 
   upload(data) {
     return Service.post("/bo/blog/upload", data);
+  }
+
+  getTags() {
+    return Service.get("/bo/blog/tags");
   }
 }
 

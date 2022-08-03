@@ -1,13 +1,9 @@
 /* eslint-disable */
-import { useState, useCallback, useEffect } from "react";
-import { withAsyncPaginate } from "react-select-async-paginate";
-
-import Creatable from "react-select/creatable";
+import { useState, useCallback } from "react";
+import AsyncCreateableSelect from "react-select/async-creatable";
 
 import { selectConfig, debounce } from "./configs";
-
-const increaseUniq = (uniq) => uniq + 1;
-const CreatableAsyncPaginate = withAsyncPaginate(Creatable);
+import { LoadingState } from "../Loading";
 
 export const SelectCreateable = ({
   name,
@@ -15,74 +11,68 @@ export const SelectCreateable = ({
   placeholder,
   error,
   defaultValue,
+  isMulti,
   isDisabled,
+  isLoading,
   value,
   onChange,
-  onCreateOption
+  onCreateOption,
+  ...rest
 }) => {
   const options = option ?? [];
-  const [cacheUniq, setCacheUniq] = useState(0);
   const [isAddingInProgress, setIsAddingInProgress] = useState(false);
-  const [values, onChanges] = useState([]);
 
-  const loadOptions = async (search, prevOptions) => {
-    let filteredOptions;
-
-    if (!search) {
-      filteredOptions = options;
-    }
-    else {
-      const searchLower = search.toLowerCase();
-      filteredOptions = options.filter(({ label }) => label.toLowerCase().includes(searchLower));
-    }
-
-    const hasMore = filteredOptions.length > prevOptions.length + 20;
-    const slicedOptions = filteredOptions.slice(prevOptions.length, prevOptions.length + 25);
-
-    return { options: slicedOptions, hasMore };
+  const filterOptions = (inputValue) => {
+    return option.filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase())
+    );
   };
 
-  // 2. API Call (Create new option)
+  const promiseOptions = (inputValue) =>
+    new Promise((resolve) => {
+      console.log(inputValue);
+      setTimeout(() => {
+        resolve(Boolean(inputValue) ? filterOptions(inputValue) : option);
+      }, 500);
+    });
+
   const addNewOption = async inputValue => {
     await debounce(1000);
 
-    const newOption = {
-      label: inputValue,
-      value: inputValue
-    };
-
+    const newOption = { label: inputValue, value: inputValue };
     options.push(newOption);
 
     return newOption;
   };
 
   // 1. Handle Create New Option 
-  const onCreateOptions = useCallback(async (inputValue) => {
+  const defaultOnCreateOptions = useCallback(async (inputValue) => {
     setIsAddingInProgress(true);
 
     const newOption = await addNewOption(inputValue);
 
-    setIsAddingInProgress(false);
-    setCacheUniq(increaseUniq);
     onChange((prev) => [...prev, newOption]);
+    setIsAddingInProgress(false);
   }, []);
 
   return (
-    <CreatableAsyncPaginate
-      isMulti
-      name={name}
-      placeholder={placeholder}
-      value={value}
-      defaultValue={defaultValue}
-      onChange={onChange}
-      isDisabled={Boolean(isAddingInProgress) || Boolean(isDisabled)}
-      loadOptions={loadOptions}
-      classNamePrefix={error ? "react-select-invalid" : "react-select"}
-      noOptionsMessage={() => "No Data"}
-      SelectComponent={Creatable}
-      onCreateOption={onCreateOption}
-      cacheUniqs={[cacheUniq]}
-      {...selectConfig}
-    />
+    isLoading
+      ? <LoadingState size={20} />
+      : <AsyncCreateableSelect
+        cacheOptions
+        defaultOptions
+        name={name}
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        value={value}
+        onChange={onChange}
+        loadOptions={promiseOptions}
+        onCreateOption={onCreateOption ?? defaultOnCreateOptions}
+        isMulti={isMulti}
+        isLoading={isAddingInProgress}
+        classNamePrefix={error ? "react-select-invalid" : "react-select"}
+        noOptionsMessage={() => "No Data"}
+        {...rest}
+        {...selectConfig}
+      />
   );
 };

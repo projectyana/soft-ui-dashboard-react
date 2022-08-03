@@ -4,15 +4,18 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 
-import SuiInput from "components/SuiInput";
 import Grid from '@mui/material/Grid';
 
-// Soft UI Dashboard React contexts
 import { useSoftUIController, setMiniSidenav } from "context";
+
+import SuiInput from "components/SuiInput";
+import SuiBox from "components/SuiBox";
+import TextEditor from "components/Custom/TextEditor";
+import { SelectCreateable } from "components/Custom/Select";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
-import TextEditor from "components/Custom/TextEditor";
+
 
 import BlogApi from "apis/Blog";
 
@@ -28,6 +31,11 @@ const BlogEditor = () => {
     link = ""
   } = useLocation()?.state || {};
   const [dataGambar, setDataGambar] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [dropdown, setDropdown] = useState({
+    loading: true,
+    tags: []
+  });
 
   const handleUploadImage = async () => {
     const formData = new FormData();
@@ -45,6 +53,7 @@ const BlogEditor = () => {
       const finalValue = {
         ...values,
         thumbnail: imageLink,
+        tags: selectedTags.map(item => item.value).join(",")
       };
 
       action === "create"
@@ -75,42 +84,52 @@ const BlogEditor = () => {
 
   const { values, errors, touched, handleChange } = formik;
 
+  const fetchDropdown = () => {
+    BlogApi.getTags()
+      .then((res) => setDropdown({ loading: false, tags: res?.data?.data?.map(tag => ({ value: tag, label: tag })) }))
+      .catch(() => {
+        setDropdown({ loading: false, tags: [] });
+        window.alert("Unable get dropdown tags!");
+      });
+  };
+
   useEffect(() => {
+    fetchDropdown();
     if (action === "edit") setDataGambar([{ link }]);
+    if (action === "edit") setSelectedTags(tags.split(",").map(tag => ({ value: tag, label: tag })));
 
     return () => { };
   }, []);
 
-
   return (
     <DashboardLayout>
-      <>
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-          <Grid item md={12}>
-            <SuiInput
-              name="title"
-              placeholder="Title"
-              onChange={handleChange}
-              value={values.title}
-              error={Boolean(errors.title && touched.title)}
-              errorMessage={errors?.title ?? ""}
-            />
-          </Grid>
-          <Grid item md={12}>
-            <SuiInput
-              name="tags"
-              placeholder="Tags"
-              onChange={handleChange}
-              value={values.tags}
-              error={Boolean(errors.tags && touched.tags)}
-              errorMessage={errors?.tags ?? ""}
-            />
-          </Grid>
-          <Grid item md={12}>
-            <TextEditor action={action} formik={formik} dataGambar={dataGambar} setDataGambar={setDataGambar} />
-          </Grid>
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        <Grid item md={12}>
+          <SuiInput
+            name="title"
+            placeholder="Title"
+            onChange={handleChange}
+            value={values.title}
+            error={Boolean(errors.title && touched.title)}
+            errorMessage={errors?.title ?? ""}
+          />
         </Grid>
-      </>
+        <Grid item md={12}>
+          <SelectCreateable
+            isMulti={true}
+            placeholder="Tags"
+            option={dropdown?.tags}
+            defaultValue={selectedTags ?? []}
+            value={selectedTags}
+            onChange={setSelectedTags}
+            isLoading={dropdown.loading}
+            menuPortalTarget={document.body}
+          />
+        </Grid>
+        <Grid item md={12}>
+          <TextEditor action={action} formik={formik} dataGambar={dataGambar} setDataGambar={setDataGambar} />
+        </Grid>
+      </Grid>
     </DashboardLayout>
   );
 };

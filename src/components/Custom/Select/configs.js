@@ -26,6 +26,7 @@ export const selectConfig = {
       paddingRight: 5,
     }),
     menu: (base) => ({ ...base, fontSize: 13 }),
+    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
   }
 };
 
