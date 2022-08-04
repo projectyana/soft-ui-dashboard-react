@@ -62,8 +62,6 @@ const BlogEditor = () => {
         tags: selectedTags.map(item => item.value).join(",")
       };
 
-      console.log(finalValue);
-
       action === "create"
         ? BlogApi.create(finalValue)
           .then((res) => {

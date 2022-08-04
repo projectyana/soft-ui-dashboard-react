@@ -36,8 +36,6 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
   // Submit to server
   const formSubmitHandler = (values, { setSubmitting }) => {
-    console.log(values);
-
     const valueFormater = values => {
       const finalValue = {
         name: values.name,
@@ -124,8 +122,6 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
         const mapParent = resParent.data.data.map(item => ({ ...item, value: item.id, label: item.name }));
         const mapPage = resPage.data.data.map(item => ({ ...item, value: item.id, label: `${item.title} (Page)`, type: "page" }));
         const mapBlog = resBlog.data.data.map(item => ({ ...item, value: item.id, label: `${item.title} (Blog)`, type: "blog" }));
-
-        console.log(mapPage, mapBlog);
 
         setDropdown(prev => ({ ...prev, parent_menu: mapParent, page: mapPage, blog: mapBlog }));
       })))
