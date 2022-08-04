@@ -142,7 +142,7 @@ const PageMenu = () => {
         onRowsPerPageChange={(e) => setPagination(prev => ({ ...prev, page: 0, rowsPerPage: parseInt(e.target.value, 10) }))} />
 
       {/* Modal Delete */}
-      {modalConfig.show && modalConfig.type === "delete" && <ModalDelete fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "delete" && <ModalDelete setData={setData} fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
     </DashboardLayout>);
 };
 
