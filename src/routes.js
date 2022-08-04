@@ -47,14 +47,6 @@ import SignUp from "layouts/authentication/sign-up";
 // App svg
 import * as SVG from "assets/svg";
 
-// Soft UI Dashboard React icons
-import Shop from "examples/Icons/Shop";
-import Office from "examples/Icons/Office";
-import Document from "examples/Icons/Document";
-import SpaceShip from "examples/Icons/SpaceShip";
-import CustomerSupport from "examples/Icons/CustomerSupport";
-import CreditCard from "examples/Icons/CreditCard";
-
 // App Pages
 import AppDashboard from "pages/dashboard";
 import SignIn from "pages/auth/sign-in";
@@ -154,7 +146,7 @@ const sideNav = [
   {
     type: "collapse",
     name: "Recent Info Category",
-    key: "recent-info-cat",
+    key: "recent-info-category",
     icon: <SVG.RecentInfoCategoryIcon />,
     route: "recent-info-category",
     component: <RecentInfoCategoryPage />,
