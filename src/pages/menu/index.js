@@ -152,22 +152,6 @@ export default function RolePage() {
         </Table>
       </TableContainer>
 
-      <SuiBox mt={4} pb={2} display="flex" justifyContent="center" alignItems="center">
-        {/* <SuiPagination>
-           <SuiPagination item>
-             <Icon>keyboard_arrow_left</Icon>
-           </SuiPagination>
-           <SuiPagination item active>
-             1
-           </SuiPagination>
-           <SuiPagination item>2</SuiPagination>
-           <SuiPagination item>3</SuiPagination>
-           <SuiPagination item>
-             <Icon>keyboard_arrow_right</Icon>
-           </SuiPagination>
-         </SuiPagination> */}
-      </SuiBox>
-
       {/* Modal  Create */}
       {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} modalCreate={modalCreate} setModalCreate={setModalCreate} />}
 
