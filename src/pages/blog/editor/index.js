@@ -3,21 +3,21 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
-
-import Grid from '@mui/material/Grid';
+import * as Yup from "yup";
+import { Grid } from '@mui/material';
 
 import { useSoftUIController, setMiniSidenav } from "context";
 
 import SuiInput from "components/SuiInput";
+import SuiTypography from "components/SuiTypography";
+import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";
 import TextEditor from "components/Custom/TextEditor";
 import { SelectCreateable } from "components/Custom/Select";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-
-
-
 import BlogApi from "apis/Blog";
+import InputImage from "../components/InputImage";
 
 const BlogEditor = () => {
   const navigate = useNavigate();
@@ -46,15 +46,23 @@ const BlogEditor = () => {
       .catch((err) => { });
   };
 
+  // some delay function before submit
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
   // Submit to server
   const formSubmitHandler = async (values, { setSubmitting }) => {
+    await sleep(900);
+
     if (dataGambar.length > 0) {
       const imageLink = await handleUploadImage();
+
       const finalValue = {
         ...values,
         thumbnail: imageLink,
         tags: selectedTags.map(item => item.value).join(",")
       };
+
+      console.log(finalValue);
 
       action === "create"
         ? BlogApi.create(finalValue)
@@ -79,10 +87,13 @@ const BlogEditor = () => {
       tags: action === "edit" ? tags : "",
       content: action === "edit" ? content : "",
     },
+    validationSchema: Yup.object().shape({
+      title: Yup.string().required("Title is required!"),
+    }),
     onSubmit: formSubmitHandler,
   });
 
-  const { values, errors, touched, handleChange } = formik;
+  const { values, errors, touched, handleChange, handleSubmit } = formik;
 
   const fetchDropdown = () => {
     BlogApi.getTags()
@@ -96,7 +107,7 @@ const BlogEditor = () => {
   useEffect(() => {
     fetchDropdown();
     if (action === "edit") setDataGambar([{ link }]);
-    if (action === "edit") setSelectedTags(tags.split(",").map(tag => ({ value: tag, label: tag })));
+    if (action === "edit") setSelectedTags(tags?.split(",").map(tag => ({ value: tag, label: tag })));
 
     return () => { };
   }, []);
@@ -127,7 +138,24 @@ const BlogEditor = () => {
           />
         </Grid>
         <Grid item md={12}>
-          <TextEditor action={action} formik={formik} dataGambar={dataGambar} setDataGambar={setDataGambar} />
+          <TextEditor action={action} formik={formik} />
+        </Grid>
+        <Grid item md={12}>
+          <SuiTypography variant="h6" >
+            Blog Thumbnail
+          </SuiTypography>
+          <InputImage dataGambar={dataGambar} setDataGambar={setDataGambar} />
+        </Grid>
+        <Grid item md={12}>
+          <SuiBox mt={2}>
+            <SuiButton
+              mt={2}
+              size="medium"
+              color="info"
+              onClick={() => handleSubmit()}>
+              {action === "edit" ? "Save Update" : "Create"}
+            </SuiButton>
+          </SuiBox>
         </Grid>
       </Grid>
     </DashboardLayout>
