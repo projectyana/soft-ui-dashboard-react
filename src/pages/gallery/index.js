@@ -1,14 +1,8 @@
 
 /* eslint-disable */
 // Gallery Page
-
-
-
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
-
-
-// @mui material components
 import {
     Icon,
     Switch,
@@ -16,10 +10,7 @@ import {
     CardActions,
     Grid
 } from "@mui/material";
-
-import GalleryApi from 'apis/Gallery'
-
-
+import GalleryApi from 'apis/Gallery';
 import { useFormik } from "formik";
 
 
@@ -29,7 +20,7 @@ import SuiButton from 'components/SuiButton';
 import SuiTypography from 'components/SuiTypography';
 
 import ImageCard from "components/Custom/Card/ImageCard";
-import Select from "components/Custom/Select";
+import { Select } from "components/Custom/Select";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 
 import ModalCreateCategory from "./components/ModalCreateCategory";
@@ -37,12 +28,7 @@ import ModalEditCategory from "./components/ModalEditCategory";
 import ModalDeleteCategory from "./components/ModalDeleteCategory";
 
 import ModalCreateGallery from "./components/ModalCreateGallery";
-import ModalCreateFile from "./components/ModalCreateFile"
-
-
-
-
-
+import ModalCreateFile from "./components/ModalCreateFile";
 
 function Gallery() {
     const [fetchStatus, setFetchStatus] = useState({ loading: true });
@@ -77,12 +63,12 @@ function Gallery() {
             value: "image",
             label: "Image"
         }
-    ]
+    ];
 
 
 
     const fetchData = () => {
-        setFetchStatus({ loading: true })
+        setFetchStatus({ loading: true });
 
         GalleryApi.get()
             .then((res) => {
@@ -90,13 +76,13 @@ function Gallery() {
                     ...item,
                     link: `https://api.rokom.xyz/${item.url}`
                 }));
-                const categoryData = res?.data.data.map(({ id, title }) => ({ value: id, label: title }))
-                setData(mapData ?? [])
-                setCategories(categoryData ?? [])
+                const categoryData = res?.data.data.map(({ id, title }) => ({ value: id, label: title }));
+                setData(mapData ?? []);
+                setCategories(categoryData ?? []);
             })
             .catch((err) => window.alert(err.message))
-            .finally(() => setFetchStatus({ loading: false }))
-    }
+            .finally(() => setFetchStatus({ loading: false }));
+    };
 
 
 
@@ -105,18 +91,18 @@ function Gallery() {
         initialValues: {
             mediaType: ""
         }
-    })
+    });
 
-    const { setFieldValue, handleChange } = formik
+    const { setFieldValue, handleChange } = formik;
 
     useEffect(() => {
         fetchData();
-        console.log('value', categories)
+        console.log('value', categories);
 
 
 
-        return () => { setData([]); setCategories([]) };
-    }, [])
+        return () => { setData([]); setCategories([]); };
+    }, []);
 
 
 
@@ -145,7 +131,7 @@ function Gallery() {
                     option={options}
                     // value={options.value}
                     onChange={(option) => {
-                        setFieldValue('mediaType', option.value)
+                        setFieldValue('mediaType', option.value);
                     }}
 
                 />

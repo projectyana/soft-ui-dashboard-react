@@ -9,25 +9,25 @@ import SuiButton from 'components/SuiButton';
 import SuiInput from 'components/SuiInput';
 
 
-import GalleryApi from "apis/Gallery"
+import GalleryApi from "apis/Gallery";
 import CustomModal from 'components/Custom/Modal';
 import { InputLabel, MenuItem, FormControl } from "@mui/material";
-import Select from "components/Custom/Select";
+import { Select } from "components/Custom/Select";
 import InputImage from "./InputImage";
 
 
 
 
 function ModalCreateGallery({ fetchData, modalConfig, setModalConfig, categories }) {
-    const [id, setId] = ('')
+    const [id, setId] = ('');
 
     const [dataGambar, setDataGambar] = useState([]);
 
 
     const handleUploadImage = async () => {
-        const formData = new FormData()
+        const formData = new FormData();
         formData.append('image', dataGambar[0]?.data);
-        console.log('data add', formData)
+        console.log('data add', formData);
 
         // return GalleryApi.addFile(formData)
         //     .then((res) => res?.data)
@@ -37,22 +37,22 @@ function ModalCreateGallery({ fetchData, modalConfig, setModalConfig, categories
     };
 
     const formSubmitHandler = async (values, { setSubmitting }) => {
-        console.log('submitted')
-        const imageLink = await handleUploadImage()
+        console.log('submitted');
+        const imageLink = await handleUploadImage();
 
-        const formData = new FormData()
+        const formData = new FormData();
         const finalValue = {
             ...values,
             image: dataGambar[0]?.nama,
-        }
+        };
 
-        formData.append('name', values?.name)
-        formData.append('image', dataGambar[0].nama)
+        formData.append('name', values?.name);
+        formData.append('image', dataGambar[0].nama);
 
 
-        console.log("----", formData)
-        console.log("----", values.name)
-        console.log("----", values.gallery_id)
+        console.log("----", formData);
+        console.log("----", values.name);
+        console.log("----", values.gallery_id);
 
 
 
@@ -80,9 +80,9 @@ function ModalCreateGallery({ fetchData, modalConfig, setModalConfig, categories
 
     const { values, errors, touched, handleChange, setFieldValue, isSubmitting, handleSubmit } = formik;
 
-    console.log('data image', dataGambar?.[0]?.nama)
+    console.log('data image', dataGambar?.[0]?.nama);
 
-    console.log('values gallery id', values.gallery_id)
+    console.log('values gallery id', values.gallery_id);
 
     return (
         <CustomModal

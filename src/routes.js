@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
 =========================================================
 * Soft UI Dashboard React - v3.1.0
@@ -174,7 +173,7 @@ const sideNav = [
     type: "collapse",
     name: "Media",
     key: "media",
-    icon: <Document size="12px" />,
+    icon: <SVG.ComicIcon />,
     route: "media",
     component: <GalleryPage />,
   },
@@ -222,4 +221,3 @@ const protectedPath = sideNav.concat([
 const routes = { publicPath, protectedPath };
 
 export default routes;
->>>>>>> 09557d04367f7c12aa73a4e814ebd4f97589edd5

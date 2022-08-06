@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Carousel Page
  */
@@ -65,7 +66,7 @@ export default function CarouselPage() {
 
   useEffect(() => {
     fetchData();
-    console.log(data)
+    console.log(data);
 
     return () => { setData([]); };
   }, []);
