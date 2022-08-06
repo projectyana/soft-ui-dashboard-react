@@ -141,10 +141,10 @@ const sideNav = [
   },
   {
     type: "collapse",
-    name: "Gallery",
-    key: "gallery",
+    name: "Media",
+    key: "media",
     icon: <Document size="12px" />,
-    route: "gallery",
+    route: "media",
     component: <GalleryPage />,
   },
 ];

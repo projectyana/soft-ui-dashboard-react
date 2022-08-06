@@ -1,7 +1,12 @@
 
+/* eslint-disable */
 // Gallery Page
 
+
+
 import React, { useEffect, useState } from "react";
+import Axios from "axios";
+
 
 // @mui material components
 import {
@@ -13,6 +18,8 @@ import {
 } from "@mui/material";
 
 import GalleryApi from 'apis/Gallery'
+
+
 import { useFormik } from "formik";
 
 
@@ -24,23 +31,43 @@ import SuiTypography from 'components/SuiTypography';
 import ImageCard from "components/Custom/Card/ImageCard";
 import Select from "components/Custom/Select";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
-import ModalUpdate from "./components/ModalUpdate";
-import ModalCreate from "./components/ModalCreate";
+
+import ModalCreateCategory from "./components/ModalCreateCategory";
+import ModalEditCategory from "./components/ModalEditCategory";
+import ModalDeleteCategory from "./components/ModalDeleteCategory";
+
+import ModalCreateGallery from "./components/ModalCreateGallery";
+import ModalCreateFile from "./components/ModalCreateFile"
 
 
 
 
 
 
-function Gallery(props) {
+function Gallery() {
     const [fetchStatus, setFetchStatus] = useState({ loading: true });
     const [data, setData] = useState([]);
-    // const [mediaType, setMediaType] = useState("")
+    const [categories, setCategories] = useState([]);
+
     const [modalConfig, setModalConfig] = useState({
         type: "create",    // create | edit | delete | configure
         show: false,
         data: null
     });
+    const [modalConfigCategory, setModalConfigCategory] = useState({
+        type: "create",    // create | edit | delete | configure
+        show: false,
+        data: null
+    });
+
+    const [modalConfigFile, setModalConfigFile] = useState({
+        type: "create",    // create | edit | delete | configure
+        show: false,
+        data: null
+    });
+
+
+
     const options = [
         {
             value: "file",
@@ -52,6 +79,8 @@ function Gallery(props) {
         }
     ]
 
+
+
     const fetchData = () => {
         setFetchStatus({ loading: true })
 
@@ -61,23 +90,16 @@ function Gallery(props) {
                     ...item,
                     link: `https://api.rokom.xyz/${item.url}`
                 }));
+                const categoryData = res?.data.data.map(({ id, title }) => ({ value: id, label: title }))
                 setData(mapData ?? [])
+                setCategories(categoryData ?? [])
             })
             .catch((err) => window.alert(err.message))
             .finally(() => setFetchStatus({ loading: false }))
     }
 
-    const handleToggleActive = (row, index) => {
-        GalleryApi.update(row.id, { ...row, active: !row.active })
-            .then(() => {
-                const newData = [...data];
-                const value = newData[index];
-                value.active = !row.active
 
-                setData(newData);
-            })
-            .catch(() => window.alert("Error connect to server"))
-    }
+
 
     const formik = useFormik({
         initialValues: {
@@ -89,12 +111,11 @@ function Gallery(props) {
 
     useEffect(() => {
         fetchData();
-        console.log('value', options.value)
-        console.log('change value', setFieldValue)
+        console.log('value', categories)
 
 
 
-        return () => { setData([]); };
+        return () => { setData([]); setCategories([]) };
     }, [])
 
 
@@ -103,9 +124,19 @@ function Gallery(props) {
         <DashboardLayout>
             <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
                 <SuiButton size="medium" color="info"
+
                     onClick={() => setModalConfig({ show: true, type: 'create' })}
                 >
                     Create
+                </SuiButton>
+
+            </SuiBox>
+            <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
+                <SuiButton size="medium" color="info"
+
+                    onClick={() => setModalConfigFile({ show: true, type: 'create' })}
+                >
+                    Create Gallery File
                 </SuiButton>
             </SuiBox>
             <SuiBox sx={{ minWidth: 120 }} display="flex" justifyContent="end" alignItems="center">
@@ -120,12 +151,53 @@ function Gallery(props) {
                 />
             </SuiBox>
             <Grid container spacing={2} mt={2}>
-                <SuiBox display="flex" justifyContent="space-between">
+                <SuiBox display="flex" justifyContent="space-between" style={{ marginLeft: '28px' }}>
                     <SuiTypography variant="h2">Categories</SuiTypography>
-                    <SuiButton style={{ background: "none" }}>
-                        <ControlPointIcon style={{ height: "auto", cursor: "pointer" }} />
+                    <SuiButton style={{ background: "none", marginLeft: '16px' }} onClick={() => setModalConfigCategory({ show: true, type: 'create' })}
+
+                    >
+                        <ControlPointIcon style={{ height: "auto", cursor: "pointer" }}
+                        />
                     </SuiButton>
                 </SuiBox>
+            </Grid>
+            <Grid container spacing={2} style={{ marginTop: "-20px" }} >
+                {data?.length > 0 && data.map((row, index) => (
+                    <CardActions display='flex' style={{ flexDirection: 'column', alignItems: 'end' }} >
+                        <SuiBox spacing={2} mt={2} display='flex' style={{ flexDirection: 'colomn', marginRight: "12px" }}>
+                            <Icon size="small"
+                                variant="text"
+                                color="dark"
+                                justifyContent="end"
+                                style={{ cursor: "pointer", marginRight: '10px' }}
+                                onClick={() => setModalConfigCategory({ show: true, type: "edit", data: row })}
+
+                            >
+                                edit
+                            </Icon>
+                            <Icon size="small"
+                                variant="text"
+                                justifyContent="end"
+                                color="error"
+                                onClick={() => setModalConfigCategory({ show: true, type: "delete", data: row })}
+
+                                style={{ cursor: "pointer" }}>delete</Icon>
+                        </SuiBox>
+                        <SuiBox>
+                            <SuiButton color="info" variant="contained"
+                                style={{ width: '200px', marginTop: '8px', cursor: 'pointer' }}
+                            >
+                                {row.title}
+                            </SuiButton>
+                        </SuiBox>
+
+                    </CardActions>
+
+                ))
+                }
+            </Grid>
+            <Grid container spacing={2} mt={2}>
+
                 {data?.length > 0 && data.map((row, index) => (
                     <Grid key={row.title} item xs={6} md={3}>
                         <ImageCard
@@ -179,17 +251,43 @@ function Gallery(props) {
             </Grid >
 
             {/* Modal  Create */}
-            {modalConfig.show && modalConfig.type === "create" && <ModalCreate
+            {modalConfig.show && modalConfig.type === "create" && <ModalCreateGallery
                 fetchData={fetchData}
+                categories={categories}
                 modalConfig={modalConfig}
-                setModalConfig={setModalConfig}
-            />}
-            {/* Modal Update */}
-            {modalConfig.show && modalConfig.type === "edit" && <ModalUpdate
-                fetchData={fetchData}
-                modalConfig={modalConfig}
-                setModalConfig={setModalConfig}
-            />}
+                setModalConfig={setModalConfig} />
+            }
+
+
+            {
+                modalConfigCategory.show && modalConfigCategory.type === "create" && <ModalCreateCategory
+                    fetchData={fetchData}
+                    modalConfigCategory={modalConfigCategory}
+                    setModalConfig={setModalConfigCategory}
+                />
+            }
+            {
+                modalConfigCategory.show && modalConfigCategory.type === "edit" && <ModalEditCategory
+                    fetchData={fetchData}
+                    modalConfigCategory={modalConfigCategory}
+                    setModalConfig={setModalConfigCategory}
+                />
+            }
+            {
+                modalConfigCategory.show && modalConfigCategory.type === "delete" && <ModalDeleteCategory
+                    fetchData={fetchData}
+                    modalConfigCategory={modalConfigCategory}
+                    setModalConfig={setModalConfigCategory}
+                />
+            }
+
+            {
+                modalConfigFile.show && modalConfigFile.type === "create" && <ModalCreateFile
+                    fetchData={fetchData}
+                    modalConfigFile={modalConfigFile}
+                    setModalConfig={setModalConfigFile}
+                />
+            }
 
 
         </DashboardLayout>

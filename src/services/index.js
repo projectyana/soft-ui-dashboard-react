@@ -11,7 +11,6 @@ Service.interceptors.request.use((config) => {
     Authorization: token ? `Bearer ${token}` : null,
     "Content-Type": "application/json",
   };
-
   return config;
 });
 

@@ -32,7 +32,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
       url: imageLink,
     };
 
-    console.log(finalValue)
+    console.log('final', finalValue)
 
     CarouselApi.create(finalValue)
       .then(({ data }) => {

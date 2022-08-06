@@ -12,6 +12,7 @@ import CustomModal from "components/Custom/Modal";
 import Select from "components/Custom/Select";
 
 const ModalCreate = ({ fetchData, modalConfig, setModalConfig, roles }) => {
+  console.log('roles', roles)
 
   // Submit to server
   const formSubmitHandler = (values, { setSubmitting }) => {
@@ -43,6 +44,8 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig, roles }) => {
   });
 
   const { values, errors, touched, handleChange, setFieldValue, isSubmitting, handleSubmit } = formik;
+  console.log(formik.initialValues)
+
 
   return (
     <CustomModal
