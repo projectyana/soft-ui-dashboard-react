@@ -16,6 +16,10 @@ class PressRelease {
   delete(id) {
     return Service.delete(`/bo/press_release/${id}`);
   }
+
+  export() {
+    return Service.get("/bo/press_release/export");
+  }
 }
 
 
