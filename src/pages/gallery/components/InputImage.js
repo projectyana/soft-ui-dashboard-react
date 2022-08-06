@@ -113,6 +113,7 @@ const InputImage = ({ dataGambar, setDataGambar }) => {
                         ? <div>
                             <Icon className="d-flex justify-end" style={{ cursor: 'pointer' }}>delete</Icon>
                             {dataGambar.map((val, index) => (
+                                
                                 <Image
                                     key={index}
                                     imageText={val.nama}
@@ -135,11 +136,12 @@ const InputImage = ({ dataGambar, setDataGambar }) => {
                             style={{
                                 background: "#f8f9fa",
                                 cursor: 'pointer', display: 'flex',
-                                alignItems: 'center', justifyContent: 'center', height: "20vh"
+                                alignItems: 'center', justifyContent: 'center', height: "40vh",
+                                flexDirection: 'column'
                             }}>
                             <PanoramaIcon></PanoramaIcon>
                             <SuiTypography variant="body2" color="dark" fontWeight="light"
-                            >Click to select image/</SuiTypography>
+                            >Click to select image/file</SuiTypography>
                         </div>
                     }
                 </div>
