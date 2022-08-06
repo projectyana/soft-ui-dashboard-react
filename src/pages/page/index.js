@@ -13,8 +13,12 @@ import {
 
 import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
+import SuiInput from "components/SuiInput";
 import SuiTypography from "components/SuiTypography";
+import Pagination from "components/Custom/Pagination";
 import { PageLoading } from "components/Custom/Loading";
+
+import useDebounce from "hooks/useDebounce";
 
 import PageApi from "apis/Page";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -23,6 +27,7 @@ import ModalDelete from "./components/ModalDelete";
 
 const PageMenu = () => {
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [modalConfig, setModalConfig] = useState({
@@ -30,19 +35,26 @@ const PageMenu = () => {
     show: false,
     data: null
   });
+  const [pagination, setPagination] = useState({ page: 0, rowsPerPage: 5, count: 0 });
+  const debounceSearch = useDebounce(search, 500);
 
   const fetchData = () => {
-    setFetchStatus({ loading: true });
-
-    PageApi.get()
-      .then((res) => setData(res.data.data ?? []))
+    PageApi.get({
+      page: parseInt(pagination.page) + 1,
+      per_page: pagination.rowsPerPage,
+      search: debounceSearch
+    })
+      .then((res) => {
+        setData(res.data.data ?? []);
+        setPagination(prev => ({ ...prev, count: res.data.pagination.total }));
+      })
       .catch((err) => window.alert(err.message))
       .finally(() => setFetchStatus({ loading: false }));
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [pagination.page, pagination.rowsPerPage, debounceSearch]);
 
   if (fetchStatus.loading) {
     return <PageLoading />;
@@ -50,8 +62,8 @@ const PageMenu = () => {
 
   return (
     <DashboardLayout>
-      <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
-        {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
+      <SuiBox pb={2} display="flex" justifyContent="space-between" alignItems="center">
+        <SuiInput placeholder="Search..." icon={{ component: "search", direction: "left" }} onChange={(e) => setSearch(e.target.value ?? "")} />
         <SuiButton size="medium" color="info" onClick={() => navigate("editor/create")}>
           Create
         </SuiButton>
@@ -120,6 +132,14 @@ const PageMenu = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Pagination  */}
+      <Pagination
+        count={pagination.count}
+        rowsPerPage={pagination.rowsPerPage}
+        page={pagination.page}
+        onPageChange={(e, newPage) => setPagination(prev => ({ ...prev, page: newPage }))}
+        onRowsPerPageChange={(e) => setPagination(prev => ({ ...prev, page: 0, rowsPerPage: parseInt(e.target.value, 10) }))} />
 
       {/* Modal Delete */}
       {modalConfig.show && modalConfig.type === "delete" && <ModalDelete fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}

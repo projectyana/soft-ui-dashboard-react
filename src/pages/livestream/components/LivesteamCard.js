@@ -7,10 +7,13 @@ import SuiTypography from "components/SuiTypography";
 
 import LivestreamApi from "apis/Livestream";
 
-const LivesteamCard = ({ data, fetchData }) => {
+const LivesteamCard = ({ data, setData, fetchData, fetchHistory }) => {
 
   const endLiveStream = () => {
-    LivestreamApi.end().then(() => fetchData());
+    LivestreamApi.end()
+      .then(() => setData({}))
+      .then(() => fetchData())
+      .then(() => fetchHistory());
   };
 
   return (
@@ -24,7 +27,10 @@ const LivesteamCard = ({ data, fetchData }) => {
           </SuiBox>
           <SuiBox alignItems="center" py={1} mb={1}>
             <SuiBox mb={2} mr={2}>
-              <SuiAvatar src={data?.thumbnail ?? "https://thumbs.dreamstime.com/b/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.jpg"} size="xl" shadow="sm" variant="circle" style={{ objectFit: 'cover' }} alt="livestream" />
+              {data?.embed_html
+                ? <div dangerouslySetInnerHTML={{ __html: data?.embed_html }} />
+                : <SuiAvatar src={data?.thumbnail ?? "https://thumbs.dreamstime.com/b/no-thumbnail-image-placeholder-forums-blogs-websites-148010362.jpg"} size="xl" shadow="sm" variant="circle" style={{ objectFit: 'cover' }} alt="livestream" />
+              }
             </SuiBox>
             <SuiBox display="flex" flexDirection="column" alignItems="flex-start" justifyContent="center">
               <SuiTypography variant="button" fontWeight="medium">

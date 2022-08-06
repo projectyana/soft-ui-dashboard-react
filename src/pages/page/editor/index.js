@@ -13,13 +13,20 @@ import { useSoftUIController, setMiniSidenav } from "context";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 import VisualEditor from "components/Custom/VisualEditor";
+import { SelectCreateable } from "components/Custom/Select";
 
 import PageApi from "apis/Page";
+import BlogApi from "apis/Blog";
 
 const PageEditor = () => {
   const navigate = useNavigate();
   const { action } = useParams();
   const [controller, dispatch] = useSoftUIController();
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [dropdown, setDropdown] = useState({
+    loading: true,
+    tags: []
+  });
   const isFullscreen = window.innerHeight == screen.height;
   const {
     id = null,
@@ -32,18 +39,26 @@ const PageEditor = () => {
 
   // Submit to server
   const formSubmitHandler = (values, { setSubmitting }) => {
+    const finalValue = {
+      ...values,
+      tags: selectedTags.map(item => item.value).join(",")
+    };
 
     action === "create"
-      ? PageApi.create(values)
+      ? PageApi.create(finalValue)
         .then((res) => {
           navigate(-1, { replace: true });
         })
-        .catch((err) => window.alert("Error connect to server"))
-      : PageApi.update(id, values)
+        .catch(({ response }) => {
+          window.alert(response?.data?.message ?? "Error connect to server");
+        })
+      : PageApi.update(id, finalValue)
         .then((res) => {
           navigate(-1, { replace: true });
         })
-        .catch((err) => window.alert("Error connect to server"));
+        .catch(({ response }) => {
+          window.alert(response?.data?.message ?? "Error connect to server");
+        });
   };
 
   const formik = useFormik({
@@ -59,6 +74,15 @@ const PageEditor = () => {
 
   const { values, errors, touched, handleChange } = formik;
 
+  const fetchDropdown = () => {
+    BlogApi.getTags()
+      .then((res) => setDropdown({ loading: false, tags: res?.data?.data?.map(tag => ({ value: tag, label: tag })) }))
+      .catch(() => {
+        setDropdown({ loading: false, tags: [] });
+        window.alert("Unable get dropdown tags!");
+      });
+  };
+
   useEffect(() => {
     setMiniSidenav(dispatch, true);
 
@@ -66,6 +90,11 @@ const PageEditor = () => {
       setMiniSidenav(dispatch, false);
     };
   }, [isFullscreen]);
+
+  useEffect(() => {
+    fetchDropdown();
+    if (action === "edit") setSelectedTags(tags?.split(",").map(tag => ({ value: tag, label: tag })));
+  }, []);
 
   return (
     <DashboardLayout>
@@ -94,13 +123,15 @@ const PageEditor = () => {
           </SuiBox>
 
           <SuiBox>
-            <SuiInput
-              name="tags"
+            <SelectCreateable
+              isMulti={true}
               placeholder="Tags"
-              onChange={handleChange}
-              value={values.tags}
-              error={Boolean(errors.tags && touched.tags)}
-              errorMessage={errors?.tags ?? ""}
+              option={dropdown?.tags}
+              defaultValue={selectedTags ?? []}
+              value={selectedTags}
+              onChange={setSelectedTags}
+              isLoading={dropdown.loading}
+              menuPortalTarget={document.body}
             />
           </SuiBox>
         </SuiBox>

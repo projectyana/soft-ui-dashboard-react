@@ -12,7 +12,7 @@ import CustomModal from "components/Custom/Modal";
 import InputImage from "./InputImage";
 
 const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
-  const { id, link, title, slug, body, url, image } = modalConfig?.data ?? {};
+  const { id, link, title, description, body, url, image } = modalConfig?.data ?? {};
   const [dataGambar, setDataGambar] = useState([{ link }]);
 
   const handleUploadImage = async () => {
@@ -26,26 +26,34 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
   // Submit to server
   const formSubmitHandler = async (values, { setSubmitting }) => {
-    const finalValue = { ...values };
+    if (dataGambar.length > 0) {
+      const finalValue = { ...values };
 
-    if (dataGambar[0]?.data) {
-      const imageLink = await handleUploadImage();
-      finalValue.image = dataGambar[0]?.nama;
-      finalValue.url = imageLink;
+      if (dataGambar[0]?.data) {
+        const imageLink = await handleUploadImage();
+        finalValue.image = dataGambar[0]?.nama;
+        finalValue.url = imageLink;
+      }
+
+      CarouselApi.update(id, finalValue)
+        .then(({ data }) => {
+          setModalConfig(prev => ({ ...prev, show: false }));
+          fetchData();
+        })
+        .catch((err) => window.alert("Error connect to server"));
+
     }
-
-    CarouselApi.update(id, finalValue)
-      .then(({ data }) => {
-        setModalConfig(prev => ({ ...prev, show: false }));
-        fetchData();
-      })
-      .catch((err) => window.alert("Error connect to server"));
+    else {
+      window.alert("Image carousel is required!");
+      setSubmitting(false);
+    }
   };
 
   const formik = useFormik({
     initialValues: {
       title: title ?? "",
       body: body ?? "",
+      description: description ?? "",
       url: url ?? "",
       image: image ?? ""
     },
@@ -74,6 +82,17 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
           value={values.title}
           error={Boolean(errors.title && touched.title)}
           errorMessage={errors?.title ?? ""}
+        />
+      </SuiBox>
+
+      <SuiBox mb={2}>
+        <SuiInput
+          name="description"
+          placeholder="Description"
+          onChange={handleChange}
+          value={values.description}
+          error={Boolean(errors.description && touched.description)}
+          errorMessage={errors?.description ?? ""}
         />
       </SuiBox>
 

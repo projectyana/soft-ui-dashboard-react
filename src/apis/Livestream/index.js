@@ -12,7 +12,10 @@ class LivestreamApi {
   end() {
     return Service.post("/bo/livestream/end");
   }
-}
 
+  history() {
+    return Service.get("/bo/livestream/history");
+  }
+}
 
 export default new LivestreamApi();

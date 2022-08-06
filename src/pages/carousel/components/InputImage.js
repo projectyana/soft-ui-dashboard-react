@@ -13,37 +13,8 @@ const Image = ({ imageText, imageUrl, onView, onDownload, onDelete }) => {
   const [isHover, setIsHover] = useState(false);
 
   return (
-    <SuiBox
-      style={{ position: 'relative', objectFit: 'cover' }}
-    // onClick={onView}
-    // onMouseEnter={() => setIsHover(true)}
-    // onMouseLeave={() => setIsHover(false)}
-    >
-      {/* Download Button */}
-      {/* <ActionButton
-          size="sm"
-          variant="primary"
-          style={{ position: 'absolute', zIndex: 1, right: 20 }}
-          className="m-2 shadow"
-          onClick={onDownload}
-        >
-          <IoDownloadOutline />
-        </ActionButton> */}
-
-      {/* Delete Button */}
-      {/* <button style={{ position: 'absolute', zIndex: 1, top: 15, right: 20 }} >Delete</button> */}
-      {/* {TYPE !== 'DETAIL' &&
-          <ActionButton
-            size="sm"
-            variant="danger"
-            className="m-2 shadow"
-            onClick={onDelete}
-          >
-            <IoTrashOutline />
-          </ActionButton>
-        } */}
+    <SuiBox style={{ position: 'relative', objectFit: 'cover' }} >
       <img
-        // className={`img-fluid rounded border ${isHover ? 'shadow' : 'shadow-sm'}`}
         style={{ height: 200, width: '100%', objectFit: 'cover', transform: isHover ? 'scale(1.03)' : 'none', transition: 'all 0.1s ease-in-out' }}
         src={imageUrl}
       />
@@ -90,22 +61,20 @@ const InputImage = ({ dataGambar, setDataGambar }) => {
           style={{ display: 'none' }}
           onChange={onChangeFileHandler}
         />
-        {/* <ActionButton
-          text="Tambah Gambar"
-          onClick={onClickFilesHandler}
-        /> */}
-        {/* {TYPE !== 'DETAIL' &&
-          <ActionButton
-            text="Tambah Gambar"
-            onClick={onClickFilesHandler}
-          />
-        } */}
-
         <div
-          // fluid
-          // className="bg-light rounded overflow-auto border"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          borderRadius="lg"
           onClick={onClickFilesHandler}
-          style={{ cursor: 'pointer', maxHeight: '60vh' }}
+          style={{
+            borderRadius: '10px',
+            backgroundColor: '#c9ced7',
+            cursor: 'pointer',
+            maxHeight: '60vh',
+            height: 200,
+            width: "100%"
+          }}
         >
           {dataGambar && dataGambar.length > 0
             ? <div>
@@ -114,23 +83,30 @@ const InputImage = ({ dataGambar, setDataGambar }) => {
                   key={index}
                   imageText={val.nama}
                   imageUrl={val.link}
-                // onDelete={e => {
-                //   e.stopPropagation();
-                //   setModalDeleteConfig({
-                //     show: true,
-                //     loading: false,
-                //     index: index
-                //   });
-                // }}
                 />
               ))}
             </div>
-            : <SuiTypography variant="body2" color="dark" fontWeight="light">Click to select image</SuiTypography>
+            :
+            <div
+              style={{
+                borderRadius: '10px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#c9ced7',
+                cursor: 'pointer',
+                maxHeight: '60vh',
+                height: 200,
+                width: "100%"
+              }}
+            >
+              <SuiTypography variant="body2" color="dark" fontWeight="light">Click to select image</SuiTypography>
+            </div>
+
           }
         </div>
       </div>
     </SuiBox>
-
   );
 };
 

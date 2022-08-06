@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 =========================================================
 * Soft UI Dashboard React - v3.1.0
@@ -44,13 +45,8 @@ import Billing from "layouts/billing";
 import Profile from "layouts/profile";
 import SignUp from "layouts/authentication/sign-up";
 
-// Soft UI Dashboard React icons
-import Shop from "examples/Icons/Shop";
-import Office from "examples/Icons/Office";
-import Document from "examples/Icons/Document";
-import SpaceShip from "examples/Icons/SpaceShip";
-import CustomerSupport from "examples/Icons/CustomerSupport";
-import CreditCard from "examples/Icons/CreditCard";
+// App svg
+import * as SVG from "assets/svg";
 
 // App Pages
 import AppDashboard from "pages/dashboard";
@@ -71,6 +67,10 @@ import BlogEditor from "pages/blog/editor";
 
 import CarouselPage from "pages/carousel";
 import LivestreamPage from "pages/livestream";
+import PressRelease from "pages/press_release";
+import RecentInfoCategoryPage from "pages/recent_info_category";
+import RecentInfoPage from "pages/recent_info";
+import HealthComicPage from "pages/health_comic";
 
 // Dashboard sidebar menu
 const sideNav = [
@@ -78,16 +78,15 @@ const sideNav = [
     type: "collapse",
     name: "Dashboard",
     key: "dashboard",
-    icon: <Office size="12px" />,
+    icon: <SVG.DashboardIcon />,
     route: "/dashboard",
     component: <AppDashboard />,
-    // component: <Tables />,
   },
   {
     type: "collapse",
     name: "Role",
     key: "role",
-    icon: <Document size="12px" />,
+    icon: <SVG.RoleIcon />,
     route: "/role",
     component: <RolePage />,
   },
@@ -95,7 +94,7 @@ const sideNav = [
     type: "collapse",
     name: "User",
     key: "user",
-    icon: <Document size="12px" />,
+    icon: <SVG.UserIcon />,
     route: "/user",
     component: <UserPage />,
   },
@@ -103,7 +102,7 @@ const sideNav = [
     type: "collapse",
     name: "Page",
     key: "page",
-    icon: <Document size="12px" />,
+    icon: <SVG.PageIcon />,
     route: "/page",
     component: <PageMenu />,
   },
@@ -111,7 +110,7 @@ const sideNav = [
     type: "collapse",
     name: "Blog",
     key: "blog",
-    icon: <Document size="12px" />,
+    icon: <SVG.BlogIcon />,
     route: "/blog",
     component: <BlogMenu />,
   },
@@ -119,7 +118,7 @@ const sideNav = [
     type: "collapse",
     name: "Carousel",
     key: "carousel",
-    icon: <Document size="12px" />,
+    icon: <SVG.CarouselIcon />,
     route: "/carousel",
     component: <CarouselPage />,
   },
@@ -127,7 +126,7 @@ const sideNav = [
     type: "collapse",
     name: "Menu Configuration",
     key: "menu-configuration",
-    icon: <Document size="12px" />,
+    icon: <SVG.MenuIcon />,
     route: "/menu-configuration",
     component: <MenuConfigurationPage />,
   },
@@ -135,9 +134,41 @@ const sideNav = [
     type: "collapse",
     name: "Livestream",
     key: "livestream",
-    icon: <Document size="12px" />,
+    icon: <SVG.LivestreamIcon />,
     route: "livestream",
     component: <LivestreamPage />,
+  },
+  {
+    type: "collapse",
+    name: "Press Release",
+    key: "press-release",
+    icon: <SVG.PressReleaseIcon />,
+    route: "press-release",
+    component: <PressRelease />,
+  },
+  {
+    type: "collapse",
+    name: "Recent Info Category",
+    key: "recent-info-category",
+    icon: <SVG.RecentInfoCategoryIcon />,
+    route: "recent-info-category",
+    component: <RecentInfoCategoryPage />,
+  },
+  {
+    type: "collapse",
+    name: "Recent Info",
+    key: "recent-info",
+    icon: <SVG.RecentInfoIcon />,
+    route: "recent-info",
+    component: <RecentInfoPage />,
+  },
+  {
+    type: "collapse",
+    name: "Health Comic",
+    key: "health-comic",
+    icon: <SVG.ComicIcon />,
+    route: "health-comic",
+    component: <HealthComicPage />,
   },
   {
     type: "collapse",
@@ -191,3 +222,4 @@ const protectedPath = sideNav.concat([
 const routes = { publicPath, protectedPath };
 
 export default routes;
+>>>>>>> 09557d04367f7c12aa73a4e814ebd4f97589edd5

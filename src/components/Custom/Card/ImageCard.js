@@ -8,12 +8,14 @@ import {
 const ImageCard = ({ children, style, image, alt, title, description }) => {
   return (
     <Card sx={{ ...style }}>
-      <CardMedia
+      {Boolean(image) && (<CardMedia
         component="img"
         alt={alt}
         height="140"
         image={image}
       />
+      )}
+
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}

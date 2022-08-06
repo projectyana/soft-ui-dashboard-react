@@ -23,6 +23,10 @@
     "@emotion/cache": "11.7.1",
     "@emotion/react": "11.8.1",
     "@emotion/styled": "11.8.1",
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-regular-svg-icons": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@mui/icons-material": "5.4.2",
     "@mui/material": "5.4.3",
     "@mui/styled-engine": "5.4.2",
@@ -95,6 +99,9 @@
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.28.0",
     "eslint-plugin-react-hooks": "4.3.0",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-normalize": "^10.0.1",
+    "postcss-preset-env": "^7.7.2",
     "prettier": "2.5.1"
   }
 }

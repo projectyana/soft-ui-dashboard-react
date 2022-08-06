@@ -88,7 +88,7 @@ const VisualEditor = ({ action = "create", formik }) => {
   return (
     <>
       <div id="gjs"></div>
-      <SuiBox display="flex" justifyContent="flex-start" mt={2}>
+      <SuiBox display="flex" justifyContent="flex-start" m={2}>
         <SuiButton
           mt={2}
           size="medium"

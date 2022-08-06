@@ -1,26 +1,28 @@
 /* eslint-disable */
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createReactEditorJS } from 'react-editor-js';
 
 import SuiBox from "components/SuiBox";
-import SuiButton from "components/SuiButton";
-
 import { EDITOR_JS_TOOLS } from "./editor_tools";
 
-const TextEditor = ({ action, formik }) => {
+const TextEditor = ({ formik }) => {
   const EditorJs = createReactEditorJS();
   const editorRef = useRef(null);
 
-  const { values, setValues, handleSubmit } = formik;
+  const handleInitialize = React.useCallback((instance) => { editorRef.current = instance; }, []);
+
+  const { values, setFieldValue, submitCount } = formik;
 
   async function handleSave() {
     const content = await editorRef.current.save();
-
-    setValues({ ...values, content: JSON.stringify(content) });
-    handleSubmit();
+    setFieldValue('content', JSON.stringify(content));
   }
 
-  const handleInitialize = React.useCallback((instance) => { editorRef.current = instance; }, []);
+  useEffect(() => {
+    if (submitCount > 0) handleSave();
+
+    return () => { };
+  }, [submitCount]);
 
   return (
     <SuiBox>
@@ -30,16 +32,9 @@ const TextEditor = ({ action, formik }) => {
           onInitialize={handleInitialize}
           tools={EDITOR_JS_TOOLS}
           defaultValue={values.content ? JSON.parse(values.content) : null}
+          onChange={() => handleSave()}
         />
-
       </SuiBox>
-      <SuiButton
-        mt={2}
-        size="medium"
-        color="info"
-        onClick={() => handleSave()}>
-        {action === "edit" ? "Save Update" : "Create"}
-      </SuiButton>
     </SuiBox>
   );
 };

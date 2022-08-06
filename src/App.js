@@ -1,3 +1,5 @@
+/* eslint-disable */;
+
 /**
 =========================================================
 * Soft UI Dashboard React - v3.1.0
@@ -38,14 +40,12 @@ import routes from "routes";
 import { useSoftUIController, setMiniSidenav } from "context";
 
 // Image
-import brand from "assets/images/logo-ct.png";
 import kemenkes from "assets/images/logos/kemenkes-transparent.png";
 
 export default function App() {
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, direction, layout, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
-  const [appRoutes, setAppRoutes] = useState(routes?.publicPath ?? []);
   const { pathname } = useLocation();
   const reduxDispatch = useDispatch();
 
@@ -55,11 +55,9 @@ export default function App() {
   // Check if authentication
   const checkAuth = () => {
     if (!storageToken) {
-      setAppRoutes(routes.publicPath);
       return reduxDispatch(authLogout());
     }
 
-    setAppRoutes(routes.protectedPath);
     return reduxDispatch(authLogin({ token: storageToken }));
   };
 
@@ -117,7 +115,7 @@ export default function App() {
             color={sidenavColor}
             brand={kemenkes}
             brandName="Back Office"
-            routes={appRoutes}
+            routes={routes.protectedPath}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
@@ -125,7 +123,7 @@ export default function App() {
         </>
       )}
 
-      <Routes> {getRoutes(appRoutes)} </Routes>
+      <Routes> {storageToken ? getRoutes(routes.protectedPath) : getRoutes(routes.publicPath)} </Routes>
     </ThemeProvider>
   );
 }
