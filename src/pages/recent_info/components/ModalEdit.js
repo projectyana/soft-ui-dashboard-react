@@ -1,21 +1,34 @@
 /* eslint-disable */
 import { useFormik } from "formik";
 import * as yup from "yup";
+import {
+  Grid,
+  DialogActions
+} from "@mui/material";
 
 import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiInput from "components/SuiInput";
+import TextEditor from "components/Custom/TextEditor";
+import CustomModal from "components/Custom/Modal";
+import SuiTypography from "components/SuiTypography";
 import { Select } from "components/Custom/Select";
 
 import RecentInfoApi from "apis/RecentInfo";
-import CustomModal from "components/Custom/Modal";
 
 const ModalEdit = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
   const { id, info, description, publish_date, recent_info_category_id } = modalConfig.data;
 
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
   // Submit to server
-  const formSubmitHandler = (values, { setSubmitting }) => {
-    RecentInfoApi.update(id, values)
+  const formSubmitHandler = async (values, { setSubmitting }) => {
+    await sleep(1000);
+    const finalValue = {
+      ...values,
+      description: values?.content,
+    };
+    RecentInfoApi.update(id, finalValue)
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
         fetchData();
@@ -27,13 +40,12 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
   const formik = useFormik({
     initialValues: {
       info: info ?? "",
-      description: description ?? "",
+      content: description ?? "",
       recent_info_category_id: recent_info_category_id ?? "",
       publish_date: publish_date ?? ""
     },
     validationSchema: yup.object().shape({
       info: yup.string().required("Info is required!"),
-      description: yup.string().required("Description is required!"),
       recent_info_category_id: yup.string().required("Recent Info Category is required!"),
       publish_date: yup.string().required("Publish Date is required!"),
     }),
@@ -44,6 +56,8 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
 
   return (
     <CustomModal
+      fullScreen
+      maxWidth="false"
       title="Edit Recent Info"
       open={modalConfig.show && modalConfig.type === 'edit'}
       setModalConfig={setModalConfig}
@@ -61,17 +75,6 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
       </SuiBox>
 
       <SuiBox mb={2}>
-        <SuiInput
-          name="description"
-          placeholder="Description"
-          onChange={handleChange}
-          value={values.description}
-          error={Boolean(errors.description && touched.description)}
-          errorMessage={errors?.description ?? ""}
-        />
-      </SuiBox>
-
-      <SuiBox mb={2}>
         <Select
           placeholder="Select Recent Info Category"
           option={dropdown}
@@ -83,6 +86,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
           })}
           error={Boolean(errors.recent_info_category_id && touched.recent_info_category_id)}
           errorMessage={errors?.recent_info_category_id ?? ""}
+          menuPortalTarget={document.body}
         />
       </SuiBox>
 
@@ -99,17 +103,38 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig, dropdown }) => {
         />
       </SuiBox>
 
-      <SuiBox display="flex" justifyContent="flex-end" mt={2}>
-        <SuiButton
-          mt={2}
-          size="medium"
-          color="info"
-          onClick={handleSubmit}>
-          Save
-        </SuiButton>
-      </SuiBox>
-    </CustomModal>);
+      <Grid container spacing={{ xs: 1, md: 1 }}>
+        <Grid item lg={12} md={12} sm={12} xs={12}>
+          <SuiTypography variant="h6">
+            Description
+          </SuiTypography>
+        </Grid>
+        <Grid item lg={6} md={12} sm={12} xs={12}>
+          <TextEditor formik={formik} />
+        </Grid>
+      </Grid>
 
+      <DialogActions>
+        <SuiBox display="flex" justifyContent="flex-end" mt={2}>
+          <SuiButton
+            variant="text"
+            size="small"
+            mt={2}
+            sx={{ mr: 2 }}
+            color="dark"
+            onClick={() => setModalConfig({ show: false, data: null })}>
+            Cancel
+          </SuiButton>
+          <SuiButton
+            mt={2}
+            size="medium"
+            color="info"
+            onClick={handleSubmit}>
+            Save
+          </SuiButton>
+        </SuiBox>
+      </DialogActions>
+    </CustomModal>);
 };
 
 export default ModalEdit;

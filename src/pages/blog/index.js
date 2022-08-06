@@ -50,6 +50,7 @@ const BlogMenu = () => {
       .finally(() => setFetchStatus({ loading: false }));
   };
 
+  // Get editorjs raw content text
   const getBlogRawContent = (content) => {
     const parseContent = JSON.parse(content);
     let blogContentText = "";

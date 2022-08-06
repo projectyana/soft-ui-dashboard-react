@@ -67,6 +67,22 @@ export default function RecentInfoPage() {
       .finally(() => setFetchStatus({ loading: false }));
   };
 
+  // Get editorjs raw content text
+  const getBlogRawContent = (content) => {
+    const parseContent = JSON.parse(content);
+    let blogContentText = "";
+
+    if (parseContent?.blocks?.length > 0) {
+      parseContent?.blocks?.forEach((item, index) => {
+        if (item.type === "header" || item.type === "paragraph") {
+          blogContentText += `${item.data.text ?? ""}. `;
+        }
+      });
+    }
+
+    return `${blogContentText.slice(0, 125)}...`;
+  };
+
   const convertDateTime = date => new Intl.DateTimeFormat('id-ID').format(new Date(date));
 
   useEffect(() => {
@@ -114,7 +130,7 @@ export default function RecentInfoPage() {
                   <SuiTypography variant="caption">{row.info}</SuiTypography>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  <SuiTypography variant="caption">{row.description ?? ""}</SuiTypography>
+                  <SuiTypography variant="caption">{getBlogRawContent(row.description)}</SuiTypography>
                 </TableCell>
                 <TableCell>
                   <SuiTypography variant="caption">{dropdown?.find(i => i.value === row.recent_info_category_id)?.label ?? ""}</SuiTypography>
