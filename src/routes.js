@@ -53,6 +53,8 @@ import SignIn from "pages/auth/sign-in";
 import RolePage from "pages/role";
 import UserPage from "pages/user";
 import MenuConfigurationPage from "pages/menu";
+import GalleryPage from "pages/gallery";
+
 
 // Page 
 import PageMenu from "pages/page";
@@ -166,7 +168,15 @@ const sideNav = [
     icon: <SVG.ComicIcon />,
     route: "health-comic",
     component: <HealthComicPage />,
-  }
+  },
+  {
+    type: "collapse",
+    name: "Media",
+    key: "media",
+    icon: <SVG.ComicIcon />,
+    route: "media",
+    component: <GalleryPage />,
+  },
 ];
 
 // Unauthenticated routes

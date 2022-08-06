@@ -112,7 +112,6 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
         </SuiButton>
       </SuiBox>
     </CustomModal>);
-
 };
 
 export default ModalCreate;
