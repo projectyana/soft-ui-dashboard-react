@@ -15,7 +15,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   const formSubmitHandler = (values, { setSubmitting }) => {
     RecentInfoCategoryApi.create({
       ...values,
-      icon: values.icon
+      icon: values.icon.value
     })
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
