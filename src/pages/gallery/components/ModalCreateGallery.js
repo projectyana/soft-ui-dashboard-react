@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -12,7 +14,7 @@ import SuiInput from 'components/SuiInput';
 import GalleryApi from "apis/Gallery";
 import CustomModal from 'components/Custom/Modal';
 import { InputLabel, MenuItem, FormControl } from "@mui/material";
-import { Select } from "components/Custom/Select";
+import {Select} from "components/Custom/Select";
 import InputImage from "./InputImage";
 
 

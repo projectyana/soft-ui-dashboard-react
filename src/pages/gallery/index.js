@@ -20,7 +20,7 @@ import SuiButton from 'components/SuiButton';
 import SuiTypography from 'components/SuiTypography';
 
 import ImageCard from "components/Custom/Card/ImageCard";
-import { Select } from "components/Custom/Select";
+import {Select,SelectIcon} from "components/Custom/Select";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 
 import ModalCreateCategory from "./components/ModalCreateCategory";

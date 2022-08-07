@@ -1,4 +1,6 @@
 
+/* eslint-disable */
+
 import { useFormik, validateYupSchema } from 'formik';
 import * as yup from "yup";
 import CustomModal from 'components/Custom/Modal';
@@ -9,6 +11,7 @@ import React from 'react';
 import SuiBox from 'components/SuiBox';
 import SuiInput from 'components/SuiInput';
 import SuiButton from 'components/SuiButton';
+import { SelectIcon } from 'components/Custom/Select';
 
 
 
@@ -18,13 +21,17 @@ function ModalCreateCategory({ fetchData, modalConfigCategory, setModalConfig })
 
     const formSubmitHandler = (values, { setSubmitting }) => {
         console.log('submitted', values)
-        GalleryApi.create(values)
+        GalleryApi.create({
+            ...values,
+            icon: values.icon
+        
+        })
             .then(({ data }) => {
                 setModalConfig(prev => ({ ...prev, show: false }));
                 fetchData();
             })
             .catch((err) => window.alert("Error connect to server"));
-        console.log('values category', values)
+        console.log('values category', values.icon)
     };
 
     const formik = useFormik({
@@ -39,8 +46,10 @@ function ModalCreateCategory({ fetchData, modalConfigCategory, setModalConfig })
         onSubmit: formSubmitHandler,
     })
 
-    const { values, errors, touched, handleChange, isSubmitting, handleSubmit } = formik;
+    const { values, errors, touched, handleChange,setValues ,isSubmitting, handleSubmit } = formik;
     console.log(modalConfigCategory)
+    console.log('icon', values.icon)
+
 
 
     return (
@@ -62,11 +71,11 @@ function ModalCreateCategory({ fetchData, modalConfigCategory, setModalConfig })
             </SuiBox>
 
             <SuiBox mb={2}>
-                <SuiInput
+                <SelectIcon
                     name="icon"
                     placeholder="Icon"
-                    onChange={handleChange}
                     value={values.icon}
+                    onChange={(opt)=>setValues({...values, icon: opt.icon.values})}
                     error={Boolean(errors.icon && touched.icon)}
                     errorMessage={errors?.icon ?? ""}
                 />

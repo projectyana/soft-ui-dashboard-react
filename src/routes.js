@@ -1,3 +1,4 @@
+
 /**
 =========================================================
 * Soft UI Dashboard React - v3.1.0
@@ -34,7 +35,7 @@ Coded by www.creative-tim.com
   10. The `title` key is only for the item with the type of `title` and its used for the title text on the Sidenav.
   10. The `component` key is used to store the component of its route.
 */
-
+/* eslint-disable*/
 import { Navigate } from "react-router-dom";
 
 // Soft UI Dashboard React layouts

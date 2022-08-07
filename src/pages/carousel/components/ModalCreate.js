@@ -11,6 +11,8 @@ import CarouselApi from "apis/Carousel";
 import CustomModal from "components/Custom/Modal";
 import InputImage from "./InputImage";
 
+
+
 const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   const [dataGambar, setDataGambar] = useState([]);
 
