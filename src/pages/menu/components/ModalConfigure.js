@@ -1,18 +1,10 @@
 /* eslint-disable */
 
 /**
- * Create Parent Sub Menu
+ * Modal to Edit or delete Submenu from Parent
  */
 
 import { useEffect, useState } from "react";
-import Axios from "axios";
-
-import SuiBox from "components/SuiBox";
-import SuiButton from "components/SuiButton";
-import SuiTypography from "components/SuiTypography";
-import { LoadingState } from "components/Custom/Loading";
-
-// @mui material components
 import {
   Chip,
   Icon,
@@ -24,19 +16,26 @@ import {
   Paper,
 } from "@mui/material";
 
+import SuiBox from "components/SuiBox";
+import SuiButton from "components/SuiButton";
+import SuiTypography from "components/SuiTypography";
+import { LoadingState } from "components/Custom/Loading";
+
 import MenuApi from "apis/Menu";
 import CustomModal from "components/Custom/Modal";
+import ModalEditMenu from "./ModalEditMenu";
 
-const ModalConfigure = ({ fetchData, modalConfig, setModalConfig }) => {
+const ModalConfigure = ({ fetchPage, modalConfig, setModalConfig }) => {
   const { id, name, } = modalConfig.data;
   const [onRowDelete, setOnRowDelete] = useState(null);
   const [fetchStatus, setFetchStatus] = useState({ loading: false });
   const [submenu, setSubmenu] = useState([]);
+  const [modalEditMenu, setModalEditMenu] = useState({ show: false, data: null });
 
   // Get sub parent menu list
   const fetchParent = () => {
     setFetchStatus({ loading: true });
-    MenuApi.getSingleParent(id)
+    MenuApi.getSingle(id)
       .then((res) => setSubmenu(res?.data?.data?.content ?? []))
       .finally(() => setFetchStatus({ loading: false }));
   };
@@ -95,20 +94,34 @@ const ModalConfigure = ({ fetchData, modalConfig, setModalConfig }) => {
                     <TableCell>
                       {onRowDelete === row.id
                         ? (
-                          <SuiBox display="flex" justifyContent="center" alignItems="center">
+                          <SuiBox display="flex" justifyContent="start" alignItems="center">
                             <Chip size="small" label="Cancel" variant="outlined" onClick={() => setOnRowDelete(null)} />
                             <Chip sx={{ marginLeft: 1 }} size="small" label="Confirm" color="error" onClick={() => handleDeleteMenu(row.id)} />
                           </SuiBox>
                         )
                         : (
-                          <SuiButton
-                            size="small"
-                            variant="text"
-                            color="error"
-                            onClick={() => setOnRowDelete(row.id)}
-                          >
-                            <Icon>delete</Icon>&nbsp;delete
-                          </SuiButton>
+                          <SuiBox display="flex" justifyContent="start" alignItems="center">
+                            <SuiBox mr={1}>
+                              <SuiButton
+                                size="small"
+                                variant="text"
+                                color="dark"
+                                onClick={() => setModalEditMenu({ show: true, data: row })}
+                              >
+                                <Icon>edit</Icon>&nbsp;edit
+                              </SuiButton>
+                            </SuiBox>
+                            <SuiBox>
+                              <SuiButton
+                                size="small"
+                                variant="text"
+                                color="error"
+                                onClick={() => setOnRowDelete(row.id)}
+                              >
+                                <Icon>delete</Icon>&nbsp;delete
+                              </SuiButton>
+                            </SuiBox>
+                          </SuiBox>
                         )}
                     </TableCell>
 
@@ -125,6 +138,8 @@ const ModalConfigure = ({ fetchData, modalConfig, setModalConfig }) => {
           </TableContainer>
         </SuiBox>
       }
+      {/* Modal edit sub menu */}
+      {modalEditMenu.show && <ModalEditMenu fetchParent={fetchParent} modalConfig={modalEditMenu} setModalConfig={setModalEditMenu} />}
     </CustomModal >
   );
 };

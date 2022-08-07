@@ -1,5 +1,8 @@
-import React from 'react';
+/**
+ * Modal to delete a menu parent
+*/
 
+import React from 'react';
 import SuiTypography from "components/SuiTypography";
 import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";

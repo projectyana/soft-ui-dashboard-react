@@ -1,4 +1,8 @@
 /* eslint-disable */
+
+/** 
+ * Modal to edit parent only menu name
+*/
 import { useFormik } from "formik";
 import * as yup from "yup";
 

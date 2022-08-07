@@ -5,7 +5,7 @@ class MenuApi {
     return Service.get("/bo/header_nav/parent");
   }
 
-  getSingleParent(id) {
+  getSingle(id) {
     return Service.get(`/bo/header_nav/${id}`);
   }
 
