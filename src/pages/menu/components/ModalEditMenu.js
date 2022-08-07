@@ -1,9 +1,10 @@
 /* eslint-disable */
 
 /**
- * Modal to create parent menu or sub menu
- *  
- * */
+ * Modal to change/edit sub menu type & name
+ * eg: update existing submenu type from page become blog or link
+ */
+
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -27,8 +28,9 @@ import { LoadingState } from "components/Custom/Loading";
 
 import MenuApi from "apis/Menu";
 
-const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
+const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
+  const [dataSingle, setDataSingle] = useState({});
   const [dropdown, setDropdown] = useState({
     parent_menu: [],
     page: [],
@@ -45,7 +47,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
       // if user  parent/sub menu as link
       if (values.menu_type == "link") {
-        finalValue.content = { url: values.content };
+        finalValue.content = { url: values.link };
       }
       else {
         // if user create parent/sub menu as page/blog
@@ -55,57 +57,35 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
       return finalValue;
     };
 
-    // if user create parent menu
-    if (values.menu_state === "parent") {
-      const finalValue = valueFormater(values);
+    const finalValue = valueFormater(values);
 
-      MenuApi.create(finalValue)
-        .then(({ data }) => {
-          setModalConfig(prev => ({ ...prev, show: false }));
-          fetchData();
-        })
-        .catch(() => window.alert("Error connect to server"));
-    }
-
-    // if user create sub parent menu
-    if (values.menu_state === "sub") {
-      const finalValue = valueFormater(values);
-
-      MenuApi.createSubmenu(values.id_parent, finalValue)
-        .then(({ data }) => {
-          setModalConfig(prev => ({ ...prev, show: false }));
-          fetchData();
-        })
-        .catch(() => window.alert("Error connect to server"));
-    }
+    MenuApi.update(modalConfig.data.id, finalValue)
+      .then(res => {
+        setModalConfig({ ...modalConfig, show: false });
+        fetchParent();
+      })
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to update menu"));
   };
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      name: "",
-      menu_state: "parent",
-      id_parent: "",            // id_parent is required when menu_state is sub 
-      menu_type: "page",        // page, blog, link 
-      content: "",              // content is required when menu_type is page or blog
-      link: "",
+      name: modalConfig.data.name ?? "",
+      id_parent: dataSingle?.parent_id ?? "",            // id_parent is required when menu_state is sub 
+      menu_type: dataSingle?.type ?? "",                 // page, blog, link 
+      content: dataSingle?.content?.id ?? "",            // content is required when menu_type is page or blog
+      link: dataSingle?.content?.url ?? "",
     },
     validationSchema: yup.object().shape({
       name: yup.string().required("Menu Name is required!"),
-      menu_state: yup.string().required("Menu State is required!"),
-      id_parent: yup.string().when('menu_state', {
-        is: (menu_state) => Boolean(menu_state === 'sub'),
-        then: yup.string().required("Parent Menu is required!")
-      }),
       menu_type: yup.string().required("Menu Type is required!"),
-      content: yup.string().required("Content is required!"),
-      // content: yup.string().when('menu_type', {
-      //   is: (menu_type) => Boolean(menu_type === 'page' || menu_type === 'blog'),
-      //   then: yup.string().required(`Content is required!`)
-      // }),
-      // link: yup.string().when('menu_type', {
-      //   is: (menu_type) => Boolean(menu_type === 'link'),
-      //   then: yup.string().required("Link is required!")
-      // }),
+      content: yup.string().when('menu_type', {
+        is: (menu_type) => Boolean(menu_type === 'page' || menu_type === 'blog'),
+        then: yup.string().required("Content is required!")
+      }), link: yup.string().when('menu_type', {
+        is: (menu_type) => Boolean(menu_type === 'link'),
+        then: yup.string().required("Link is required!")
+      }),
     }),
     onSubmit: formSubmitHandler,
   });
@@ -115,16 +95,28 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   const getInitialData = () => {
 
     Axios.all([
+      MenuApi.getSingle(modalConfig.data.id),
       MenuApi.getParent(),
       MenuApi.getPageUnlinked(),
       MenuApi.getBlogUnlinked()
     ])
-      .then((Axios.spread((resParent, resPage, resBlog) => {
+      .then((Axios.spread((resSingle, resParent, resPage, resBlog) => {
+        const { type, content } = resSingle?.data?.data ?? {};
+
+        // get previous selected blog /page to join with unlinked array
+        const previousContent = { value: content?.id, label: content?.title };
+
         const mapParent = resParent.data.data.map(item => ({ ...item, value: item.id, label: item.name }));
         const mapPage = resPage.data.data.map(item => ({ ...item, value: item.id, label: `${item.title} (Page)`, type: "page" }));
         const mapBlog = resBlog.data.data.map(item => ({ ...item, value: item.id, label: `${item.title} (Blog)`, type: "blog" }));
 
-        setDropdown(prev => ({ ...prev, parent_menu: mapParent, page: mapPage, blog: mapBlog }));
+        setDataSingle(resSingle.data.data);
+        setDropdown(prev => ({
+          ...prev,
+          parent_menu: mapParent,
+          page: type === "page" ? [previousContent].concat(mapPage) : mapPage,
+          blog: type === "blog" ? [previousContent].concat(mapBlog) : mapBlog
+        }));
       })))
       .catch(() => window.alert("Error connect to server"))
       .finally(() => setFetchStatus({ loading: false }));
@@ -139,8 +131,8 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title="Create Menu"
-      open={modalConfig.show && modalConfig.type === 'create'}
+      title={`Edit sub menu | ${modalConfig.data.name}`}
+      open={modalConfig.show}
       setModalConfig={setModalConfig}
       maxWidth="md"
     >
@@ -160,40 +152,6 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
           <SuiBox mb={2}>
             <FormControl>
-              <FormLabel id="menu_state">
-                <SuiTypography variant="subtitle2">
-                  Create menu as
-                </SuiTypography>
-              </FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="menu_state"
-                name="menu_state"
-                value={values.menu_state}
-                onChange={handleChange}
-              >
-                <FormControlLabel sx={{ marginX: 1 }} size="small" value="parent" control={<Radio />} label="Parent" />
-                <FormControlLabel sx={{ marginX: 1 }} size="small" value="sub" control={<Radio />} label="Sub Parent" />
-              </RadioGroup>
-            </FormControl>
-          </SuiBox>
-
-          <SuiBox mb={2}>
-            {/* Show select dropdown if menu_state equals sub (User create sub parent menu)*/}
-            {Boolean(values.menu_state === "sub") && (
-              <Select
-                placeholder="Select Parent Menu"
-                option={dropdown?.parent_menu ?? []}
-                defaultValue={dropdown?.parent_menu?.find(item => item.value === values.id_parent)}
-                onChange={(option) => setValues({ ...values, id_parent: option.value })}
-                error={Boolean(errors.id_parent && touched.id_parent)}
-                errorMessage={!!(errors?.id_parent && touched.id_parent) ? errors.id_parent : ""}
-              />
-            )}
-          </SuiBox>
-
-          <SuiBox mb={2}>
-            <FormControl>
               <FormLabel id="menu_type">
                 <SuiTypography variant="subtitle2">
                   Choose menu type
@@ -203,12 +161,12 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
                 row
                 aria-labelledby="menu_type"
                 name="menu_type"
-                value={values.menu_type}
-                onChange={(e) => setValues({ ...values, menu_type: e.target.value, content: "" })}
+                defaultValue={values.menu_type}
+                onChange={(e) => setValues({ ...values, menu_type: e.target.value })}
               >
-                <FormControlLabel sx={{ marginX: 1 }} size="small" value="page" control={<Radio />} label="Page" />
-                <FormControlLabel sx={{ marginX: 1 }} size="small" value="blog" control={<Radio />} label="Blog" />
-                <FormControlLabel sx={{ marginX: 1 }} size="small" value="link" control={<Radio />} label="Link" />
+                <FormControlLabel sx={{ marginX: 1 }} size="small" checked={values.menu_type === "page"} value="page" control={<Radio />} label="Page" />
+                <FormControlLabel sx={{ marginX: 1 }} size="small" checked={values.menu_type === "blog"} value="blog" control={<Radio />} label="Blog" />
+                <FormControlLabel sx={{ marginX: 1 }} size="small" checked={values.menu_type === "link"} value="link" control={<Radio />} label="Link" />
               </RadioGroup>
             </FormControl>
           </SuiBox>
@@ -233,17 +191,26 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
             {values.menu_type === "link" && (
               <SuiInput
-                name="content"
+                name="link"
                 placeholder="https://"
                 onChange={handleChange}
-                value={values.content}
-                error={Boolean(errors.content && touched.content)}
-                errorMessage={errors?.contnet ?? ""}
+                value={values.link}
+                error={Boolean(errors.link && touched.link)}
+                errorMessage={errors?.link ?? ""}
               />
             )}
           </SuiBox>
 
           <SuiBox display="flex" justifyContent="flex-end" mt={2}>
+            <SuiButton
+              variant="text"
+              size="small"
+              mt={2}
+              sx={{ mr: 2 }}
+              color="dark"
+              onClick={() => setModalConfig({ show: false, data: null })}>
+              Cancel
+            </SuiButton>
             <SuiButton
               mt={2}
               size="medium"
@@ -257,4 +224,4 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
     </CustomModal >);
 };
 
-export default ModalCreate;
+export default ModalEditMenu;

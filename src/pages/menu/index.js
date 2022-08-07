@@ -4,14 +4,6 @@
  */
 
 import React, { useEffect, useState } from "react";
-
-import SuiButton from "components/SuiButton";
-import SuiBox from "components/SuiBox";
-import SuiInput from "components/SuiInput";
-import SuiPagination from "components/SuiPagination";
-import SuiTypography from "components/SuiTypography";
-
-// @mui material components
 import {
   Table,
   TableBody,
@@ -22,9 +14,12 @@ import {
   Icon
 } from "@mui/material";
 
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-
+import SuiButton from "components/SuiButton";
+import SuiBox from "components/SuiBox";
+import SuiTypography from "components/SuiTypography";
 import { PageLoading } from "components/Custom/Loading";
+
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 import MenuApi from "apis/Menu";
 
@@ -32,7 +27,6 @@ import ModalCreate from "./components/ModalCreate";
 import ModalEdit from "./components/ModalEdit";
 import ModalConfigure from "./components/ModalConfigure";
 import ModalDelete from "./components/ModalDelete";
-import ModalCreatePage from "./components/ModalCreatePage";
 
 export default function RolePage() {
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
@@ -58,6 +52,13 @@ export default function RolePage() {
 
     return () => { setData([]); };
   }, []);
+
+  useEffect(() => {
+    // refetch data on modal configure close
+    if (modalConfig.type === "configure" && !modalConfig.show) {
+      fetchData();
+    }
+  }, [modalConfig]);
 
   if (fetchStatus.loading) {
     return <PageLoading />;
@@ -153,19 +154,34 @@ export default function RolePage() {
       </TableContainer>
 
       {/* Modal  Create */}
-      {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} modalCreate={modalCreate} setModalCreate={setModalCreate} />}
+      {modalConfig.show && modalConfig.type === "create" && <ModalCreate
+        fetchData={fetchData}
+        modalConfig={modalConfig}
+        setModalConfig={setModalConfig}
+        modalCreate={modalCreate}
+        setModalCreate={setModalCreate}
+      />}
 
       {/* Modal Edit */}
-      {modalConfig.show && modalConfig.type === "edit" && <ModalEdit fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "edit" && <ModalEdit
+        fetchData={fetchData}
+        modalConfig={modalConfig}
+        setModalConfig={setModalConfig}
+      />}
 
       {/* Modal Configure */}
-      {modalConfig.show && modalConfig.type === "configure" && <ModalConfigure fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "configure" && <ModalConfigure
+        fetchPage={fetchData}
+        modalConfig={modalConfig}
+        setModalConfig={setModalConfig}
+      />}
 
       {/* Modal Delete */}
-      {modalConfig.show && modalConfig.type === "delete" && <ModalDelete fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
-
-      {/* Modal Create */}
-      {modalCreate.show && <ModalCreatePage modalCreate={modalCreate} setModalCreate={setModalCreate} />}
+      {modalConfig.show && modalConfig.type === "delete" && <ModalDelete
+        fetchData={fetchData}
+        modalConfig={modalConfig}
+        setModalConfig={setModalConfig}
+      />}
     </DashboardLayout>
   );
 }
