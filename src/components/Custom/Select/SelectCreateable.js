@@ -29,7 +29,6 @@ export const SelectCreateable = ({
 
   const promiseOptions = (inputValue) =>
     new Promise((resolve) => {
-      console.log(inputValue);
       setTimeout(() => {
         resolve(Boolean(inputValue) ? filterOptions(inputValue) : option);
       }, 500);

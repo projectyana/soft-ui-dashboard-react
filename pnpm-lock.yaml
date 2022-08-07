@@ -32,6 +32,7 @@ specifiers:
   eslint-plugin-prettier: 4.0.0
   eslint-plugin-react: 7.28.0
   eslint-plugin-react-hooks: 4.3.0
+  file-saver: ^2.0.5
   formik: ^2.2.9
   grapesjs: ^0.19.4
   grapesjs-preset-webpage: ^0.1.11
@@ -50,13 +51,16 @@ specifiers:
   react-github-btn: 1.2.1
   react-redux: ^8.0.2
   react-router-dom: 6.2.1
+  react-script: ^2.0.5
   react-scripts: 5.0.0
   react-select: ^5.4.0
   react-select-async-paginate: ^0.6.1
+  react-transition-group: ^4.4.3
   stylis: 4.0.13
   stylis-plugin-rtl: 2.1.1
   uuid: 8.3.2
   web-vitals: 2.1.4
+  yarn: ^1.22.19
   yup: ^0.32.11
 
 dependencies:
@@ -83,10 +87,12 @@ dependencies:
   axios: 0.27.2
   chart.js: 3.4.1
   chroma-js: 2.4.2
+  file-saver: 2.0.5
   formik: 2.2.9_react@17.0.2
   grapesjs: 0.19.4
   grapesjs-preset-webpage: 0.1.11_grapesjs@0.19.4
   jwt-decode: 3.1.2
+  postcss-normalize: 10.0.1_vqntrzeodbkzmktqxvgijrtgk4
   prop-types: 15.8.1
   react: 17.0.2
   react-chartjs-2: 3.0.4_27meab5fhv4bvzi564ylv3zhtm
@@ -97,13 +103,16 @@ dependencies:
   react-github-btn: 1.2.1
   react-redux: 8.0.2_ykxqnxanlq42xavzz22bjdrwni
   react-router-dom: 6.2.1_sfoxds7t5ydpegc3knd667wn6m
+  react-script: 2.0.5
   react-scripts: 5.0.0_kkkse6ykemylkxedq55canwpsq
   react-select: 5.4.0_apvyc6hsquzbx56wwdowrbgkzm
   react-select-async-paginate: 0.6.1_c6yhnevfdtklkah7unncqq32cm
+  react-transition-group: 4.4.5_sfoxds7t5ydpegc3knd667wn6m
   stylis: 4.0.13
   stylis-plugin-rtl: 2.1.1_stylis@4.0.13
   uuid: 8.3.2
   web-vitals: 2.1.4
+  yarn: 1.22.19
   yup: 0.32.11
 
 devDependencies:
@@ -116,7 +125,6 @@ devDependencies:
   eslint-plugin-react: 7.28.0_eslint@8.10.0
   eslint-plugin-react-hooks: 4.3.0_eslint@8.10.0
   postcss-flexbugs-fixes: 5.0.2_postcss@8.4.14
-  postcss-normalize: 10.0.1_vqntrzeodbkzmktqxvgijrtgk4
   postcss-preset-env: 7.7.2_postcss@8.4.14
   prettier: 2.5.1
 
@@ -1503,6 +1511,7 @@ packages:
 
   /@csstools/normalize.css/12.0.0:
     resolution: {integrity: sha512-M0qqxAcwCsIVfpFQSlGN5XjXWu8l5JDZN+fPt1LeW5SZexQTgnaEvgXAY+CeygRw0EeppWHi12JxESWiWrB0Sg==}
+    dev: false
 
   /@csstools/postcss-cascade-layers/1.0.4_postcss@8.4.14:
     resolution: {integrity: sha512-zP2tQIFu4C3HueOT+G4Pkla7f2Z6pfXphc1Y9wDE5jS2Ss6dk/asQ7FFEFWKgy3EkYc7E1FSjzhfeZVGg5sjXQ==}
@@ -2210,7 +2219,7 @@ packages:
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-is: 17.0.2
-      react-transition-group: 4.4.2_sfoxds7t5ydpegc3knd667wn6m
+      react-transition-group: 4.4.5_sfoxds7t5ydpegc3knd667wn6m
     dev: false
 
   /@mui/private-theming/5.8.6_react@17.0.2:
@@ -5422,6 +5431,10 @@ packages:
     resolution: {integrity: sha512-spKHSBQIxxS81N/O21WmuXA2F6wppUCsutpzenOeZzOCCJ5gEfcbqJP983IrpLXzYmXnMUa6J03SubcNPdKrlg==}
     dev: false
 
+  /file-saver/2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
+    dev: false
+
   /filelist/1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
     dependencies:
@@ -7789,6 +7802,7 @@ packages:
     dependencies:
       browserslist: 4.21.1
       postcss: 8.4.14
+    dev: false
 
   /postcss-calc/8.2.4_postcss@8.4.14:
     resolution: {integrity: sha512-SmWMSJmB8MRnnULldx0lQIyhSNvuDl9HfrZkaqqE/WHAhToYsAvDq+yAsA/kIyINDszOp3Rh0GFoNuH5Ypsm3Q==}
@@ -8318,6 +8332,7 @@ packages:
       postcss: 8.4.14
       postcss-browser-comments: 4.0.0_vqntrzeodbkzmktqxvgijrtgk4
       sanitize.css: 13.0.0
+    dev: false
 
   /postcss-opacity-percentage/1.1.2:
     resolution: {integrity: sha512-lyUfF7miG+yewZ8EAk9XUBIlrHyUE6fijnesuz+Mj5zrIHIEw6KcIZSOk/elVMqzLvREmXB83Zi/5QpNRYd47w==}
@@ -8849,6 +8864,10 @@ packages:
       react: 17.0.2
     dev: false
 
+  /react-script/2.0.5:
+    resolution: {integrity: sha512-hLFLMFAH3Rr0VJisBz/bPyaJxMEimQGvuVOBXyn3t/nmlbV6mF+nghCPoY1V4dzIi+M1A8iyyXId1cgg8eS6XA==}
+    dev: false
+
   /react-scripts/5.0.0_kkkse6ykemylkxedq55canwpsq:
     resolution: {integrity: sha512-3i0L2CyIlROz7mxETEdfif6Sfhh9Lfpzi10CtcGs1emDQStmZfWjJbAIMtRD0opVUjQuFWqHZyRZ9PPzKCFxWg==}
     engines: {node: '>=14.0.0'}
@@ -8975,14 +8994,14 @@ packages:
       prop-types: 15.8.1
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
-      react-transition-group: 4.4.2_sfoxds7t5ydpegc3knd667wn6m
+      react-transition-group: 4.4.5_sfoxds7t5ydpegc3knd667wn6m
     transitivePeerDependencies:
       - '@babel/core'
       - '@types/react'
     dev: false
 
-  /react-transition-group/4.4.2_sfoxds7t5ydpegc3knd667wn6m:
-    resolution: {integrity: sha512-/RNYfRAMlZwDSr6z4zNKV6xu53/e2BuaBbGhbyYIXTrmgu/bGHzmqOs7mJSJBHy9Ud+ApHx3QjrkKSp1pxvlFg==}
+  /react-transition-group/4.4.5_sfoxds7t5ydpegc3knd667wn6m:
+    resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
     peerDependencies:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
@@ -9268,6 +9287,7 @@ packages:
 
   /sanitize.css/13.0.0:
     resolution: {integrity: sha512-ZRwKbh/eQ6w9vmTjkuG0Ioi3HBwPFce0O+v//ve+aOq1oeCy7jMV2qzzAlpsNuqpqCBjjriM1lbtZbF/Q8jVyA==}
+    dev: false
 
   /sass-loader/12.6.0_webpack@5.73.0:
     resolution: {integrity: sha512-oLTaH0YCtX4cfnJZxKSLAyglED0naiYfNG1iXfU5w1LNZ+ukoA5DtyDIN5zmKVZwYNJP4KRc5Y3hkWga+7tYfA==}
@@ -10729,6 +10749,13 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
+    dev: false
+
+  /yarn/1.22.19:
+    resolution: {integrity: sha512-/0V5q0WbslqnwP91tirOvldvYISzaqhClxzyUKXYxs07yUILIs5jx/k6CFe8bvKSkds5w+eiOqta39Wk3WxdcQ==}
+    engines: {node: '>=4.0.0'}
+    hasBin: true
+    requiresBuild: true
     dev: false
 
   /yocto-queue/0.1.0:

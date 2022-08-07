@@ -5,6 +5,7 @@
  */
 
 import React, { useEffect, useState } from "react";
+import { saveAs } from 'file-saver';
 import {
   Table,
   TableBody,
@@ -21,6 +22,7 @@ import SuiInput from "components/SuiInput";
 import SuiTypography from "components/SuiTypography";
 import Pagination from "components/Custom/Pagination";
 import { PageLoading } from "components/Custom/Loading";
+import { LoadingState } from "components/Custom/Loading";
 
 import useDebounce from "hooks/useDebounce";
 
@@ -42,6 +44,7 @@ const sliceText = (text, length) => {
 export default function PressReleasePage() {
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
+  const [isExportData, setIsExportData] = useState(false);
   const [modalConfig, setModalConfig] = useState({
     type: "create",    // create | edit | delete | configure
     show: false,
@@ -65,6 +68,16 @@ export default function PressReleasePage() {
       .finally(() => setFetchStatus({ loading: false }));
   };
 
+  const handleExportData = () => {
+    setIsExportData(true);
+    PresReleaseApi.export()
+      .then((res) => {
+        saveAs(`https://api.rokom.xyz/${res.data.data}`, "press_release.csv");
+      })
+      .catch(({ response }) => window.alert(response.data.message ?? "Unable to export file!"))
+      .finally(() => setIsExportData(false));
+  };
+
   useEffect(() => {
     fetchData();
 
@@ -80,8 +93,14 @@ export default function PressReleasePage() {
       <SuiBox pb={2} display="flex" justifyContent="space-between" alignItems="center">
         <SuiBox display="flex">
           <SuiInput placeholder="Search..." icon={{ component: "search", direction: "left" }} onChange={(e) => setSearch(e.target.value ?? "")} />
-          <SuiButton sx={{ marginLeft: 2 }} size="medium" color="warning" >
-            Export
+          <SuiButton
+            sx={{ marginLeft: 2 }}
+            size="medium"
+            color="warning"
+            disabled={isExportData}
+            onClick={() => handleExportData()}
+          >
+            {isExportData ? <LoadingState color="light" size={14} /> : "Export"}
           </SuiButton>
 
         </SuiBox>

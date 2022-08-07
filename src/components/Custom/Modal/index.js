@@ -13,10 +13,12 @@ import {
   Dialog
 } from "@mui/material";
 
-const CustomModal = ({ fullwidth = true, maxWidth = "md", title, open, setModalConfig, children }) => {
+const CustomModal = ({ fullScreen, fullwidth = true, maxWidth = "md", title, open, setModalConfig, children }) => {
   return (
     <Dialog
+      color="light"
       fullWidth={fullwidth}
+      fullScreen={fullScreen}
       maxWidth={maxWidth}
       open={open}
       onClose={() => setModalConfig(prev => ({ ...prev, show: false }))}

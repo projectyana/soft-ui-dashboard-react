@@ -18,11 +18,11 @@ export const PageLoading = () => {
   );
 };
 
-export const LoadingState = (props) => {
+export const LoadingState = ({ color = "info", ...props }) => {
   return (
     <SuiBox display="flex" justifyContent="center" alignItems="center">
       <SuiBox>
-        <CircularProgress color="info" {...props} />
+        <CircularProgress color={color} {...props} />
       </SuiBox>
     </SuiBox>
   );

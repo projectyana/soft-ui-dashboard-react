@@ -77,9 +77,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
     setLoading(true);
     HealthComicApi.getSingle(id)
       .then((res) => {
-        console.log(res);
         const mapAssetPath = res?.data?.data?.assets_path?.map((item) => ({ relative_path: item, link: `https://api.rokom.xyz/${item}` }));
-        console.log(mapAssetPath);
         setDataGambar(mapAssetPath ?? []);
       })
       .finally(() => setLoading(false));

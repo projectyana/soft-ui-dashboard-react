@@ -24,9 +24,6 @@ export const SelectIcon = ({
 
   library.add(...iconList);
 
-  console.log(value);
-  console.log(iconList.find(icon => icon.value === value));
-
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -40,7 +37,6 @@ export const SelectIcon = ({
     const test = defaultValue ? iconList.find(icon => icon.value === defaultValue) : null;
     if (test) {
       const def = { value: test.value, label: <span> <FontAwesomeIcon icon={test.value} size="xs" /> - {test.label} </span> };
-      console.log(def);
       return def;
     }
     return null;

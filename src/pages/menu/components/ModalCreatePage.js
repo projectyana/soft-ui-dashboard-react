@@ -24,8 +24,6 @@ const ModalCreatePage = ({ formik, modalCreate, setModalCreate }) => {
 
   const handleClose = () => { setModalCreate({ show: false }); };
 
-  React.useEffect(() => { console.log(modalCreate); }, [modalCreate]);
-
   return (
     <Dialog
       fullScreen
