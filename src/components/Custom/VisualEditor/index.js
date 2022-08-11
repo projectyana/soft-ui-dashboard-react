@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import SuiBox from "components/SuiBox";
-import SuiButton from "components/SuiButton";
-
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
 import 'grapesjs/dist/grapes.min.js';
@@ -20,16 +17,19 @@ import { defaultHTML, defaultStyle } from './defaultTemplate';
 const VisualEditor = ({ action = "create", formik }) => {
   const [myEditor, setMyEditor] = useState(null);
 
-  const { values, setValues, handleSubmit } = formik;
+  const { values, setValues, submitCount } = formik;
 
-  const onClickSubmit = () => {
+  const handleSave = () => {
     const html = myEditor.getHtml();
     const css = myEditor.getCss();
 
     setValues({ ...values, html_content: html, css_content: css });
-
-    handleSubmit();
   };
+
+  useEffect(() => {
+    if (submitCount > 0) handleSave();
+
+  }, [submitCount]);
 
   useEffect(() => {
     const editor = grapesjs.init({
@@ -88,15 +88,6 @@ const VisualEditor = ({ action = "create", formik }) => {
   return (
     <>
       <div id="gjs"></div>
-      <SuiBox display="flex" justifyContent="flex-start" m={2}>
-        <SuiButton
-          mt={2}
-          size="medium"
-          color="info"
-          onClick={() => onClickSubmit()}>
-          {action === "edit" ? "Save Update" : "Create"}
-        </SuiButton>
-      </SuiBox>
     </>
   );
 };
