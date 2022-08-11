@@ -86,12 +86,12 @@ function DropdownButtonCreate({ setModalCreate }) {
 }
 
 function Gallery() {
-  const [alignment, setAlignment] = useState('left');
+  const [showType, setShowType] = useState('gallery');
   const [modalCreate, setModalCreate] = useState({ show: false, type: 'gallery' });
 
-  const handleAlignment = (event, newAlignment) => {
-    if (newAlignment !== null) {
-      setAlignment(newAlignment);
+  const toggleType = (event, newType) => {
+    if (newType !== null) {
+      setShowType(newType);
     }
   };
 
@@ -106,17 +106,16 @@ function Gallery() {
 
         <ToggleButtonGroup
           sx={{ marginLeft: 2 }}
-          value={alignment}
+          value={showType}
           exclusive
-          onChange={handleAlignment}
-          aria-label="text alignment"
+          onChange={toggleType}
         >
-          <ToggleButton value="left" aria-label="left aligned">
+          <ToggleButton value="gallery">
             <Tooltip title="Show Galleries">
               <CollectionsIcon />
             </Tooltip>
           </ToggleButton>
-          <ToggleButton value="center" aria-label="centered">
+          <ToggleButton value="file">
             <Tooltip title="Show Files">
               <InsertDriveFileIcon />
             </Tooltip>
@@ -124,15 +123,13 @@ function Gallery() {
         </ToggleButtonGroup>
       </SuiBox>
 
-      {/* Gallery Categories View*/}
-      {alignment === "left" && (
+      <SuiBox sx={{ display: showType === "gallery" ? "block" : "none" }}>
         <CategoriesView modalCreate={modalCreate} setModalCreate={setModalCreate} />
-      )}
+      </SuiBox>
 
-      {/* Files view */}
-      {alignment === "center" && (
+      <SuiBox sx={{ display: showType === "file" ? "block" : "none" }}>
         <FilesView modalCreate={modalCreate} setModalCreate={setModalCreate} />
-      )}
+      </SuiBox>
     </DashboardLayout>
   );
 }
