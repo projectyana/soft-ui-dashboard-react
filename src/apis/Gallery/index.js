@@ -9,12 +9,20 @@ class GalleryApi {
     return Service.post(`/bo/gallery/${id}/add`, data);
   }
 
-  get(data) {
+  getGalleryCategories(data) {
     return Service.get("/bo/gallery", data);
   }
 
-  getById(id, data) {
+  getSingleGallery(id, data) {
     return Service.get(`/bo/gallery/${id}`, data);
+  }
+
+  removeImageGallery(id, data) {
+    return Service.post(`/bo/gallery/${id}/remove`, data);
+  }
+
+  getFiles(params) {
+    return Service.get('/bo/document', { params });
   }
 
   update(id, data) {

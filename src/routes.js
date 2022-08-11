@@ -54,8 +54,6 @@ import SignIn from "pages/auth/sign-in";
 import RolePage from "pages/role";
 import UserPage from "pages/user";
 import MenuConfigurationPage from "pages/menu";
-import GalleryPage from "pages/gallery";
-
 
 // Page 
 import PageMenu from "pages/page";
@@ -71,6 +69,7 @@ import PressRelease from "pages/press_release";
 import RecentInfoCategoryPage from "pages/recent_info_category";
 import RecentInfoPage from "pages/recent_info";
 import HealthComicPage from "pages/health_comic";
+import GalleryPage from "pages/gallery";
 
 // Dashboard sidebar menu
 const sideNav = [
@@ -174,7 +173,7 @@ const sideNav = [
     type: "collapse",
     name: "Media",
     key: "media",
-    icon: <SVG.ComicIcon />,
+    icon: <SVG.MediaIcon/>,
     route: "media",
     component: <GalleryPage />,
   },
