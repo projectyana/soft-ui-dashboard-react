@@ -6,7 +6,9 @@ import {
   TableContainer,
   TableRow,
   Paper,
-  Icon
+  Icon,
+  Tooltip,
+  ButtonGroup
 } from "@mui/material";
 import FileSaver from "file-saver";
 
@@ -17,6 +19,11 @@ import { LoadingState } from "components/Custom/Loading";
 
 import FileUploadApi from "apis/FileUpload";
 
+// Category Component
+import ModalCreateCategory from "./file_upload/category/ModalCreateCategory";
+import ModalEditCategory from "./file_upload/category/ModalEditCategory";
+
+// File Component
 import ModalCreate from "./file_upload/ModalCreate";
 import ModalDelete from "./file_upload/ModalDelete";
 
@@ -27,6 +34,7 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
     show: false,
     data: null
   });
+  const [modalConfigCategory, setModalConfigCategory] = useState({ show: false });
 
   const fetchData = () => {
     setLoading({ fetch: true });
@@ -54,6 +62,35 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
   }
   return (
     <>
+      <SuiBox mb={1} display="flex" justifyContent="start" alignItems="center" >
+        <SuiTypography variant="h2">Categories</SuiTypography>
+        <ButtonGroup>
+          <Tooltip title="Create new File Category">
+            <SuiButton
+              rounded="small"
+              sx={{ marginTop: 0.5, marginLeft: 1 }}
+              iconOnly
+              size="small"
+              color="info"
+              onClick={() => setModalConfigCategory({ show: true, type: 'create' })} >
+              <Icon>add</Icon>
+            </SuiButton>
+          </Tooltip>
+
+          <Tooltip title="Edit File Category">
+            <SuiButton
+              rounded="small"
+              sx={{ marginTop: 0.5, marginLeft: 1 }}
+              iconOnly
+              size="small"
+              color="success"
+              onClick={() => setModalConfigCategory({ show: true, type: 'edit' })} >
+              <Icon>edit</Icon>
+            </SuiButton>
+          </Tooltip>
+
+        </ButtonGroup>
+      </SuiBox >
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
           <TableRow>
@@ -61,13 +98,7 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
               <SuiTypography variant="h6">Name</SuiTypography>
             </TableCell>
             <TableCell>
-              <SuiTypography variant="h6">Type</SuiTypography>
-            </TableCell>
-            <TableCell>
-              <SuiTypography variant="h6">Year</SuiTypography>
-            </TableCell>
-            <TableCell>
-              <SuiTypography variant="h6">Date</SuiTypography>
+              <SuiTypography variant="h6">Category</SuiTypography>
             </TableCell>
             <TableCell>
               <SuiTypography variant="h6">Action</SuiTypography>
@@ -80,13 +111,7 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
                   <SuiTypography variant="caption">{row.name}</SuiTypography>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  <SuiTypography variant="caption">{row.type ?? ""}</SuiTypography>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <SuiTypography variant="caption">{row.year ?? ""}</SuiTypography>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <SuiTypography variant="caption">{row.date ?? ""}</SuiTypography>
+                  <SuiTypography variant="caption">{row?.category?.name ?? ""}</SuiTypography>
                 </TableCell>
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
@@ -129,6 +154,20 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
 
       {/* Modal Delete */}
       {modalDelete.show && <ModalDelete fetchData={fetchData} modalConfig={modalDelete} setModalConfig={setModalDelete} />}
+
+      {/* Modal Create Category */}
+      {modalConfigCategory.show && modalConfigCategory.type === "create" &&
+        <ModalCreateCategory
+          modalConfigCategory={modalConfigCategory}
+          setModalConfig={setModalConfigCategory}
+        />}
+
+      {/* Modal Edit Category */}
+      {modalConfigCategory.show && modalConfigCategory.type === "edit" &&
+        <ModalEditCategory
+          modalConfigCategory={modalConfigCategory}
+          setModalConfig={setModalConfigCategory}
+        />}
     </>
   );
 };

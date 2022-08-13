@@ -6,8 +6,6 @@ import {
   Grid,
   Tooltip
 } from "@mui/material";
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
-import EditIcon from '@mui/icons-material/Edit';
 
 import SuiBox from 'components/SuiBox';
 import SuiButton from 'components/SuiButton';
@@ -18,9 +16,9 @@ import { LoadingState } from "components/Custom/Loading";
 import GalleryApi from 'apis/Gallery';
 
 // Category Component
-import ModalCreateCategory from "./category/ModalCreateCategory";
-import ModalEditCategory from "./category/ModalEditCategory";
-import ModalDeleteCategory from "./category/ModalDeleteCategory";
+import ModalCreateCategory from "./gallery/category/ModalCreateCategory";
+import ModalEditCategory from "./gallery/category/ModalEditCategory";
+import ModalDeleteCategory from "./gallery/category/ModalDeleteCategory";
 
 // Gallery Component
 import ModalCreateGallery from "./gallery/ModalCreateGallery";
@@ -64,10 +62,10 @@ const CategoriesView = ({ modalCreate, setModalCreate }) => {
       {/* Create Image gallery categories */}
       <SuiBox mb={1} display="flex" justifyContent="start" alignItems="center" >
         <SuiTypography variant="h2">Categories</SuiTypography>
-        <Tooltip title="Create new Category of Gallery">
+        <Tooltip title="Create new Gallery Category">
           <SuiButton
             rounded="small"
-            sx={{ marginTop: 0.5, marginLeft: 1 }}
+            sx={{ marginTop: 0.5, marginLeft: 1, padding: 1 }}
             iconOnly
             size="small"
             color="info"

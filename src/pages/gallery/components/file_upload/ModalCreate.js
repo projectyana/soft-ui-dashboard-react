@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -12,23 +12,19 @@ import { Select } from "components/Custom/Select";
 import FileUploadApi from "apis/FileUpload";
 
 import InputFile from "./InputFile";
+
 const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
+  const [dropdown, setDropdown] = useState({ loading: true, category: [] });
   const [dataFile, setDataFile] = useState({});
-  const dropdownType = [
-    { value: "umum", label: "Umum" },
-    { value: "pembangunan", label: "Pembangunan" }
-  ];
 
   // Submit to server
   const formSubmitHandler = async (values, { setSubmitting }) => {
     if (dataFile) {
       const formData = new FormData();
       formData.append("name", values.name);
-      formData.append("date", values.date);
-      formData.append("type", values.type);
       formData.append("file", dataFile?.data);
 
-      FileUploadApi.create(formData)
+      FileUploadApi.create(values.id_category, formData)
         .then(({ data }) => {
           setModalConfig(prev => ({ ...prev, show: false }));
           fetchData();
@@ -44,18 +40,40 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      type: "",
-      date: ""
+      id_category: "",
     },
     validationSchema: yup.object().shape({
       name: yup.string().required("Name File is required!"),
-      type: yup.string().required("Type is required!"),
-      date: yup.string().required("Date is required!"),
+      id_category: yup.string().required("File Category is required!"),
     }),
     onSubmit: formSubmitHandler,
   });
 
   const { values, errors, touched, setValues, handleChange, isSubmitting, handleSubmit } = formik;
+
+  const fetchParentDropdown = () => {
+    setDropdown(prev => ({ ...prev, loading: true }));
+
+    FileUploadApi.dropdownCategory()
+      .then(({ data }) => {
+        const categories = [];
+
+        data?.data?.forEach(category => {
+          categories.push(category);
+          if (category.sub_categories) categories.push(category.sub_categories);
+        });
+
+        const flattenCategories = categories.flat();
+        const mapDropdown = flattenCategories?.map(({ id, name }) => ({ value: id, label: name }));
+        setDropdown({ category: mapDropdown ?? [], loading: false });
+      });
+  };
+
+  useEffect(() => {
+    fetchParentDropdown();
+
+    return () => setDropdown({ category: [] });;
+  }, []);
 
   return (
     <CustomModal
@@ -65,6 +83,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
       setModalConfig={setModalConfig}
     >
       <InputFile dataFile={dataFile} setDataFile={setDataFile} />
+
       <SuiBox mt={3} mb={2}>
         <SuiInput
           name="name"
@@ -78,22 +97,13 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
       <SuiBox mb={2}>
         <Select
-          placeholder="Choose Type"
-          name="type"
-          options={dropdownType}
-          onChange={(opt) => setValues({ ...values, type: opt.value })}
-          error={Boolean(errors.type && touched.type)}
-          errorMessage={!!(errors?.type && touched.type) ? errors.type : ""}
-        />
-      </SuiBox>
-
-      <SuiBox mb={2}>
-        <SuiInput
-          name="date"
-          type="date"
-          onChange={(e) => setValues({ ...values, date: e.target.value })}
-          error={Boolean(errors.date && touched.date)}
-          errorMessage={errors?.date ?? ""}
+          placeholder="Choose File Category"
+          name="id_category"
+          loading={dropdown.loading}
+          options={dropdown.category ?? []}
+          onChange={(opt) => setValues({ ...values, id_category: opt.value })}
+          error={Boolean(errors.id_category && touched.id_category)}
+          errorMessage={!!(errors?.id_category && touched.id_category) ? errors.id_category : ""}
         />
       </SuiBox>
 
@@ -107,7 +117,6 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
         </SuiButton>
       </SuiBox>
     </CustomModal>);
-
 };
 
 export default ModalCreate;
