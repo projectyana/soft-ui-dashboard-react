@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { AsyncPaginate } from "react-select-async-paginate";
 import SuiTypography from "components/SuiTypography";
+import { LoadingState } from "components/Custom/Loading";
 
 import { selectConfig, debounce } from "./configs";
 
@@ -42,9 +43,7 @@ export const Select = ({
     <div className="mb-2">
       <small style={{ textTransform: "capitalize" }}>{label}</small>
       {loading ? (
-        <div className="text-secondary text-center">
-          <small>Memuat . . .</small>
-        </div>
+        <LoadingState />
       ) : (
         <>
           <AsyncPaginate
