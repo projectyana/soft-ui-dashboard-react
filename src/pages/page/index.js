@@ -8,7 +8,11 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Icon
+  Icon,
+  Menu,
+  MenuItem,
+  Fade,
+  ListItemIcon
 } from "@mui/material";
 
 import SuiBox from "components/SuiBox";
@@ -24,6 +28,66 @@ import PageApi from "apis/Page";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 import ModalDelete from "./components/ModalDelete";
+
+const DropdownButton = () => {
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+
+  const handleClickBuilder = () => {
+    navigate("editor/create", { state: { type: 'builder' } });
+    handleClose();
+  };
+
+  const handleClickEditor = () => {
+    navigate("editor/create", { state: { type: 'editor' } });
+    handleClose();
+  };
+
+  return (
+    <div>
+      <SuiButton
+        size="medium"
+        color="info"
+        id="fade-button"
+        aria-controls={open ? 'fade-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        Create&nbsp;
+        <Icon>arrow_drop_down</Icon>
+      </SuiButton>
+      <Menu
+        id="fade-menu"
+        MenuListProps={{
+          'aria-labelledby': 'fade-button',
+        }}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Fade}
+      >
+        <MenuItem onClick={handleClickBuilder}>
+          <ListItemIcon>
+            <Icon size="medium">grid_view</Icon>
+          </ListItemIcon>
+          &nbsp;Page Builder
+        </MenuItem>
+
+        <MenuItem onClick={handleClickEditor}>
+          <ListItemIcon>
+            <Icon size="medium">format_size</Icon>
+          </ListItemIcon>
+          &nbsp;Page Editor
+        </MenuItem>
+      </Menu>
+    </div>
+  );
+};
 
 const PageMenu = () => {
   const navigate = useNavigate();
@@ -64,9 +128,7 @@ const PageMenu = () => {
     <DashboardLayout>
       <SuiBox pb={2} display="flex" justifyContent="space-between" alignItems="center">
         <SuiInput placeholder="Search..." icon={{ component: "search", direction: "left" }} onChange={(e) => setSearch(e.target.value ?? "")} />
-        <SuiButton size="medium" color="info" onClick={() => navigate("editor/create")}>
-          Create
-        </SuiButton>
+        <DropdownButton />
       </SuiBox>
 
       <TableContainer component={Paper}>
