@@ -43,7 +43,13 @@ const ModalConfigure = ({ fetchPage, modalConfig, setModalConfig }) => {
   const handleDeleteMenu = (id) => {
     MenuApi.delete(id)
       .then(() => setSubmenu(submenu.filter((item) => item.id !== id)))
-      .catch(() => window.alert('Error connect to server'));
+      .catch(() => window.alert('Error connect to server'))
+      .finally(() => {
+        setTimeout(() => {
+          setModalConfig(prev => ({ ...prev, show: false }));
+          fetchPage();
+        }, 300);
+      });
   };
 
   useEffect(() => {

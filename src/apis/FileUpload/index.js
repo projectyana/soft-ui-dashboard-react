@@ -6,6 +6,10 @@ class FileUploadApi {
     return Service.get("/bo/document");
   }
 
+  getCategories() {
+    return Service.get('/bo/doc_gallery');
+  }
+
   create(id, data) {
     return Service.post(`/bo/doc_gallery/${id}/add`, data);
   }

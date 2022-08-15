@@ -25,6 +25,7 @@ import MenuApi from "apis/Menu";
 
 import ModalCreate from "./components/ModalCreate";
 import ModalEdit from "./components/ModalEdit";
+import ModalEditMenu from "./components/ModalEditMenu";
 import ModalConfigure from "./components/ModalConfigure";
 import ModalDelete from "./components/ModalDelete";
 
@@ -38,8 +39,8 @@ export default function RolePage() {
   });
   const [modalCreate, setModalCreate] = useState({ show: false });
 
-  const fetchData = () => {
-    setFetchStatus({ loading: true });
+  const fetchData = (loading = true) => {
+    setFetchStatus({ loading });
 
     MenuApi.getParent()
       .then((res) => setData(res.data.data ?? []))
@@ -56,7 +57,7 @@ export default function RolePage() {
   useEffect(() => {
     // refetch data on modal configure close
     if (modalConfig.type === "configure" && !modalConfig.show) {
-      fetchData();
+      fetchData(false);
     }
   }, [modalConfig]);
 
@@ -109,7 +110,7 @@ export default function RolePage() {
                 </TableCell>
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
-                    <SuiBox mr={1}>
+                    <SuiBox mr={1} sx={{ visibility: row.sub_header_navs.length > 0 ? "visible" : "hidden" }}>
                       <SuiButton
                         size="small"
                         variant="text"
@@ -124,7 +125,7 @@ export default function RolePage() {
                         size="small"
                         variant="text"
                         color="dark"
-                        onClick={() => setModalConfig({ show: true, type: "edit", data: row })}
+                        onClick={() => setModalConfig({ show: true, type: row.type === "parent" ? "edit" : "editMenu", data: row })}
                       >
                         <Icon>edit</Icon>&nbsp;edit
                       </SuiButton>
@@ -168,6 +169,13 @@ export default function RolePage() {
         modalConfig={modalConfig}
         setModalConfig={setModalConfig}
       />}
+
+      {modalConfig.show && modalConfig.type === "editMenu" &&
+        <ModalEditMenu
+          fetchParent={fetchData}
+          modalConfig={modalConfig}
+          setModalConfig={setModalConfig}
+        />}
 
       {/* Modal Configure */}
       {modalConfig.show && modalConfig.type === "configure" && <ModalConfigure

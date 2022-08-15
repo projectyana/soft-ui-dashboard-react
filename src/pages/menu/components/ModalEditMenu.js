@@ -27,6 +27,8 @@ import { Select } from "components/Custom/Select";
 import { LoadingState } from "components/Custom/Loading";
 
 import MenuApi from "apis/Menu";
+import GalleryApi from "apis/Gallery";
+import FileUploadApi from "apis/FileUpload";
 
 const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
@@ -34,7 +36,9 @@ const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
   const [dropdown, setDropdown] = useState({
     parent_menu: [],
     page: [],
-    blog: []
+    blog: [],
+    image_gallery: [],
+    doc_gallery: [],
   });
 
   // Submit to server
@@ -48,6 +52,9 @@ const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
       // if user  parent/sub menu as link
       if (values.menu_type == "link") {
         finalValue.content = { url: values.link };
+      }
+      else if (values.menu_type == "image_gallery" || values.menu_type == "doc_gallery") {
+        finalValue.content = { category_ids: values?.gallery.map(selected => selected.id) };
       }
       else {
         // if user create parent/sub menu as page/blog
@@ -72,9 +79,10 @@ const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
     initialValues: {
       name: modalConfig.data.name ?? "",
       id_parent: dataSingle?.parent_id ?? "",            // id_parent is required when menu_state is sub 
-      menu_type: dataSingle?.type ?? "",                 // page, blog, link 
+      menu_type: dataSingle?.type ?? "",                 // page, blog, link, image_gallery, doc_gallery
       content: dataSingle?.content?.id ?? "",            // content is required when menu_type is page or blog
       link: dataSingle?.content?.url ?? "",
+      gallery: dataSingle?.gallery ?? []
     },
     validationSchema: yup.object().shape({
       name: yup.string().required("Menu Name is required!"),
@@ -82,9 +90,14 @@ const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
       content: yup.string().when('menu_type', {
         is: (menu_type) => Boolean(menu_type === 'page' || menu_type === 'blog'),
         then: yup.string().required("Content is required!")
-      }), link: yup.string().when('menu_type', {
+      }),
+      link: yup.string().when('menu_type', {
         is: (menu_type) => Boolean(menu_type === 'link'),
         then: yup.string().required("Link is required!")
+      }),
+      gallery: yup.array().of(yup.object()).when('menu_type', {
+        is: (menu_type) => Boolean(menu_type === 'image_gallery' || menu_type === 'doc_gallery'),
+        then: yup.array().of(yup.object()).min(1, "Select min. 1 category").required("Category is required!")
       }),
     }),
     onSubmit: formSubmitHandler,
@@ -98,24 +111,36 @@ const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
       MenuApi.getSingle(modalConfig.data.id),
       MenuApi.getParent(),
       MenuApi.getPageUnlinked(),
-      MenuApi.getBlogUnlinked()
+      MenuApi.getBlogUnlinked(),
+      GalleryApi.getGalleryCategories(),
+      FileUploadApi.getCategories(),
     ])
-      .then((Axios.spread((resSingle, resParent, resPage, resBlog) => {
+      .then((Axios.spread((resSingle, resParent, resPage, resBlog, resGalleryCat, resFileCat) => {
         const { type, content } = resSingle?.data?.data ?? {};
 
         // get previous selected blog /page to join with unlinked array
         const previousContent = { value: content?.id, label: content?.title };
 
         const mapParent = resParent.data.data.map(item => ({ ...item, value: item.id, label: item.name }));
-        const mapPage = resPage.data.data.map(item => ({ ...item, value: item.id, label: `${item.title} (Page)`, type: "page" }));
-        const mapBlog = resBlog.data.data.map(item => ({ ...item, value: item.id, label: `${item.title} (Blog)`, type: "blog" }));
+        const mapPage = resPage.data.data.map(item => ({ ...item, value: item.id, label: item.title }));
+        const mapBlog = resBlog.data.data.map(item => ({ ...item, value: item.id, label: item.title }));
+        const mapImage = resGalleryCat.data.data.map(item => ({ ...item, value: item.id, label: item.title }));
+        const mapDoc = resFileCat?.data?.data?.map(({ sub_categories }) => sub_categories ?? [])?.flat()?.map(item => ({ ...item, value: item.id, label: item.name })) ?? [];
 
-        setDataSingle(resSingle.data.data);
+        // map single data gallery
+        const mapGallery = (type === 'image_gallery' || type === "doc_gallery") ? content?.map(gal => ({ ...gal, value: gal.id, label: gal.title ?? gal.name })) : [];
+
+        setDataSingle({
+          ...resSingle.data.data,
+          gallery: mapGallery ?? [],
+        });
         setDropdown(prev => ({
           ...prev,
           parent_menu: mapParent,
           page: type === "page" ? [previousContent].concat(mapPage) : mapPage,
-          blog: type === "blog" ? [previousContent].concat(mapBlog) : mapBlog
+          blog: type === "blog" ? [previousContent].concat(mapBlog) : mapBlog,
+          image_gallery: mapImage,
+          doc_gallery: mapDoc
         }));
       })))
       .catch(() => window.alert("Error connect to server"))
@@ -131,7 +156,7 @@ const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title={`Edit sub menu | ${modalConfig.data.name}`}
+      title={`Edit | ${modalConfig.data.name}`}
       open={modalConfig.show}
       setModalConfig={setModalConfig}
       maxWidth="md"
@@ -162,11 +187,17 @@ const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
                 aria-labelledby="menu_type"
                 name="menu_type"
                 defaultValue={values.menu_type}
-                onChange={(e) => setValues({ ...values, menu_type: e.target.value })}
+                onChange={(e) => {
+                  const isExactPrevType = e.target.value === dataSingle.type;
+                  setValues({ ...values, menu_type: e.target.value, gallery: isExactPrevType ? dataSingle.gallery : [] });
+                }
+                }
               >
                 <FormControlLabel sx={{ marginX: 1 }} size="small" checked={values.menu_type === "page"} value="page" control={<Radio />} label="Page" />
                 <FormControlLabel sx={{ marginX: 1 }} size="small" checked={values.menu_type === "blog"} value="blog" control={<Radio />} label="Blog" />
                 <FormControlLabel sx={{ marginX: 1 }} size="small" checked={values.menu_type === "link"} value="link" control={<Radio />} label="Link" />
+                <FormControlLabel sx={{ marginX: 1 }} size="small" checked={values.menu_type === "doc_gallery"} value="doc_gallery" control={<Radio />} label="Document" />
+                <FormControlLabel sx={{ marginX: 1 }} size="small" checked={values.menu_type === "image_gallery"} value="image_gallery" control={<Radio />} label="Image" />
               </RadioGroup>
             </FormControl>
           </SuiBox>
@@ -197,6 +228,20 @@ const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
                 value={values.link}
                 error={Boolean(errors.link && touched.link)}
                 errorMessage={errors?.link ?? ""}
+              />
+            )}
+
+            {Boolean(values.menu_type === "image_gallery" || values.menu_type === "doc_gallery") && (
+              <Select
+                isMulti
+                key={values.menu_type}
+                placeholder={`Select ${values.menu_type === "image_gallery" ? "image" : "document"} gallery`}
+                option={dropdown[values.menu_type] ?? []}
+                defaultValue={dropdown[values.menu_type]?.find(item => item.value === values.content)}
+                value={values.gallery}
+                onChange={(options) => setValues({ ...values, gallery: options })}
+                error={Boolean(errors.gallery && touched.gallery)}
+                errorMessage={!!(errors?.gallery && touched?.gallery) ? errors.gallery : ""}
               />
             )}
           </SuiBox>
