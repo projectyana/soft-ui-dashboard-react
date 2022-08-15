@@ -93,6 +93,23 @@ export default function App() {
     checkAuth();
   }, [storageToken, token]);
 
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      console.log('service worker is supported');
+      console.log(navigator.serviceWorker);
+      navigator.serviceWorker.getRegistrations()
+        .then(function (registrations) {
+          console.log(registrations);
+          if (registrations.length) {
+            for (let registration of registrations) {
+              console.log(registration);
+              registration.unregister();
+            }
+          }
+        });
+    }
+  }, []);
+
   const getRoutes = (allRoutes) =>
     allRoutes?.map((route) => {
       if (route.collapse) {
