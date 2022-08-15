@@ -58,7 +58,7 @@ function ModalCreateCategory({ modalConfigCategory, setModalConfig }) {
   const { values, errors, touched, handleChange, setValues, isSubmitting, handleSubmit } = formik;
 
   const fetchParentDropdown = () => {
-    FileUploadApi.dropdownCategory()
+    FileUploadApi.getCategories()
       .then(({ data }) => {
         const mapDropdown = data.data.map(({ id, name }) => ({ value: id, label: name }));
         setDropdown({ parent_category: mapDropdown ?? [] });

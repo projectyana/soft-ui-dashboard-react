@@ -43,7 +43,7 @@ function ModalEditCategory({ fetchData, modalConfigCategory, setModalConfig }) {
   const fetchParentDropdown = () => {
     setDropdown(prev => ({ ...prev, loading: true }));
 
-    FileUploadApi.dropdownCategory()
+    FileUploadApi.getCategories()
       .then(({ data }) => {
         const categories = [];
 

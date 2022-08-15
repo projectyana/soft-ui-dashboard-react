@@ -54,17 +54,9 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   const fetchParentDropdown = () => {
     setDropdown(prev => ({ ...prev, loading: true }));
 
-    FileUploadApi.dropdownCategory()
+    FileUploadApi.getCategories()
       .then(({ data }) => {
-        const categories = [];
-
-        data?.data?.forEach(category => {
-          categories.push(category);
-          if (category.sub_categories) categories.push(category.sub_categories);
-        });
-
-        const flattenCategories = categories.flat();
-        const mapDropdown = flattenCategories?.map(({ id, name }) => ({ value: id, label: name }));
+        const mapDropdown = data?.data?.map(({ sub_categories }) => sub_categories ?? [])?.flat()?.map(item => ({ ...item, value: item.id, label: item.name })) ?? [];
         setDropdown({ category: mapDropdown ?? [], loading: false });
       });
   };

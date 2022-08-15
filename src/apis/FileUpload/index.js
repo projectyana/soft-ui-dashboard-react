@@ -33,10 +33,6 @@ class FileUploadApi {
   deleteCategory(id) {
     return Service.delete(`/bo/doc_gallery/${id}`);
   }
-
-  dropdownCategory() {
-    return Service.get('/bo/doc_gallery');
-  }
 }
 
 

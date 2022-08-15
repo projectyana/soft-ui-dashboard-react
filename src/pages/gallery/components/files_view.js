@@ -98,9 +98,6 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
               <SuiTypography variant="h6">Name</SuiTypography>
             </TableCell>
             <TableCell>
-              <SuiTypography variant="h6">Category</SuiTypography>
-            </TableCell>
-            <TableCell>
               <SuiTypography variant="h6">Action</SuiTypography>
             </TableCell>
           </TableRow>
@@ -109,9 +106,6 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
               <TableRow key={row.name} >
                 <TableCell component="th" scope="row">
                   <SuiTypography variant="caption">{row.name}</SuiTypography>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <SuiTypography variant="caption">{row?.category?.name ?? ""}</SuiTypography>
                 </TableCell>
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
