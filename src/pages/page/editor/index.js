@@ -53,6 +53,11 @@ const PageEditor = () => {
       tags: selectedTags.map(item => item.value).join(",")
     };
 
+    if (values.page_type === "editor") {
+      // if page_type is editor, then fill html_content with values.content from TextEditor component
+      finalValue.html_content = values?.content;
+    }
+
     console.log(finalValue);
 
     action === "create"
@@ -78,7 +83,9 @@ const PageEditor = () => {
       slug: action === "edit" ? slug : "",
       tags: action === "edit" ? tags : "",
       html_content: action === "edit" ? html_content : "",
-      css_content: action === "edit" ? css_content : ""
+      css_content: action === "edit" ? css_content : "",
+      content: action === "edit" && type === "editor" ? html_content : "",         // for TextEditor component
+      page_type: type
     },
     onSubmit: formSubmitHandler,
   });

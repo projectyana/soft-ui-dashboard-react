@@ -141,6 +141,9 @@ const PageMenu = () => {
               <SuiTypography variant="h6">Slug</SuiTypography>
             </TableCell>
             <TableCell>
+              <SuiTypography variant="h6">Type</SuiTypography>
+            </TableCell>
+            <TableCell>
               <SuiTypography variant="h6">Tags</SuiTypography>
             </TableCell>
             <TableCell>
@@ -156,8 +159,11 @@ const PageMenu = () => {
                 <TableCell component="th" scope="row">
                   <SuiTypography variant="caption">{row.slug}</SuiTypography>
                 </TableCell>
+                <TableCell component="th" scope="row">
+                  <SuiTypography variant="caption">{row.page_type}</SuiTypography>
+                </TableCell>
                 <TableCell>
-                  <SuiTypography variant="caption">{row.tags}</SuiTypography>
+                  <SuiTypography variant="caption">{row?.tags?.split(",").join(", ")}</SuiTypography>
                 </TableCell>
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
@@ -166,7 +172,7 @@ const PageMenu = () => {
                         size="small"
                         variant="text"
                         color="dark"
-                        onClick={() => navigate("editor/edit", { state: { ...row } })}
+                        onClick={() => navigate("editor/edit", { state: { ...row, type: row.page_type } })}
                       >
                         <Icon>edit</Icon>&nbsp;edit
                       </SuiButton>
