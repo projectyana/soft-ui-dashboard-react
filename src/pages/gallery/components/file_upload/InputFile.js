@@ -25,7 +25,11 @@ const InputFile = ({ dataFile, setDataFile }) => {
     const getFileType = file.type.split('/')[1];
 
     // check if type file is allowed
-    if (['pdf', 'xls', 'xlsx'].includes(getFileType)) {
+    if ([
+      'pdf',
+      'vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'vnd.openxmlformats-officedocument.wordprocessingml.document']
+      .includes(getFileType)) {
       const generateName = file.name;
       const generateLink = URL.createObjectURL(file);
       const finalValue = { data: file, nama: generateName, link: generateLink };
@@ -43,7 +47,8 @@ const InputFile = ({ dataFile, setDataFile }) => {
         <input
           ref={inputFileRef}
           type="file"
-          accept=".pdf, .xls, .xlsx"
+          // accept=".pdf, .xls, .xlsx"
+          accept="pdf,vnd.openxmlformats-officedocument.spreadsheetml.sheet,vnd.openxmlformats-officedocument.wordprocessingml.document"
           style={{ display: 'none' }}
           onChange={onChangeFileHandler}
         />
