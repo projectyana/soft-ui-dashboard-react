@@ -76,7 +76,7 @@ const CategoriesView = ({ modalCreate, setModalCreate }) => {
       </SuiBox >
 
       {/* Chip category */}
-      <SuiBox pb={2} display="flex" flex="wrap" justifyContent="start" alignItems="center">
+      <SuiBox pb={2} display="flex" flexWrap="wrap" justifyContent="start" alignItems="center">
         {dataCat?.length > 0 && dataCat.map((row) => (
           <Chip
             sx={{ margin: 0.5 }}

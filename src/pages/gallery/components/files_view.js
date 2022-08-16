@@ -46,20 +46,34 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
   const fetchData = (fetch = true) => {
     setLoading({ fetch });
 
-    Axios.all([FileUploadApi.get(), FileUploadApi.getCategories()])
+    Axios.all([
+      FileUploadApi.get(),
+      FileUploadApi.getCategories()
+    ])
       .then(
         Axios.spread((res, resCat) => {
-          const files = res.data.data.map((item) => ({
-            ...item,
-            full_path: `https://api.rokom.xyz/${item.path}`,
-          }));
-          const mapDropdown =
-            resCat?.data?.data
-              ?.map(({ sub_categories }) => sub_categories ?? [])
-              ?.flat()
-              ?.map((item) => ({ ...item, value: item.id, label: item.name })) ?? [];
+          const mapParentCategory = resCat?.data?.data?.map((item) => ({ value: item.id, label: item.name }));
 
-          setDropdown({ categories: [{ value: "", label: "All" }].concat(mapDropdown) });
+          const mapSubCategory = resCat?.data?.data?.map(({ sub_categories }) => sub_categories ?? [])
+            ?.flat()
+            ?.map((item) => ({ ...item, value: item.id, label: item.name })) ?? [];
+
+          const allCategories = mapParentCategory.concat(mapSubCategory);
+
+          // Map category and subcategory list document
+          const files = res.data.data.map((item) => {
+            const subcategory = allCategories.find(({ value }) => value === item.doc_category_id) ?? {};
+            const category = allCategories.find(({ value }) => value === subcategory.parent_id) ?? {};
+
+            return {
+              ...item,
+              full_path: `https://api.rokom.xyz/${item.path}`,
+              category: category,
+              subcategory: subcategory,
+            };
+          });
+
+          setDropdown({ categories: allCategories });
           setData(files ?? []);
         })
       )
@@ -71,7 +85,7 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
     FileSaver.saveAs(url, fileName);
   };
 
-  const filterData = selectedCat ? data.filter((val) => val.doc_category_id === selectedCat) : data;
+  // const filterData = selectedCat ? data.filter((val) => val.doc_category_id === selectedCat) : data;
 
   useEffect(() => {
     fetchData();
@@ -117,15 +131,15 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
         </ButtonGroup>
       </SuiBox>
 
-      <SuiBox pb={2} display="flex" flex="wrap" justifyContent="start" alignItems="center">
+      <SuiBox pb={2} display="flex" flexWrap="wrap" justifyContent="start" alignItems="center">
         {dropdown?.categories?.length > 0 &&
           dropdown?.categories?.map((row) => (
             <Chip
               sx={{ margin: 0.5 }}
               label={row.label}
-              onClick={() => setSelectedCat(row.value)}
               variant="outlined"
-              color={row.value === selectedCat ? "info" : "secondary"}
+            // onClick={() => setSelectedCat(row.value)}
+            // color={row.value === selectedCat ? "info" : "secondary"}
             />
           ))}
       </SuiBox>
@@ -136,15 +150,27 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
               <SuiTypography variant="h6">Name</SuiTypography>
             </TableCell>
             <TableCell>
+              <SuiTypography variant="h6">Category</SuiTypography>
+            </TableCell>
+            <TableCell>
+              <SuiTypography variant="h6">Subcategory</SuiTypography>
+            </TableCell>
+            <TableCell>
               <SuiTypography variant="h6">Action</SuiTypography>
             </TableCell>
           </TableRow>
           <TableBody>
-            {filterData?.length > 0 ? (
-              filterData.map((row) => (
+            {data?.length > 0 ? (
+              data.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell component="th" scope="row">
                     <SuiTypography variant="caption">{row.name}</SuiTypography>
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <SuiTypography variant="caption">{row?.category?.label ?? ""}</SuiTypography>
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <SuiTypography variant="caption">{row?.subcategory?.label ?? ""}</SuiTypography>
                   </TableCell>
                   <TableCell>
                     <SuiBox display="flex" alignItems="center">
