@@ -15,7 +15,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   const formSubmitHandler = async (values, { setSubmitting }) => {
     LivestreamApi.start(values)
       .then(({ data }) => setModalConfig(prev => ({ ...prev, show: false })))
-      .catch((err) => window.alert("Error connect to server"))
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"))
       .finally(() => setTimeout(() => fetchData(), 1000));
   };
 

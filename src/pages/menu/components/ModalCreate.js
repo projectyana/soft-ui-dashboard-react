@@ -72,7 +72,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
           setModalConfig(prev => ({ ...prev, show: false }));
           fetchData();
         })
-        .catch(() => window.alert("Error connect to server"));
+        .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
     }
 
     // if user create sub parent menu
@@ -84,7 +84,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
           setModalConfig(prev => ({ ...prev, show: false }));
           fetchData();
         })
-        .catch(() => window.alert("Error connect to server"));
+        .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
     }
   };
 
@@ -149,7 +149,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
           doc_gallery: mapDoc
         }));
       })))
-      .catch(() => window.alert("Error connect to server"))
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"))
       .finally(() => setFetchStatus({ loading: false }));
   };
 

@@ -1,4 +1,4 @@
-/* eslint-disable*/ 
+/* eslint-disable*/
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -21,7 +21,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig, roles }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
         fetchData();
       })
-      .catch((err) => window.alert("Error connect to server"));
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
   };
 
   const formik = useFormik({

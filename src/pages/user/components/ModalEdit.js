@@ -21,7 +21,7 @@ const ModalEdit = ({ fetchData, roles, modalConfig, setModalConfig }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
         fetchData();
       })
-      .catch((err) => window.alert("Error connect to server"));
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
   };
 
   const formik = useFormik({

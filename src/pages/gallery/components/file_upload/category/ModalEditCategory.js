@@ -22,8 +22,9 @@ function ModalEditCategory({ fetchData, modalConfigCategory, setModalConfig }) {
     FileUploadApi.updateCategory(values.id, { name: values.name })
       .then(({ data }) => {
         setModalConfig(prev => ({ ...prev, show: false }));
+        fetchData(false);
       })
-      .catch((err) => window.alert("Error connect to server"));
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
   };
 
   const formik = useFormik({

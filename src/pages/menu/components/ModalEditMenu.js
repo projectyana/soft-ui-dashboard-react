@@ -143,7 +143,7 @@ const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
           doc_gallery: mapDoc
         }));
       })))
-      .catch(() => window.alert("Error connect to server"))
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"))
       .finally(() => setFetchStatus({ loading: false }));
   };
 

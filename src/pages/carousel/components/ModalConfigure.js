@@ -36,7 +36,7 @@ const ModalConfigure = ({ fetchData, modalConfig, setModalConfig }) => {
 
     RoleApi.getRoleAccess(id)
       .then((res) => setData(res.data.data ?? []))
-      .catch(() => window.alert("Error connect to server"))
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"))
       .finally(() => setFetchStatus({ loading: false }));
   };
 
@@ -63,7 +63,7 @@ const ModalConfigure = ({ fetchData, modalConfig, setModalConfig }) => {
     // Submit to server
     RoleApi.setRoleAccess(id, finalValue)
       .then(() => { setModalConfig((prev) => ({ ...prev, show: false })); })
-      .catch(() => window.alert("Error connect to server"));
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
   };
 
   useEffect(() => {

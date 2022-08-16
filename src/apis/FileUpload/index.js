@@ -1,4 +1,3 @@
-
 import { Service } from "services";
 
 class FileUploadApi {
@@ -7,7 +6,7 @@ class FileUploadApi {
   }
 
   getCategories() {
-    return Service.get('/bo/doc_gallery');
+    return Service.get("/bo/doc_gallery");
   }
 
   create(id, data) {
@@ -15,7 +14,7 @@ class FileUploadApi {
   }
 
   createCategory(data) {
-    return Service.post('/bo/doc_gallery', data);
+    return Service.post("/bo/doc_gallery", data);
   }
 
   createSubCategory(id, data) {
@@ -34,6 +33,5 @@ class FileUploadApi {
     return Service.delete(`/bo/doc_gallery/${id}`);
   }
 }
-
 
 export default new FileUploadApi();
