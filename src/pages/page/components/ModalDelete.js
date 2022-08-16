@@ -16,7 +16,7 @@ const ModalDelete = ({ fetchData, modalConfig, setModalConfig, setData }) => {
       .then(() => {
         setModalConfig({ show: false, data: null });
         setData(prev => [...prev.filter(item => item.id !== id)]);
-        // fetchData();
+        fetchData();
       })
       .catch(() => window.alert('Error connect to server'));
   };
