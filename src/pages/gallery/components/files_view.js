@@ -11,7 +11,6 @@ import {
   Paper,
   Icon,
   Tooltip,
-  ButtonGroup,
 } from "@mui/material";
 import FileSaver from "file-saver";
 
@@ -52,7 +51,7 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
     ])
       .then(
         Axios.spread((res, resCat) => {
-          const mapParentCategory = resCat?.data?.data?.map((item) => ({ value: item.id, label: item.name }));
+          const mapParentCategory = resCat?.data?.data?.map((item) => ({ ...item, value: item.id, label: item.name }));
 
           const mapSubCategory = resCat?.data?.data?.map(({ sub_categories }) => sub_categories ?? [])
             ?.flat()
@@ -102,33 +101,18 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
     <>
       <SuiBox mb={1} display="flex" justifyContent="start" alignItems="center">
         <SuiTypography variant="h2">Categories</SuiTypography>
-        <ButtonGroup>
-          <Tooltip title="Create new File Category">
-            <SuiButton
-              rounded="small"
-              sx={{ marginTop: 0.5, marginLeft: 1 }}
-              iconOnly
-              size="small"
-              color="info"
-              onClick={() => setModalConfigCategory({ show: true, type: "create" })}
-            >
-              <Icon>add</Icon>
-            </SuiButton>
-          </Tooltip>
-
-          <Tooltip title="Edit File Category">
-            <SuiButton
-              rounded="small"
-              sx={{ marginTop: 0.5, marginLeft: 1 }}
-              iconOnly
-              size="small"
-              color="success"
-              onClick={() => setModalConfigCategory({ show: true, type: "edit" })}
-            >
-              <Icon>edit</Icon>
-            </SuiButton>
-          </Tooltip>
-        </ButtonGroup>
+        <Tooltip title="Create new File Category">
+          <SuiButton
+            rounded="small"
+            sx={{ marginTop: 0.5, marginLeft: 1 }}
+            iconOnly
+            size="small"
+            color="info"
+            onClick={() => setModalConfigCategory({ show: true, type: "create" })}
+          >
+            <Icon>add</Icon>
+          </SuiButton>
+        </Tooltip>
       </SuiBox>
 
       <SuiBox pb={2} display="flex" flexWrap="wrap" justifyContent="start" alignItems="center">
@@ -138,8 +122,10 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
               sx={{ margin: 0.5 }}
               label={row.label}
               variant="outlined"
+              onDelete={() => setModalConfigCategory({ show: true, type: 'edit', data: row })}
+              deleteIcon={<Icon>edit</Icon>}
+              color="secondary"
             // onClick={() => setSelectedCat(row.value)}
-            // color={row.value === selectedCat ? "info" : "secondary"}
             />
           ))}
       </SuiBox>

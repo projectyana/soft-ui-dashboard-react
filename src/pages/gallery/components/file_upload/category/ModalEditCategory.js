@@ -15,6 +15,7 @@ import FileUploadApi from "apis/FileUpload";
 import ModalDeleteCategory from "./ModalDeleteCategory";
 
 function ModalEditCategory({ fetchData, modalConfigCategory, setModalConfig }) {
+  const { id, name } = modalConfigCategory.data;
   const [dropdown, setDropdown] = useState({ loading: true, category: [] });
   const [modalDelete, setModalDelete] = useState({ show: false });
 
@@ -29,8 +30,8 @@ function ModalEditCategory({ fetchData, modalConfigCategory, setModalConfig }) {
 
   const formik = useFormik({
     initialValues: {
-      id: "",
-      name: ""
+      id: id,
+      name: name
     },
     validationSchema: yup.object().shape({
       id: yup.string().required("Select category to edit!"),
@@ -71,19 +72,6 @@ function ModalEditCategory({ fetchData, modalConfigCategory, setModalConfig }) {
       open={modalConfigCategory.show && modalConfigCategory.type === "edit"}
       setModalConfig={setModalConfig}
     >
-      <SuiBox mb={2}>
-        <Select
-          name="id"
-          loading={dropdown.loading}
-          placeholder="Select Category to Edit"
-          options={dropdown.category}
-          onChange={(opt) => setValues({ ...values, id: opt.value })}
-          menuPosition="fixed"
-          error={Boolean(errors.id && touched.id)}
-          errorMessage={!!(errors?.id && touched.id) ? errors?.id : ""}
-        />
-      </SuiBox>
-
       <SuiBox mb={2}>
         <SuiInput
           name="name"
