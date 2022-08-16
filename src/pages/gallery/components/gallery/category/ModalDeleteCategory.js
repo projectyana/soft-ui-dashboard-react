@@ -16,7 +16,7 @@ function ModalDeleteCategory({ fetchData, modalConfigCategory, setModalConfig, s
         setModalConfigEdit({ show: false, data: null });
         fetchData();
       })
-      .catch(() => window.alert('Error connect to server'));
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
 
   };
   return (

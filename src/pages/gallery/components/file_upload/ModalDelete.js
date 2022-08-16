@@ -17,7 +17,7 @@ const ModalDelete = ({ fetchData, modalConfig, setModalConfig }) => {
         setModalConfig({ show: false, data: null });
         fetchData();
       })
-      .catch(() => window.alert('Error connect to server'));
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
   };
 
   return (
