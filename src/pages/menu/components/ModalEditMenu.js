@@ -125,7 +125,8 @@ const ModalEditMenu = ({ fetchParent, modalConfig, setModalConfig }) => {
         const mapPage = resPage.data.data.map(item => ({ ...item, value: item.id, label: item.title }));
         const mapBlog = resBlog.data.data.map(item => ({ ...item, value: item.id, label: item.title }));
         const mapImage = resGalleryCat.data.data.map(item => ({ ...item, value: item.id, label: item.title }));
-        const mapDoc = resFileCat?.data?.data?.map(({ sub_categories }) => sub_categories ?? [])?.flat()?.map(item => ({ ...item, value: item.id, label: item.name })) ?? [];
+        // const mapDoc = resFileCat?.data?.data?.map(({ sub_categories }) => sub_categories ?? [])?.flat()?.map(item => ({ ...item, value: item.id, label: item.name })) ?? [];
+        const mapDoc = resFileCat?.data?.data?.map((item) => ({ ...item, value: item.id, label: item.name })) ?? [];
 
         // map single data gallery
         const mapGallery = (type === 'image_gallery' || type === "doc_gallery") ? content?.map(gal => ({ ...gal, value: gal.id, label: gal.title ?? gal.name })) : [];

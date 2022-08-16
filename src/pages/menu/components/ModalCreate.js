@@ -138,7 +138,8 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
         const mapPage = resPage.data.data.map(item => ({ ...item, value: item.id, label: item.title }));
         const mapBlog = resBlog.data.data.map(item => ({ ...item, value: item.id, label: item.title }));
         const mapImage = resGalleryCat.data.data.map(item => ({ ...item, value: item.id, label: item.title }));
-        const mapDoc = resFileCat?.data?.data?.map(({ sub_categories }) => sub_categories ?? [])?.flat()?.map(item => ({ ...item, value: item.id, label: item.name })) ?? [];
+        // const mapDoc = resFileCat?.data?.data?.map(({ sub_categories }) => sub_categories ?? [])?.flat()?.map(item => ({ ...item, value: item.id, label: item.name })) ?? [];
+        const mapDoc = resFileCat?.data?.data?.map((item) => ({ ...item, value: item.id, label: item.name })) ?? [];
 
         setDropdown(prev => ({
           ...prev,
