@@ -94,6 +94,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
           loading={dropdown.loading}
           options={dropdown.category ?? []}
           onChange={(opt) => setValues({ ...values, id_category: opt.value })}
+          menuPosition="fixed"
           error={Boolean(errors.id_category && touched.id_category)}
           errorMessage={!!(errors?.id_category && touched.id_category) ? errors.id_category : ""}
         />

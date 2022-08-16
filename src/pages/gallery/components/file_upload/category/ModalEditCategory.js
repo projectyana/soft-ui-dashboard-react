@@ -78,6 +78,7 @@ function ModalEditCategory({ fetchData, modalConfigCategory, setModalConfig }) {
           placeholder="Select Category to Edit"
           options={dropdown.category}
           onChange={(opt) => setValues({ ...values, id: opt.value })}
+          menuPosition="fixed"
           error={Boolean(errors.id && touched.id)}
           errorMessage={!!(errors?.id && touched.id) ? errors?.id : ""}
         />

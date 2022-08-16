@@ -50,7 +50,19 @@ function ModalCreateGallery({ fetchData, modalConfig, setModalConfig, categories
       setModalConfig={setModalConfig}
     >
       <InputImage dataGambar={dataGambar} setDataGambar={setDataGambar} />
+
       <SuiBox mt={3}>
+        <Select
+          placeholder="Select Gallery Category"
+          option={categories}
+          onChange={(option) => setFieldValue('gallery_id', option.value)}
+          menuPosition="fixed"
+          error={Boolean(errors.gallery_id && touched.gallery_id)}
+          errorMessage={!!(errors?.gallery_id && touched.gallery_id) ? errors.gallery_id : ""}
+        />
+      </SuiBox>
+
+      <SuiBox mb={2} pt={2}>
         <SuiInput
           name="name"
           placeholder="Name"
@@ -58,15 +70,6 @@ function ModalCreateGallery({ fetchData, modalConfig, setModalConfig, categories
           value={values.name}
           error={Boolean(errors.name && touched.name)}
           errorMessage={errors?.name ?? ""}
-        />
-      </SuiBox>
-      <SuiBox mb={2} pt={2}>
-        <Select
-          placeholder="Select Gallery Category"
-          option={categories}
-          onChange={(option) => setFieldValue('gallery_id', option.value)}
-          error={Boolean(errors.gallery_id && touched.gallery_id)}
-          errorMessage={!!(errors?.gallery_id && touched.gallery_id) ? errors.gallery_id : ""}
         />
       </SuiBox>
 

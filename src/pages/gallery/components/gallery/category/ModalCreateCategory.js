@@ -62,6 +62,7 @@ function ModalCreateCategory({ fetchData, modalConfigCategory, setModalConfig })
           placeholder="Icon"
           value={values.icon}
           onChange={(opt) => setValues({ ...values, icon: opt })}
+          menuPosition="fixed"
           error={Boolean(errors.icon && touched.icon)}
           errorMessage={!!(errors?.icon && touched.icon) ? errors?.icon : ""}
         />

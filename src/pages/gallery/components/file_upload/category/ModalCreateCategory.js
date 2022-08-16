@@ -8,7 +8,7 @@ import {
   FormControlLabel,
   FormLabel,
   RadioGroup,
-  Radio
+  Radio,
 } from "@mui/material";
 
 import SuiBox from 'components/SuiBox';
@@ -20,7 +20,7 @@ import { Select } from 'components/Custom/Select';
 
 import FileUploadApi from "apis/FileUpload";
 
-function ModalCreateCategory({ modalConfigCategory, setModalConfig }) {
+function ModalCreateCategory({ fetchData, modalConfigCategory, setModalConfig }) {
   const [dropdown, setDropdown] = useState({
     parent_category: []
   });
@@ -30,11 +30,13 @@ function ModalCreateCategory({ modalConfigCategory, setModalConfig }) {
       ? FileUploadApi.createCategory({ name: values.name })
         .then(({ data }) => {
           setModalConfig(prev => ({ ...prev, show: false }));
+          fetchData();
         })
         .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"))
       : FileUploadApi.createSubCategory(values.id_parent, { name: values.name })
         .then(({ data }) => {
           setModalConfig(prev => ({ ...prev, show: false }));
+          fetchData();
         })
         .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
   };
@@ -70,7 +72,6 @@ function ModalCreateCategory({ modalConfigCategory, setModalConfig }) {
 
     return () => setDropdown({ parent_category: [] });;
   }, []);
-
 
   return (
     <CustomModal
@@ -121,6 +122,7 @@ function ModalCreateCategory({ modalConfigCategory, setModalConfig }) {
               ...values,
               id_parent: option.value
             })}
+            menuPosition="fixed"
             error={Boolean(errors.id_parent && touched.id_parent)}
             errorMessage={!!(errors?.id_parent && touched?.id_parent) ? errors.id_parent : ""}
           />

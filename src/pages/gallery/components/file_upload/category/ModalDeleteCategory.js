@@ -14,6 +14,7 @@ function ModalDeleteCategory({ fetchData, modalConfigCategory, setModalConfig, s
       .then(() => {
         setModalConfig({ show: false, data: null });
         setModalConfigEdit({ show: false, data: null });
+        fetchData();
       })
       .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
 

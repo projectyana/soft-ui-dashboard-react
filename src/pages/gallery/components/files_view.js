@@ -230,6 +230,7 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
       {/* Modal Create Category */}
       {modalConfigCategory.show && modalConfigCategory.type === "create" && (
         <ModalCreateCategory
+          fetchData={fetchData}
           modalConfigCategory={modalConfigCategory}
           setModalConfig={setModalConfigCategory}
         />
