@@ -79,7 +79,7 @@ const CategoriesView = ({ modalCreate, setModalCreate }) => {
       <SuiBox pb={2} display="flex" flexWrap="wrap" justifyContent="start" alignItems="center">
         {dataCat?.length > 0 && dataCat.map((row) => (
           <Chip
-            sx={{ margin: 0.5 }}
+            sx={{ margin: 0.5, textTransform: "capitalize" }}
             label={row.title}
             onClick={() => setSelectedCat(row.id)}
             onDelete={() => setModalConfigCategory({ show: true, type: 'edit', data: row })}

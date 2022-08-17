@@ -27,15 +27,23 @@ import ModalEditCategory from "./file_upload/category/ModalEditCategory";
 
 // File Component
 import ModalCreate from "./file_upload/ModalCreate";
+import ModalEdit from "./file_upload/ModalEdit";
 import ModalDelete from "./file_upload/ModalDelete";
 
 const FilesView = ({ modalCreate, setModalCreate }) => {
   const [loading, setLoading] = useState({ fetch: true });
   const [data, setData] = useState([]);
   const [dropdown, setDropdown] = useState({
+    parent: [],
+    subcategories: [],
     categories: [],
   });
   const [selectedCat, setSelectedCat] = useState("");
+  const [modalConfig, setModalConfig] = useState({
+    show: false,
+    type: "edit",
+    data: null,
+  });
   const [modalDelete, setModalDelete] = useState({
     show: false,
     data: null,
@@ -72,7 +80,11 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
             };
           });
 
-          setDropdown({ categories: allCategories });
+          setDropdown({
+            parent: mapParentCategory,
+            subcategories: mapSubCategory,
+            categories: allCategories
+          });
           setData(files ?? []);
         })
       )
@@ -116,15 +128,31 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
       </SuiBox>
 
       <SuiBox pb={2} display="flex" flexWrap="wrap" justifyContent="start" alignItems="center">
-        {dropdown?.categories?.length > 0 &&
-          dropdown?.categories?.map((row) => (
+        {dropdown?.parent?.length > 0 &&
+          dropdown?.parent?.map((row) => (
+            <Chip
+              sx={{ margin: 0.5, textTransform: "capitalize" }}
+              label={row.label}
+              variant="outlined"
+              onDelete={() => setModalConfigCategory({ show: true, type: 'edit', data: row })}
+              deleteIcon={<Icon>edit</Icon>}
+              color={selectedCat === row.value ? "info" : "secondary"}
+              onClick={() => setSelectedCat(row.value)}
+            />
+          ))}
+      </SuiBox>
+
+      <SuiTypography variant="h5">Subcategories</SuiTypography>
+      <SuiBox pb={2} display="flex" flexWrap="wrap" justifyContent="start" alignItems="center">
+        {dropdown?.subcategories?.length > 0 &&
+          dropdown?.subcategories?.map((row) => (
             <Chip
               sx={{ margin: 0.5 }}
               label={row.label}
               variant="outlined"
               onDelete={() => setModalConfigCategory({ show: true, type: 'edit', data: row })}
               deleteIcon={<Icon>edit</Icon>}
-              color="secondary"
+              color={selectedCat === row.parent_id ? "success" : "secondary"}
             // onClick={() => setSelectedCat(row.value)}
             />
           ))}
@@ -170,6 +198,16 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
                           <Icon>download</Icon>&nbsp;download
                         </SuiButton>
                       </SuiBox>
+                      {/* <SuiBox mr={1}>
+                        <SuiButton
+                          size="small"
+                          variant="text"
+                          color="dark"
+                          onClick={() => setModalConfig({ show: true, type: "edit", data: row })}
+                        >
+                          <Icon>edit</Icon>&nbsp;edit
+                        </SuiButton>
+                      </SuiBox> */}
                       <SuiBox mr={1}>
                         <SuiButton
                           size="small"
@@ -201,6 +239,15 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
           fetchData={fetchData}
           modalConfig={modalCreate}
           setModalConfig={setModalCreate}
+        />
+      )}
+
+      {/* Modal  Edit*/}
+      {modalConfig.show && modalConfig.type === "edit" && (
+        <ModalEdit
+          fetchData={fetchData}
+          modalConfig={modalConfig}
+          setModalConfig={setModalConfig}
         />
       )}
 
