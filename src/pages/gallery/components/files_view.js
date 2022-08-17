@@ -152,7 +152,7 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
               variant="outlined"
               onDelete={() => setModalConfigCategory({ show: true, type: 'edit', data: row })}
               deleteIcon={<Icon>edit</Icon>}
-              color={selectedCat === row.parent_id ? "success" : "secondary"}
+              color={selectedCat === row.parent_id ? "info" : "secondary"}
             // onClick={() => setSelectedCat(row.value)}
             />
           ))}

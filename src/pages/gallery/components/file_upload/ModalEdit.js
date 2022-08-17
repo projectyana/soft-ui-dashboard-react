@@ -14,6 +14,7 @@ import FileUploadApi from "apis/FileUpload";
 import InputFile from "./InputFile";
 
 const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
+  const { doc_category_id, name } = modalConfig.data;
   const [dropdown, setDropdown] = useState({ loading: true, category: [] });
   const [dataFile, setDataFile] = useState({});
 
@@ -39,8 +40,8 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      id_category: "",
+      name: name ?? "",
+      id_category: doc_category_id ?? "",
     },
     validationSchema: yup.object().shape({
       name: yup.string().required("Name File is required!"),
@@ -70,7 +71,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
   return (
     <CustomModal
       maxWidth="lg"
-      title="Upload New File"
+      title="Edit File"
       open={modalConfig.show && modalConfig.type === 'edit'}
       setModalConfig={setModalConfig}
     >
@@ -93,6 +94,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
           name="id_category"
           loading={dropdown.loading}
           options={dropdown.category ?? []}
+          defaultValue={values.id_category ? dropdown?.category?.find(item => item.value === values.id_category) : null}
           onChange={(opt) => setValues({ ...values, id_category: opt.value })}
           menuPosition="fixed"
           error={Boolean(errors.id_category && touched.id_category)}
