@@ -10,6 +10,7 @@ import SuiTypography from "components/SuiTypography";
 
 const InputFile = ({ dataFile, setDataFile }) => {
   const inputFileRef = useRef();
+  const MAX_SIZE_KB = 3072;
 
   // on click select image file
   const onClickFilesHandler = () => inputFileRef.current.click();
@@ -17,9 +18,14 @@ const InputFile = ({ dataFile, setDataFile }) => {
   // Handle after pick an image
   const onChangeFileHandler = (e) => {
     const file = e.target.files[0];
+    const fileSizeInKB = file.size / 1024;
 
     // Check file
     if (!file) return null;
+
+    if (fileSizeInKB > MAX_SIZE_KB) {
+      return window.alert(`File size must be less than ${MAX_SIZE_KB / 1024}MB`);
+    }
 
     // get image file extension
     const getFileType = file.type.split('/')[1];
