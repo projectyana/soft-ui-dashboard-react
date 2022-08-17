@@ -57,6 +57,7 @@ export const Select = ({
             noOptionsMessage={() => "No Data"}
             isDisabled={isDisabled}
             getOptionLabel={getOptionLabel}
+            menuPosition="fixed"
             {...rest}
             {...selectConfig}
           />

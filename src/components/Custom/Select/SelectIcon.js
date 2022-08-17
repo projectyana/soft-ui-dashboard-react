@@ -51,6 +51,7 @@ export const SelectIcon = ({
         defaultValue={defaultValue ? getDef(defaultValue) : null}
         value={value}
         onChange={onChange}
+        menuPosition="fixed"
         getOptionLabel={(option) => <span> <FontAwesomeIcon icon={option.value} size="xs" /> - {option.label} </span>}
         // formatOptionLabel={(option) => <span> <FontAwesomeIcon icon={option.value} size="xs" /> - {option.label} </span>}
         {...rest}
