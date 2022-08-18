@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -14,28 +14,26 @@ import FileUploadApi from "apis/FileUpload";
 import InputFile from "./InputFile";
 
 const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
-  const { doc_category_id, name } = modalConfig.data;
+  const { id, doc_category_id, name, path } = modalConfig.data;
   const [dropdown, setDropdown] = useState({ loading: true, category: [] });
   const [dataFile, setDataFile] = useState({});
 
   // Submit to server
   const formSubmitHandler = async (values, { setSubmitting }) => {
-    if (dataFile) {
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("file", dataFile?.data);
+    const formData = new FormData();
 
-      FileUploadApi.create(values.id_category, formData)
-        .then(({ data }) => {
-          setModalConfig(prev => ({ ...prev, show: false }));
-          fetchData();
-        })
-        .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
-    }
-    else {
-      window.alert("Comic Image is required!");
-      setSubmitting(false);
-    }
+    formData.append("name", values.name);
+    formData.append("category_id", values.id_category);
+
+    // if file is changed
+    if (dataFile?.data) formData.append("file", dataFile?.data);
+
+    FileUploadApi.update(id, formData)
+      .then(({ data }) => {
+        setModalConfig(prev => ({ ...prev, show: false }));
+        fetchData();
+      })
+      .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
   };
 
   const formik = useFormik({
@@ -64,6 +62,9 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
   useEffect(() => {
     fetchParentDropdown();
+
+    // set file name to input file
+    if (path) { setDataFile({ nama: path.split("/")[2] }); }
 
     return () => setDropdown({ category: [] });;
   }, []);

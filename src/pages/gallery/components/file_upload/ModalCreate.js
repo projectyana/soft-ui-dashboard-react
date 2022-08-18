@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -32,7 +32,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
         .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
     }
     else {
-      window.alert("Comic Image is required!");
+      window.alert("File is required!");
       setSubmitting(false);
     }
   };

@@ -176,7 +176,7 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
           <TableBody>
             {data?.length > 0 ? (
               data.map((row) => (
-                <TableRow key={row.name}>
+                <TableRow key={row.id}>
                   <TableCell component="th" scope="row">
                     <SuiTypography variant="caption">{row.name}</SuiTypography>
                   </TableCell>
@@ -198,7 +198,7 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
                           <Icon>download</Icon>&nbsp;download
                         </SuiButton>
                       </SuiBox>
-                      {/* <SuiBox mr={1}>
+                      <SuiBox mr={1}>
                         <SuiButton
                           size="small"
                           variant="text"
@@ -207,7 +207,7 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
                         >
                           <Icon>edit</Icon>&nbsp;edit
                         </SuiButton>
-                      </SuiBox> */}
+                      </SuiBox>
                       <SuiBox mr={1}>
                         <SuiButton
                           size="small"

@@ -2,7 +2,7 @@ import { Service } from "services";
 
 class FileUploadApi {
   get() {
-    return Service.get("/bo/document");
+    return Service.get("/bo/doc_gallery/documents");
   }
 
   getCategories() {
@@ -11,6 +11,10 @@ class FileUploadApi {
 
   create(id, data) {
     return Service.post(`/bo/doc_gallery/${id}/add`, data);
+  }
+
+  update(id, data) {
+    return Service.post(`/bo/doc_gallery/update/${id}`, data);
   }
 
   createCategory(data) {
