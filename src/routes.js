@@ -107,7 +107,7 @@ const sideNav = [
   },
   {
     type: "collapse",
-    name: "Blog",
+    name: "Article",
     key: "blog",
     icon: <SVG.BlogIcon />,
     route: "/blog",
@@ -123,7 +123,7 @@ const sideNav = [
   },
   {
     type: "collapse",
-    name: "Menu Configuration",
+    name: "Menu",
     key: "menu-configuration",
     icon: <SVG.MenuIcon />,
     route: "/menu-configuration",
