@@ -42,15 +42,33 @@ const ModalConfigure = ({ fetchData, modalConfig, setModalConfig }) => {
 
   // Handle Change / toggle permission 
   const handleChange = (val, ability) => {
-    setData(() => data.map((item) => (item.id === val.id ? {
-      ...item,
-      abilities: {
-        ...item.abilities,
-        [ability]: !item.abilities[ability]
+    const shallowData = [...data];
+    const getIndex = shallowData?.findIndex(i => i.id === val.id);
+    const getItem = shallowData[getIndex];
+
+    // if user toggle ability read
+    if (ability === "read") {
+      // if previous ability read is true, then set read to false also write & delete
+      if (getItem.abilities.read) {
+        getItem.abilities.read = false;
+        getItem.abilities.write = false;
+        getItem.abilities.delete = false;
+      } else {
+        getItem.abilities.read = true;
       }
     }
-      : item))
-    );
+    // if ability write/delete is toggling
+    else {
+      // if previous ability write/delete is false, then set write/delete to true also read
+      if (!getItem.abilities[ability]) {
+        getItem.abilities[ability] = true;
+        getItem.abilities["read"] = true;
+      } else {
+        getItem.abilities[ability] = !getItem.abilities[ability];
+      }
+    }
+
+    setData(shallowData);
   };
 
   // Handle Submit to Server
