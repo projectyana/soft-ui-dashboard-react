@@ -49,6 +49,10 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
     data: null,
   });
   const [modalConfigCategory, setModalConfigCategory] = useState({ show: false });
+  const [filter, setFilter] = useState({
+    parent_id: "",
+    doc_category_id: ""
+  });
 
   const fetchData = (fetch = true) => {
     setLoading({ fetch });
@@ -75,8 +79,8 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
             return {
               ...item,
               full_path: `https://api.rokom.xyz/${item.path}`,
-              category: category,
-              subcategory: subcategory,
+              category: { id: category.id, name: category.name },
+              subcategory: { parent_id: subcategory.parent_id, id: subcategory.id, name: subcategory.name },
             };
           });
 
@@ -96,7 +100,15 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
     FileSaver.saveAs(url, fileName);
   };
 
-  // const filterData = selectedCat ? data.filter((val) => val.doc_category_id === selectedCat) : data;
+  const filterSubCategories = filter.parent_id ? dropdown?.subcategories?.filter((val) => val.parent_id === filter?.parent_id) : dropdown?.subcategories;
+
+  // if filter parent_id is not empty, then check filter subcategories 
+  const filterData = filter.parent_id ? data?.filter((val) => {
+    if (filter.doc_category_id) {
+      return val.subcategory.id === filter.doc_category_id;
+    }
+    return val.category.id === filter.parent_id;
+  }) : data;
 
   useEffect(() => {
     fetchData();
@@ -128,6 +140,14 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
       </SuiBox>
 
       <SuiBox pb={2} display="flex" flexWrap="wrap" justifyContent="start" alignItems="center">
+        {/* Show All Subcategories */}
+        <Chip
+          sx={{ margin: 0.5, textTransform: "capitalize" }}
+          label="All"
+          variant="outlined"
+          color={filter?.parent_id === "" ? "info" : "secondary"}
+          onClick={() => setFilter(prev => ({ parent_id: "", doc_category_id: "" }))}
+        />
         {dropdown?.parent?.length > 0 &&
           dropdown?.parent?.map((row) => (
             <Chip
@@ -136,24 +156,24 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
               variant="outlined"
               onDelete={() => setModalConfigCategory({ show: true, type: 'edit', data: row })}
               deleteIcon={<Icon>edit</Icon>}
-              color={selectedCat === row.value ? "info" : "secondary"}
-              onClick={() => setSelectedCat(row.value)}
+              color={filter?.parent_id === row.value ? "info" : "secondary"}
+              onClick={() => setFilter(prev => ({ parent_id: row.value, doc_category_id: "" }))}
             />
           ))}
       </SuiBox>
 
       <SuiTypography variant="h5">Subcategories</SuiTypography>
       <SuiBox pb={2} display="flex" flexWrap="wrap" justifyContent="start" alignItems="center">
-        {dropdown?.subcategories?.length > 0 &&
-          dropdown?.subcategories?.map((row) => (
+        {filterSubCategories?.length > 0 &&
+          filterSubCategories?.map((row) => (
             <Chip
               sx={{ margin: 0.5 }}
               label={row.label}
               variant="outlined"
               onDelete={() => setModalConfigCategory({ show: true, type: 'edit', data: row })}
               deleteIcon={<Icon>edit</Icon>}
-              color={selectedCat === row.parent_id ? "info" : "secondary"}
-            // onClick={() => setSelectedCat(row.value)}
+              color={filter?.doc_category_id === row.id ? "info" : "secondary"}
+              onClick={() => setFilter(prev => ({ parent_id: row.parent_id, doc_category_id: row.id }))}
             />
           ))}
       </SuiBox>
@@ -174,17 +194,17 @@ const FilesView = ({ modalCreate, setModalCreate }) => {
             </TableCell>
           </TableRow>
           <TableBody>
-            {data?.length > 0 ? (
-              data.map((row) => (
+            {filterData?.length > 0 ? (
+              filterData.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell component="th" scope="row">
                     <SuiTypography variant="caption">{row.name}</SuiTypography>
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    <SuiTypography variant="caption">{row?.category?.label ?? ""}</SuiTypography>
+                    <SuiTypography variant="caption">{row?.category?.name ?? ""}</SuiTypography>
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    <SuiTypography variant="caption">{row?.subcategory?.label ?? ""}</SuiTypography>
+                    <SuiTypography variant="caption">{row?.subcategory?.name ?? ""}</SuiTypography>
                   </TableCell>
                   <TableCell>
                     <SuiBox display="flex" alignItems="center">
