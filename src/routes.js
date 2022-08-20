@@ -139,27 +139,11 @@ const sideNav = [
   },
   {
     type: "collapse",
-    name: "Press Release",
-    key: "press-release",
-    icon: <SVG.PressReleaseIcon />,
-    route: "press-release",
-    component: <PressRelease />,
-  },
-  {
-    type: "collapse",
     name: "Recent Info Category",
     key: "recent-info-category",
     icon: <SVG.RecentInfoCategoryIcon />,
     route: "recent-info-category",
     component: <RecentInfoCategoryPage />,
-  },
-  {
-    type: "collapse",
-    name: "Recent Info",
-    key: "recent-info",
-    icon: <SVG.RecentInfoIcon />,
-    route: "recent-info",
-    component: <RecentInfoPage />,
   },
   {
     type: "collapse",
@@ -173,10 +157,26 @@ const sideNav = [
     type: "collapse",
     name: "Media",
     key: "media",
-    icon: <SVG.MediaIcon/>,
+    icon: <SVG.MediaIcon />,
     route: "media",
     component: <GalleryPage />,
   },
+  // {
+  //   type: "collapse",
+  //   name: "Recent Info",
+  //   key: "recent-info",
+  //   icon: <SVG.RecentInfoIcon />,
+  //   route: "recent-info",
+  //   component: <RecentInfoPage />,
+  // },
+  // {
+  //   type: "collapse",
+  //   name: "Press Release",
+  //   key: "press-release",
+  //   icon: <SVG.PressReleaseIcon />,
+  //   route: "press-release",
+  //   component: <PressRelease />,
+  // },
 ];
 
 // Unauthenticated routes
