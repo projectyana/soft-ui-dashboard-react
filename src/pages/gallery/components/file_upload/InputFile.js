@@ -10,7 +10,7 @@ import SuiTypography from "components/SuiTypography";
 
 const InputFile = ({ dataFile, setDataFile }) => {
   const inputFileRef = useRef();
-  const MAX_SIZE_KB = 3072;
+  const MAX_SIZE_KB = 10240; // 10MB
 
   // on click select image file
   const onClickFilesHandler = () => inputFileRef.current.click();
