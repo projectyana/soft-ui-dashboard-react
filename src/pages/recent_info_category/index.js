@@ -4,12 +4,6 @@
  */
 
 import React, { useEffect, useState } from "react";
-
-import SuiButton from "components/SuiButton";
-import SuiBox from "components/SuiBox";
-import SuiTypography from "components/SuiTypography";
-
-// @mui material components
 import {
   Table,
   TableBody,
@@ -20,9 +14,15 @@ import {
   Icon
 } from "@mui/material";
 
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-
+import SuiButton from "components/SuiButton";
+import SuiBox from "components/SuiBox";
+import SuiTypography from "components/SuiTypography";
+import CreateButton from "components/Custom/Button/CreateButton";
+import EditButton from "components/Custom/Button/EditButton";
+import DeleteButton from "components/Custom/Button/DeleteButton";
 import { PageLoading } from "components/Custom/Loading";
+
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 import RecentInfoCategory from "apis/RecentInfoCategory";
 
@@ -61,9 +61,7 @@ export default function RecentInfoCategoryPage() {
   return (
     <DashboardLayout>
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
-        <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
-          Create
-        </SuiButton>
+        <CreateButton onClick={() => setModalConfig({ show: true, type: 'create' })} />
       </SuiBox>
 
       <TableContainer component={Paper}>
@@ -90,26 +88,8 @@ export default function RecentInfoCategoryPage() {
                 </TableCell>
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="dark"
-                        onClick={() => setModalConfig({ show: true, type: "edit", data: row })}
-                      >
-                        <Icon>edit</Icon>&nbsp;edit
-                      </SuiButton>
-                    </SuiBox>
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="error"
-                        onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
-                      >
-                        <Icon>delete</Icon>&nbsp;delete
-                      </SuiButton>
-                    </SuiBox>
+                    <EditButton onClick={() => setModalConfig({ show: true, type: "edit", data: row })} />
+                    <DeleteButton onClick={() => setModalConfig({ show: true, type: "delete", data: row })} />
                   </SuiBox>
                 </TableCell>
               </TableRow>

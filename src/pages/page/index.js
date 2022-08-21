@@ -21,8 +21,11 @@ import SuiInput from "components/SuiInput";
 import SuiTypography from "components/SuiTypography";
 import Pagination from "components/Custom/Pagination";
 import { PageLoading } from "components/Custom/Loading";
+import EditButton from "components/Custom/Button/EditButton";
+import DeleteButton from "components/Custom/Button/DeleteButton";
 
 import useDebounce from "hooks/useDebounce";
+import getRolePermissions from "utils/getRolePermissions";
 
 import PageApi from "apis/Page";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -91,6 +94,7 @@ const DropdownButton = () => {
 
 const PageMenu = () => {
   const navigate = useNavigate();
+  const { isAllowWrite } = getRolePermissions();
   const [search, setSearch] = useState("");
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
@@ -128,7 +132,7 @@ const PageMenu = () => {
     <DashboardLayout>
       <SuiBox pb={2} display="flex" justifyContent="space-between" alignItems="center">
         <SuiInput placeholder="Search..." icon={{ component: "search", direction: "left" }} onChange={(e) => setSearch(e.target.value ?? "")} />
-        <DropdownButton />
+        {isAllowWrite && <DropdownButton />}
       </SuiBox>
 
       <TableContainer component={Paper}>
@@ -167,26 +171,8 @@ const PageMenu = () => {
                 </TableCell>
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="dark"
-                        onClick={() => navigate("editor/edit", { state: { ...row, type: row.page_type } })}
-                      >
-                        <Icon>edit</Icon>&nbsp;edit
-                      </SuiButton>
-                    </SuiBox>
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="error"
-                        onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
-                      >
-                        <Icon>delete</Icon>&nbsp;delete
-                      </SuiButton>
-                    </SuiBox>
+                    <EditButton onClick={() => navigate("editor/edit", { state: { ...row, type: row.page_type } })} />
+                    <DeleteButton onClick={() => setModalConfig({ show: true, type: "delete", data: row })} />
                   </SuiBox>
                 </TableCell>
               </TableRow>

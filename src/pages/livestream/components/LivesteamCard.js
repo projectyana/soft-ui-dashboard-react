@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Card } from "@mui/material";
 
 import SuiButton from "components/SuiButton";
@@ -6,8 +7,10 @@ import SuiAvatar from "components/SuiAvatar";
 import SuiTypography from "components/SuiTypography";
 
 import LivestreamApi from "apis/Livestream";
+import getRolePermissions from "utils/getRolePermissions";
 
 const LivesteamCard = ({ data, setData, fetchData, fetchHistory }) => {
+  const { isAllowWrite } = getRolePermissions();
 
   const endLiveStream = () => {
     LivestreamApi.end()
@@ -48,14 +51,16 @@ const LivesteamCard = ({ data, setData, fetchData, fetchHistory }) => {
           </SuiBox>
         </SuiBox>
         <SuiBox display="flex" justifyContent="flex-end" mt={2}>
-          <SuiButton
-            ml={1}
-            size="small"
-            color="error"
-            onClick={() => endLiveStream()}
-          >
-            End Stream
-          </SuiButton>
+          {isAllowWrite && (
+            <SuiButton
+              ml={1}
+              size="small"
+              color="error"
+              onClick={() => endLiveStream()}
+            >
+              End Stream
+            </SuiButton>
+          )}
         </SuiBox>
       </Card>
     </SuiBox >

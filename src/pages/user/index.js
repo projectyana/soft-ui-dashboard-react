@@ -5,15 +5,6 @@
  */
 
 import React, { useEffect, useState } from "react";
-import Axios from "axios";
-
-import SuiButton from "components/SuiButton";
-import SuiBox from "components/SuiBox";
-import SuiInput from "components/SuiInput";
-import SuiPagination from "components/SuiPagination";
-import SuiTypography from "components/SuiTypography";
-
-// @mui material components
 import {
   Table,
   TableBody,
@@ -22,16 +13,21 @@ import {
   TableRow,
   Paper,
   Icon,
-  CircularProgress
 } from "@mui/material";
+import Axios from "axios";
+
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+
+import SuiButton from "components/SuiButton";
+import SuiBox from "components/SuiBox";
+import SuiTypography from "components/SuiTypography";
+import CreateButton from "components/Custom/Button/CreateButton";
+import EditButton from "components/Custom/Button/EditButton";
+import DeleteButton from "components/Custom/Button/DeleteButton";
+import { PageLoading } from "components/Custom/Loading";
 
 import UserApi from "apis/User";
 import RoleApi from "apis/Role";
-
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-
-import { PageLoading } from "components/Custom/Loading";
 
 import ModalCreate from "./components/ModalCreate";
 import ModalEdit from "./components/ModalEdit";
@@ -78,10 +74,7 @@ export default function UserPage() {
   return (
     <DashboardLayout>
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
-        {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
-        <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
-          Create
-        </SuiButton>
+        <CreateButton onClick={() => setModalConfig({ type: 'create', show: true })} />
       </SuiBox>
 
       <TableContainer component={Paper}>
@@ -120,26 +113,8 @@ export default function UserPage() {
                 </TableCell>
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="dark"
-                        onClick={() => setModalConfig({ show: true, type: "edit", data: row })}
-                      >
-                        <Icon>edit</Icon>&nbsp;edit
-                      </SuiButton>
-                    </SuiBox>
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="error"
-                        onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
-                      >
-                        <Icon>delete</Icon>&nbsp;delete
-                      </SuiButton>
-                    </SuiBox>
+                    <EditButton onClick={() => setModalConfig({ show: true, type: 'edit', data: row })} />
+                    <DeleteButton onClick={() => setModalConfig({ show: true, type: 'delete', data: row })} />
                   </SuiBox>
                 </TableCell>
               </TableRow>
@@ -147,22 +122,6 @@ export default function UserPage() {
           </TableBody>
         </Table>
       </TableContainer>
-
-      <SuiBox mt={4} pb={2} display="flex" justifyContent="center" alignItems="center">
-        {/* <SuiPagination>
-          <SuiPagination item>
-            <Icon>keyboard_arrow_left</Icon>
-          </SuiPagination>
-          <SuiPagination item active>
-            1
-          </SuiPagination>
-          <SuiPagination item>2</SuiPagination>
-          <SuiPagination item>3</SuiPagination>
-          <SuiPagination item>
-            <Icon>keyboard_arrow_right</Icon>
-          </SuiPagination>
-        </SuiPagination> */}
-      </SuiBox>
 
       {/* Modal  Create */}
       {modalConfig.show && modalConfig.type === "create" && <ModalCreate

@@ -14,9 +14,12 @@ import {
   Icon
 } from "@mui/material";
 
-import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";
 import SuiTypography from "components/SuiTypography";
+import CreateButton from "components/Custom/Button/CreateButton";
+import EditButton from "components/Custom/Button/EditButton";
+import DeleteButton from "components/Custom/Button/DeleteButton";
+import ConfigureButton from "components/Custom/Button/ConfigureButton";
 import { PageLoading } from "components/Custom/Loading";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -68,10 +71,7 @@ export default function RolePage() {
   return (
     <DashboardLayout>
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
-        {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
-        <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
-          Create
-        </SuiButton>
+        <CreateButton onClick={() => setModalConfig({ show: true, type: 'create' })} />
       </SuiBox>
 
       <TableContainer component={Paper}>
@@ -111,35 +111,10 @@ export default function RolePage() {
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
                     <SuiBox mr={1} sx={{ visibility: row.sub_header_navs.length > 0 ? "visible" : "hidden" }}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="info"
-                        onClick={() => setModalConfig({ show: true, type: "configure", data: row })}
-                      >
-                        <Icon>settings</Icon>&nbsp;configure
-                      </SuiButton>
+                      <ConfigureButton onClick={() => setModalConfig({ show: true, type: "configure", data: row })} />
                     </SuiBox>
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="dark"
-                        onClick={() => setModalConfig({ show: true, type: row.type === "parent" ? "edit" : "editMenu", data: row })}
-                      >
-                        <Icon>edit</Icon>&nbsp;edit
-                      </SuiButton>
-                    </SuiBox>
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="error"
-                        onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
-                      >
-                        <Icon>delete</Icon>&nbsp;delete
-                      </SuiButton>
-                    </SuiBox>
+                    <EditButton onClick={() => setModalConfig({ show: true, type: row.type === "parent" ? "edit" : "editMenu", data: row })} />
+                    <DeleteButton onClick={() => setModalConfig({ show: true, type: "delete", data: row })} />
                   </SuiBox>
                 </TableCell>
               </TableRow>

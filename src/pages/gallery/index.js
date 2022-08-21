@@ -20,6 +20,7 @@ import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 
 import SuiBox from 'components/SuiBox';
 import SuiButton from 'components/SuiButton';
+import getRolePermissions from "utils/getRolePermissions";
 
 // View Toggle
 import CategoriesView from "./components/categories_view";
@@ -86,6 +87,7 @@ function DropdownButtonCreate({ setModalCreate }) {
 }
 
 function Gallery() {
+  const { isAllowWrite } = getRolePermissions();
   const [showType, setShowType] = useState('gallery');
   const [modalCreate, setModalCreate] = useState({ show: false, type: 'gallery' });
 
@@ -99,10 +101,13 @@ function Gallery() {
     <DashboardLayout>
       {/* Button Create Image / File */}
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
-        <DropdownButtonCreate
-          modalCreate={modalCreate}
-          setModalCreate={setModalCreate}
-        />
+
+        {isAllowWrite && (
+          <DropdownButtonCreate
+            modalCreate={modalCreate}
+            setModalCreate={setModalCreate}
+          />
+        )}
 
         <ToggleButtonGroup
           sx={{ marginLeft: 2 }}

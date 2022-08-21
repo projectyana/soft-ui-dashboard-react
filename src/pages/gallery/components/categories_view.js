@@ -14,6 +14,7 @@ import GalleryCard from "components/Custom/Card/GalleryCard";
 import { LoadingState } from "components/Custom/Loading";
 
 import GalleryApi from 'apis/Gallery';
+import getRolePermissions from "utils/getRolePermissions";
 
 // Category Component
 import ModalCreateCategory from "./gallery/category/ModalCreateCategory";
@@ -25,6 +26,7 @@ import ModalCreateGallery from "./gallery/ModalCreateGallery";
 import ModalDeleteGallery from "./gallery/ModalDeleteGallery";
 
 const CategoriesView = ({ modalCreate, setModalCreate }) => {
+  const { isAllowWrite, isAllowDelete } = getRolePermissions();
   const [dataCat, setDataCat] = useState([]);
   const [selectedCat, setSelectedCat] = useState(null);
   const [loading, setLoading] = useState({ gallery: false });
@@ -62,17 +64,19 @@ const CategoriesView = ({ modalCreate, setModalCreate }) => {
       {/* Create Image gallery categories */}
       <SuiBox mb={1} display="flex" justifyContent="start" alignItems="center" >
         <SuiTypography variant="h2">Categories</SuiTypography>
-        <Tooltip title="Create new Gallery Category">
-          <SuiButton
-            rounded="small"
-            sx={{ marginTop: 0.5, marginLeft: 1, padding: 1 }}
-            iconOnly
-            size="small"
-            color="info"
-            onClick={() => setModalConfigCategory({ show: true, type: 'create' })} >
-            <Icon>add</Icon>
-          </SuiButton>
-        </Tooltip>
+        {isAllowWrite && (
+          <Tooltip title="Create new Gallery Category">
+            <SuiButton
+              rounded="small"
+              sx={{ marginTop: 0.5, marginLeft: 1, padding: 1 }}
+              iconOnly
+              size="small"
+              color="info"
+              onClick={() => setModalConfigCategory({ show: true, type: 'create' })} >
+              <Icon>add</Icon>
+            </SuiButton>
+          </Tooltip>
+        )}
       </SuiBox >
 
       {/* Chip category */}
@@ -82,8 +86,8 @@ const CategoriesView = ({ modalCreate, setModalCreate }) => {
             sx={{ margin: 0.5, textTransform: "capitalize" }}
             label={row.title}
             onClick={() => setSelectedCat(row.id)}
-            onDelete={() => setModalConfigCategory({ show: true, type: 'edit', data: row })}
-            deleteIcon={<Icon>edit</Icon>}
+            onDelete={isAllowWrite ? () => setModalConfigCategory({ show: true, type: 'edit', data: row }) : null}
+            deleteIcon={isAllowWrite ? <Icon>edit</Icon> : null}
             variant="outlined"
             color={row.id === selectedCat ? "info" : "secondary"}
           />

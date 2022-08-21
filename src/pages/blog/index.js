@@ -10,10 +10,12 @@ import {
 
 import SuiBox from "components/SuiBox";
 import SuiInput from "components/SuiInput";
-import SuiButton from "components/SuiButton";
 import BlogCard from "components/Custom/Card/BlogCard";
 import Pagination from "components/Custom/Pagination";
 import { PageLoading } from "components/Custom/Loading";
+import EditButton from "components/Custom/Button/EditButton";
+import DeleteButton from "components/Custom/Button/DeleteButton";
+import CreateButton from "components/Custom/Button/CreateButton";
 
 import useDebounce from "hooks/useDebounce";
 
@@ -78,9 +80,7 @@ const BlogMenu = () => {
     <DashboardLayout>
       <SuiBox pb={2} display="flex" justifyContent="space-between" alignItems="center">
         <SuiInput placeholder="Search..." icon={{ component: "search", direction: "left" }} onChange={(e) => setSearch(e.target.value ?? "")} />
-        <SuiButton size="medium" color="info" onClick={() => navigate("editor/create")}>
-          Create
-        </SuiButton>
+        <CreateButton onClick={() => navigate("editor/create")} />
       </SuiBox>
 
       {/* Blog Cards */}
@@ -98,26 +98,8 @@ const BlogMenu = () => {
             >
               <CardActions>
                 <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end" alignItems="center">
-                  <SuiBox mr={1}>
-                    <SuiButton
-                      size="small"
-                      variant="text"
-                      color="dark"
-                      onClick={() => navigate("editor/edit", { state: { ...row } })}
-                    >
-                      <Icon>edit</Icon>&nbsp;edit
-                    </SuiButton>
-                  </SuiBox>
-                  <SuiBox mr={1}>
-                    <SuiButton
-                      size="small"
-                      variant="text"
-                      color="error"
-                      onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
-                    >
-                      <Icon>delete</Icon>&nbsp;delete
-                    </SuiButton>
-                  </SuiBox>
+                  <EditButton onClick={() => navigate("editor/edit", { state: { ...row } })} />
+                  <DeleteButton onClick={() => setModalConfig({ show: true, type: "delete", data: row })} />
                 </SuiBox>
               </CardActions>
             </BlogCard>

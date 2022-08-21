@@ -26,6 +26,7 @@ import LivestreamApi from "apis/Livestream";
 
 import ModalCreate from "./components/ModalCreate";
 import LivesteamCard from "./components/LivesteamCard";
+import CreateButton from "components/Custom/Button/CreateButton";
 
 export default function LivestreamPage() {
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
@@ -69,9 +70,10 @@ export default function LivestreamPage() {
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
         {/* Create livestream button */}
         {!data?.url && (
-          <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
-            Start
-          </SuiButton>
+          <CreateButton text="Start" onClick={() => setModalConfig({ show: true, type: 'create' })} />
+          // <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
+          //   Start
+          // </SuiButton>
         )}
       </SuiBox>
 

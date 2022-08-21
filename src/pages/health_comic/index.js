@@ -3,24 +3,18 @@
  */
 
 import React, { useEffect, useState } from "react";
-
-import SuiButton from "components/SuiButton";
-import SuiBox from "components/SuiBox";
-
-// @mui material components
 import {
-  Icon,
-  Switch,
-  Tooltip,
   CardActions,
   Grid
 } from "@mui/material";
+import SuiBox from "components/SuiBox";
+import CreateButton from "components/Custom/Button/CreateButton";
+import EditButton from "components/Custom/Button/EditButton";
+import DeleteButton from "components/Custom/Button/DeleteButton";
+import ComicCard from "components/Custom/Card/ComicCard";
+import { PageLoading } from "components/Custom/Loading";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-
-import { PageLoading } from "components/Custom/Loading";
-import ComicCard from "components/Custom/Card/ComicCard";
-
 import HealthComicApi from "apis/HealthComic";
 
 import ModalCreate from "./components/ModalCreate";
@@ -64,9 +58,7 @@ export default function HealthComicPage() {
   return (
     <DashboardLayout>
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
-        <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
-          Create
-        </SuiButton>
+        <CreateButton onClick={() => setModalConfig({ show: true, type: 'create' })} />
       </SuiBox>
 
       <Grid container spacing={2}>
@@ -81,26 +73,8 @@ export default function HealthComicPage() {
             >
               <CardActions>
                 <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end" alignItems="center">
-                  <SuiBox >
-                    <SuiButton
-                      size="small"
-                      variant="text"
-                      color="dark"
-                      onClick={() => setModalConfig({ show: true, type: "edit", data: row })}
-                    >
-                      <Icon>edit</Icon>&nbsp;edit
-                    </SuiButton>
-                  </SuiBox>
-                  <SuiBox >
-                    <SuiButton
-                      size="small"
-                      variant="text"
-                      color="error"
-                      onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
-                    >
-                      <Icon>delete</Icon>&nbsp;delete
-                    </SuiButton>
-                  </SuiBox>
+                  <EditButton onClick={() => setModalConfig({ show: true, type: "edit", data: row })} />
+                  <DeleteButton onClick={() => setModalConfig({ show: true, type: "delete", data: row })} />
                 </SuiBox>
               </CardActions>
             </ComicCard>

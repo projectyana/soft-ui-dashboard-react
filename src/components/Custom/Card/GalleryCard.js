@@ -4,8 +4,10 @@ import {
   Icon
 } from "@mui/material";
 import SuiButton from "components/SuiButton";
+import getRolePermissions from "utils/getRolePermissions";
 
 const GalleryCard = ({ style, image, alt, onDeleteClick }) => {
+  const { isAllowDelete } = getRolePermissions();
   return (
     <Card sx={{ ...style }}>
       {Boolean(image) && (<CardMedia
@@ -17,17 +19,19 @@ const GalleryCard = ({ style, image, alt, onDeleteClick }) => {
       />
       )}
 
-      <SuiButton
-        sx={{ position: "absolute", top: 10, right: 10 }}
-        size="small"
-        variant="contained"
-        color="error"
-        iconOnly
-        borderRadius="large"
-        onClick={() => onDeleteClick()}
-      >
-        <Icon>close</Icon>
-      </SuiButton>
+      {isAllowDelete && (
+        <SuiButton
+          sx={{ position: "absolute", top: 10, right: 10 }}
+          size="small"
+          variant="contained"
+          color="error"
+          iconOnly
+          borderRadius="large"
+          onClick={() => onDeleteClick()}
+        >
+          <Icon>close</Icon>
+        </SuiButton>
+      )}
     </Card>
   );
 };

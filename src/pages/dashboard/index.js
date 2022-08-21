@@ -26,6 +26,8 @@ import SuiTypography from "components/SuiTypography";
 import BlogCard from "components/Custom/Card/BlogCard";
 import { LoadingState } from "components/Custom/Loading";
 
+import getRolePermissions from "utils/getRolePermissions";
+
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import MiniStatisticsCard from "examples/Cards/StatisticsCards/MiniStatisticsCard";
 
@@ -33,6 +35,7 @@ import ModalBlogDelete from "./components/ModalBlogDelete";
 
 export default function AppDashboard() {
   const navigate = useNavigate();
+  const { isAllowWrite, isAllowDelete } = getRolePermissions("/blog");
   const [dashboard, setDashboard] = useState({});
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [modalConfig, setModalConfig] = useState({
@@ -141,25 +144,29 @@ export default function AppDashboard() {
                     >
                       <CardActions>
                         <SuiBox sx={{ width: '100%' }} display="flex" justifyContent="end" alignItems="end" >
-                          <SuiButton
-                            size="small"
-                            variant="text"
-                            color="dark"
-                            onClick={() => navigate("/blog/editor/edit", { state: { ...row } })}
-                          >
-                            <Icon>edit</Icon> &nbsp;edit
-                          </SuiButton>
-
-                          <SuiBox mr={1}>
+                          {isAllowWrite && (
                             <SuiButton
                               size="small"
                               variant="text"
-                              color="error"
-                              onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
+                              color="dark"
+                              onClick={() => navigate("/blog/editor/edit", { state: { ...row } })}
                             >
-                              <Icon>delete</Icon>&nbsp;delete
+                              <Icon>edit</Icon> &nbsp;edit
                             </SuiButton>
-                          </SuiBox>
+                          )}
+
+                          {isAllowDelete && (
+                            <SuiBox mr={1}>
+                              <SuiButton
+                                size="small"
+                                variant="text"
+                                color="error"
+                                onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
+                              >
+                                <Icon>delete</Icon>&nbsp;delete
+                              </SuiButton>
+                            </SuiBox>
+                          )}
                         </SuiBox>
                       </CardActions>
                     </BlogCard>

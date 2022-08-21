@@ -3,14 +3,6 @@
  */
 
 import React, { useEffect, useState } from "react";
-
-import SuiButton from "components/SuiButton";
-import SuiBox from "components/SuiBox";
-import SuiInput from "components/SuiInput";
-import SuiPagination from "components/SuiPagination";
-import SuiTypography from "components/SuiTypography";
-
-// @mui material components
 import {
   Table,
   TableBody,
@@ -18,13 +10,17 @@ import {
   TableContainer,
   TableRow,
   Paper,
-  Icon
 } from "@mui/material";
 
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-
+import SuiBox from "components/SuiBox";
+import SuiTypography from "components/SuiTypography";
+import CreateButton from "components/Custom/Button/CreateButton";
+import EditButton from "components/Custom/Button/EditButton";
+import DeleteButton from "components/Custom/Button/DeleteButton";
+import ConfigureButton from "components/Custom/Button/ConfigureButton";
 import { PageLoading } from "components/Custom/Loading";
 
+import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import RoleApi from "apis/Role";
 
 import ModalCreate from "./components/ModalCreate";
@@ -63,10 +59,7 @@ export default function RolePage() {
   return (
     <DashboardLayout>
       <SuiBox pb={2} display="flex" justifyContent="end" alignItems="center">
-        {/* <SuiInput placeholder="Type here..." icon={{ component: "search", direction: "left" }} /> */}
-        <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
-          Create
-        </SuiButton>
+        <CreateButton onClick={() => setModalConfig({ show: true, type: 'create' })} />
       </SuiBox>
 
       <TableContainer component={Paper}>
@@ -99,36 +92,9 @@ export default function RolePage() {
                 </TableCell>
                 <TableCell>
                   <SuiBox display="flex" alignItems="center">
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="info"
-                        onClick={() => setModalConfig({ show: true, type: "configure", data: row })}
-                      >
-                        <Icon>settings</Icon>&nbsp;configure
-                      </SuiButton>
-                    </SuiBox>
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="dark"
-                        onClick={() => setModalConfig({ show: true, type: "edit", data: row })}
-                      >
-                        <Icon>edit</Icon>&nbsp;edit
-                      </SuiButton>
-                    </SuiBox>
-                    <SuiBox mr={1}>
-                      <SuiButton
-                        size="small"
-                        variant="text"
-                        color="error"
-                        onClick={() => setModalConfig({ show: true, type: "delete", data: row })}
-                      >
-                        <Icon>delete</Icon>&nbsp;delete
-                      </SuiButton>
-                    </SuiBox>
+                    <ConfigureButton onClick={() => setModalConfig({ show: true, type: "configure", data: row })} />
+                    <EditButton onClick={() => setModalConfig({ show: true, type: "edit", data: row })} />
+                    <DeleteButton onClick={() => setModalConfig({ show: true, type: "delete", data: row })} />
                   </SuiBox>
                 </TableCell>
               </TableRow>
@@ -143,26 +109,8 @@ export default function RolePage() {
         </Table>
       </TableContainer>
 
-      <SuiBox mt={4} pb={2} display="flex" justifyContent="center" alignItems="center">
-        {/* <SuiPagination>
-          <SuiPagination item>
-            <Icon>keyboard_arrow_left</Icon>
-          </SuiPagination>
-          <SuiPagination item active>
-            1
-          </SuiPagination>
-          <SuiPagination item>2</SuiPagination>
-          <SuiPagination item>3</SuiPagination>
-          <SuiPagination item>
-            <Icon>keyboard_arrow_right</Icon>
-          </SuiPagination>
-        </SuiPagination> */}
-      </SuiBox>
-
       {/* Modal  Create */}
-      {modalConfig.show && modalConfig.type === "create" &&
-        <ModalCreate fetchData={fetchData}
-          modalConfig={modalConfig} setModalConfig={setModalConfig} />}
+      {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
 
       {/* Modal Edit */}
       {modalConfig.show && modalConfig.type === "edit" && <ModalEdit fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
