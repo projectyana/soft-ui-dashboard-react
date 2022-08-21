@@ -141,7 +141,7 @@ const sideNav = [
     name: "Livestream",
     key: "livestream",
     icon: <SVG.LivestreamIcon />,
-    route: "livestream",
+    route: "/livestream",
     component: <LivestreamPage />,
     role: "menu_livestream"
   },
@@ -150,7 +150,7 @@ const sideNav = [
     name: "Recent Info Category",
     key: "recent-info-category",
     icon: <SVG.RecentInfoCategoryIcon />,
-    route: "recent-info-category",
+    route: "/recent-info-category",
     component: <RecentInfoCategoryPage />,
     role: "menu_recentinfocategory"
   },
@@ -159,7 +159,7 @@ const sideNav = [
     name: "Health Comic",
     key: "health-comic",
     icon: <SVG.ComicIcon />,
-    route: "health-comic",
+    route: "/health-comic",
     component: <HealthComicPage />,
     role: "menu_healthcomic"
   },
@@ -168,7 +168,7 @@ const sideNav = [
     name: "Media",
     key: "media",
     icon: <SVG.MediaIcon />,
-    route: "media",
+    route: "/media",
     component: <GalleryPage />,
     role: "menu_media"
   },
