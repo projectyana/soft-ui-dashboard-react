@@ -80,6 +80,7 @@ const sideNav = [
     icon: <SVG.DashboardIcon />,
     route: "/dashboard",
     component: <AppDashboard />,
+    role: "menu_dashboard"
   },
   {
     type: "collapse",
@@ -88,6 +89,7 @@ const sideNav = [
     icon: <SVG.RoleIcon />,
     route: "/role",
     component: <RolePage />,
+    role: "menu_role"
   },
   {
     type: "collapse",
@@ -96,6 +98,7 @@ const sideNav = [
     icon: <SVG.UserIcon />,
     route: "/user",
     component: <UserPage />,
+    role: "menu_user"
   },
   {
     type: "collapse",
@@ -104,6 +107,7 @@ const sideNav = [
     icon: <SVG.PageIcon />,
     route: "/page",
     component: <PageMenu />,
+    role: "menu_page"
   },
   {
     type: "collapse",
@@ -112,6 +116,7 @@ const sideNav = [
     icon: <SVG.BlogIcon />,
     route: "/blog",
     component: <BlogMenu />,
+    role: "menu_blog"
   },
   {
     type: "collapse",
@@ -120,6 +125,7 @@ const sideNav = [
     icon: <SVG.CarouselIcon />,
     route: "/carousel",
     component: <CarouselPage />,
+    role: "menu_carousel"
   },
   {
     type: "collapse",
@@ -128,6 +134,7 @@ const sideNav = [
     icon: <SVG.MenuIcon />,
     route: "/menu-configuration",
     component: <MenuConfigurationPage />,
+    role: "menu_menuconfiguration"
   },
   {
     type: "collapse",
@@ -136,6 +143,7 @@ const sideNav = [
     icon: <SVG.LivestreamIcon />,
     route: "livestream",
     component: <LivestreamPage />,
+    role: "menu_livestream"
   },
   {
     type: "collapse",
@@ -144,6 +152,7 @@ const sideNav = [
     icon: <SVG.RecentInfoCategoryIcon />,
     route: "recent-info-category",
     component: <RecentInfoCategoryPage />,
+    role: "menu_recentinfocategory"
   },
   {
     type: "collapse",
@@ -152,6 +161,7 @@ const sideNav = [
     icon: <SVG.ComicIcon />,
     route: "health-comic",
     component: <HealthComicPage />,
+    role: "menu_healthcomic"
   },
   {
     type: "collapse",
@@ -160,6 +170,7 @@ const sideNav = [
     icon: <SVG.MediaIcon />,
     route: "media",
     component: <GalleryPage />,
+    role: "menu_media"
   },
   // {
   //   type: "collapse",
@@ -186,12 +197,14 @@ const publicPath = [
     key: "sign-in",
     route: "/sign-in",
     component: <SignIn />,
+    role: "*"
   },
   {
     name: "wildcard",
     key: "wildcard",
     route: "*",
     component: <Navigate replace to="/sign-in" />,
+    role: "*"
   },
 ];
 
@@ -203,18 +216,21 @@ const protectedPath = sideNav.concat([
     key: "page-editor",
     route: "/page/editor/:action", // action : create | edit
     component: <PageEditor />,
+    role: "menu_page"
   },
   {
     name: "Blog Editor",
     key: "blog-editor",
     route: "/blog/editor/:action", // action : create | edit
     component: <BlogEditor />,
+    role: "menu_blog"
   },
   {
     name: "protected-wildcard",
     key: "protected-wildcard",
     route: "*",
     component: <Navigate replace to="/dashboard" />,
+    role: "*"
   },
 ]);
 

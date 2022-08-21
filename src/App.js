@@ -50,7 +50,7 @@ export default function App() {
   const reduxDispatch = useDispatch();
 
   const storageToken = localStorage.getItem("token");
-  const { token } = useSelector((state) => state?.auth);
+  const { token, role } = useSelector((state) => state?.auth);
 
   // Check if authentication
   const checkAuth = () => {
@@ -107,18 +107,17 @@ export default function App() {
     }
   }, []);
 
-  const getRoutes = (allRoutes) =>
-    allRoutes?.map((route) => {
-      if (route.collapse) {
-        return getRoutes(route.collapse);
-      }
+  const getRoutes = (allRoutes) => allRoutes?.map((route) => {
+    if (route.collapse) {
+      return getRoutes(route.collapse);
+    }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
-      }
+    if (route.route && (role?.hasOwnProperty(route.role) || route.role === "*")) {
+      return <Route exact path={route.route} element={route.component} key={route.key} />;
+    }
 
-      return null;
-    });
+    return null;
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -129,7 +128,7 @@ export default function App() {
             color={sidenavColor}
             brand={kemenkes}
             brandName="Back Office"
-            routes={routes.protectedPath}
+            routes={routes.protectedPath.filter((route) => role?.hasOwnProperty(route.role))}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
