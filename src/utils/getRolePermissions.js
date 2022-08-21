@@ -1,10 +1,14 @@
 import { useSelector } from 'react-redux';
 import routes from "routes";
 
-const getRolePermissions = () => {
+const getRolePermissions = (currentPagePath = null) => {
+  // get user allowed role
   const { role } = useSelector((state) => state?.auth);
-  const currentPath = window.location.pathname.replace("/admin", "");
+  // get page url from params or from window.location.pathname
+  const currentPath = currentPagePath ?? window.location.pathname.replace("/admin", "");
+  // get page role code from routes, by matching with current path
   const getRoleCode = routes?.protectedPath?.find((item) => item.route === currentPath)?.role;
+  // check if user is allowed to write/delete on this page
   const isAllowWrite = role[getRoleCode].includes("W");
   const isAllowDelete = role[getRoleCode].includes("D");
 
