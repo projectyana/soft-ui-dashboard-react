@@ -232,7 +232,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
                 onChange={(e) => setValues({ ...values, menu_type: e.target.value, content: "", gallery: [] })}
               >
                 <FormControlLabel sx={{ marginX: 1 }} size="small" value="page" control={<Radio />} label="Page" />
-                <FormControlLabel sx={{ marginX: 1 }} size="small" value="blog" control={<Radio />} label="Blog" />
+                <FormControlLabel sx={{ marginX: 1 }} size="small" value="blog" control={<Radio />} label="Article" />
                 <FormControlLabel sx={{ marginX: 1 }} size="small" value="link" control={<Radio />} label="Link" />
                 <FormControlLabel sx={{ marginX: 1 }} size="small" value="doc_gallery" control={<Radio />} label="Document" />
                 <FormControlLabel sx={{ marginX: 1 }} size="small" value="image_gallery" control={<Radio />} label="Image" />
