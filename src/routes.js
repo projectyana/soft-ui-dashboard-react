@@ -115,7 +115,7 @@ const sideNav = [
   },
   {
     type: "collapse",
-    name: "Carousel",
+    name: "Slider",
     key: "carousel",
     icon: <SVG.CarouselIcon />,
     route: "/carousel",

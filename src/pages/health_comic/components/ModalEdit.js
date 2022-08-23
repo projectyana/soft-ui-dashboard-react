@@ -52,7 +52,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
     }
     else {
-      window.alert("Image carousel is required!");
+      window.alert("Image slider is required!");
       setSubmitting(false);
     }
   };

@@ -44,7 +44,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
     }
     else {
-      window.alert("Image carousel is required!");
+      window.alert("Image slider is required!");
       setSubmitting(false);
     }
   };
@@ -68,7 +68,7 @@ const ModalEdit = ({ fetchData, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title="Edit Carousel"
+      title="Edit Slider"
       open={modalConfig.show && modalConfig.type === 'edit'}
       setModalConfig={setModalConfig}
     >

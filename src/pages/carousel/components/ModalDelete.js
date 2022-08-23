@@ -22,17 +22,17 @@ const ModalDelete = ({ fetchData, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title="Delete Carousel"
+      title="Delete Slider"
       maxWidth="sm"
       open={modalConfig.show && modalConfig.type === "delete"}
       setModalConfig={setModalConfig}
     >
       <SuiTypography mt={2} variant="h6">
-        Carousel Title: {title}
+        Slider Title: {title}
       </SuiTypography>
       <SuiBox mt={2}>
         <img
-          alt="carousel"
+          alt="slider"
           style={{
             height: 200,
             width: '100%',

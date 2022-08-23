@@ -95,7 +95,7 @@ export default function CarouselPage() {
             >
               <CardActions>
                 <SuiBox >
-                  <Tooltip title={row?.active ? 'Carousel is enabled' : 'Carousel is disabled'}>
+                  <Tooltip title={row?.active ? 'Slider is enabled' : 'Slider is disabled'}>
                     <Switch
                       checked={row?.active ?? false}
                       onChange={() => handleToggleActive(row, index)}
