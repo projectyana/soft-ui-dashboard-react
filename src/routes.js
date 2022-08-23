@@ -155,7 +155,7 @@ const sideNav = [
   },
   {
     type: "collapse",
-    name: "Media",
+    name: "Media & File",
     key: "media",
     icon: <SVG.MediaIcon />,
     route: "media",
