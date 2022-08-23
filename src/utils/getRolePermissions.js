@@ -9,8 +9,8 @@ const getRolePermissions = (currentPagePath = null) => {
   // get page role code from routes, by matching with current path
   const getRoleCode = routes?.protectedPath?.find((item) => item.route === currentPath)?.role;
   // check if user is allowed to write/delete on this page
-  const isAllowWrite = role[getRoleCode].includes("W");
-  const isAllowDelete = role[getRoleCode].includes("D");
+  const isAllowWrite = role[getRoleCode]?.includes("W");
+  const isAllowDelete = role[getRoleCode]?.includes("D");
 
   return {
     currentPath,

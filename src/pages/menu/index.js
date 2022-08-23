@@ -26,6 +26,7 @@ import { PageLoading } from "components/Custom/Loading";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 import MenuApi from "apis/Menu";
+import getRolePermissions from "utils/getRolePermissions";
 
 import ModalCreate from "./components/ModalCreate";
 import ModalEdit from "./components/ModalEdit";
@@ -36,6 +37,7 @@ import ModalDelete from "./components/ModalDelete";
 import handleOrder from "./helpers/handleOrder";
 
 export default function RolePage() {
+  const { isAllowWrite } = getRolePermissions();
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [modalConfig, setModalConfig] = useState({
@@ -82,9 +84,11 @@ export default function RolePage() {
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
           <TableRow>
-            <TableCell>
-              <SuiTypography variant="h6">&nbsp;</SuiTypography>
-            </TableCell>
+            {isAllowWrite && (
+              <TableCell>
+                <SuiTypography variant="h6">&nbsp;</SuiTypography>
+              </TableCell>
+            )}
             <TableCell>
               <SuiTypography variant="h6">Menu</SuiTypography>
             </TableCell>
@@ -102,52 +106,53 @@ export default function RolePage() {
             {data?.length > 0 ? (
               data.map((row, index) => (
                 <TableRow key={row.name}>
-                  <TableCell>
-                    <SuiBox display="flex" justifyContent="start" alignItems="center">
-                      <Tooltip title="Change order forward">
-                        <SuiButton
-                          visibility="hidden"
-                          iconOnly
-                          circular
-                          variant="contained"
-                          disabled={index === 0}
-                          color="info"
-                          size="small"
-                          sx={{ marginRight: 1 }}
-                          onClick={() => handleOrder({
-                            data,
-                            setData,
-                            index,
-                            id: row.id,
-                            direction: "up",
-                          })}
-                        >
-                          <Icon>expand_less</Icon>
-                        </SuiButton>
-                      </Tooltip>
+                  {isAllowWrite && (
+                    <TableCell>
+                      <SuiBox display="flex" justifyContent="start" alignItems="center">
+                        <Tooltip title="Change order forward">
+                          <SuiButton
+                            visibility="hidden"
+                            iconOnly
+                            circular
+                            variant="contained"
+                            disabled={index === 0}
+                            color="info"
+                            size="small"
+                            sx={{ marginRight: 1 }}
+                            onClick={() => handleOrder({
+                              data,
+                              setData,
+                              index,
+                              id: row.id,
+                              direction: "up",
+                            })}
+                          >
+                            <Icon>expand_less</Icon>
+                          </SuiButton>
+                        </Tooltip>
 
-                      <Tooltip title="Change order backward">
-                        <SuiButton
-                          iconOnly
-                          circular
-                          variant="contained"
-                          disabled={index === data.length - 1}
-                          color="warning"
-                          size="small"
-                          onClick={() => handleOrder({
-                            data,
-                            setData,
-                            index,
-                            id: row.id,
-                            direction: "down",
-                          })}
-                        >
-                          <Icon>expand_more</Icon>
-                        </SuiButton>
-                      </Tooltip>
-
-                    </SuiBox>
-                  </TableCell>
+                        <Tooltip title="Change order backward">
+                          <SuiButton
+                            iconOnly
+                            circular
+                            variant="contained"
+                            disabled={index === data.length - 1}
+                            color="warning"
+                            size="small"
+                            onClick={() => handleOrder({
+                              data,
+                              setData,
+                              index,
+                              id: row.id,
+                              direction: "down",
+                            })}
+                          >
+                            <Icon>expand_more</Icon>
+                          </SuiButton>
+                        </Tooltip>
+                      </SuiBox>
+                    </TableCell>
+                  )}
                   <TableCell component="th" scope="row">
                     <SuiTypography variant="caption">{row.name}</SuiTypography>
                   </TableCell>
