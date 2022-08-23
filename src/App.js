@@ -1,6 +1,4 @@
-/* eslint-disable */;
-
-/**
+/* eslint-disable */ /**
 =========================================================
 * Soft UI Dashboard React - v3.1.0
 =========================================================
@@ -20,7 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { authLogin, authLogout } from "store/authSlice";
 
 // react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -42,10 +40,14 @@ import { useSoftUIController, setMiniSidenav } from "context";
 // Image
 import kemenkes from "assets/images/logos/kemenkes-transparent.png";
 
+import SuiBox from "components/SuiBox";
+import { LoadingState } from "components/Custom/Loading";
+
 export default function App() {
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, direction, layout, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { pathname } = useLocation();
   const reduxDispatch = useDispatch();
 
@@ -55,10 +57,12 @@ export default function App() {
   // Check if authentication
   const checkAuth = () => {
     if (!storageToken) {
-      return reduxDispatch(authLogout());
+      reduxDispatch(authLogout());
+      return setLoading(false);
     }
 
-    return reduxDispatch(authLogin({ token: storageToken }));
+    reduxDispatch(authLogin({ token: storageToken }));
+    return setLoading(false);
   };
 
   // Open sidenav when mouse enter on mini sidenav
@@ -95,29 +99,46 @@ export default function App() {
 
   useEffect(() => {
     // check serviceworker, if exist then unregister
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations()
-        .then(function (registrations) {
-          if (registrations.length) {
-            for (let registration of registrations) {
-              registration.unregister();
-            }
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function (registrations) {
+        if (registrations.length) {
+          for (let registration of registrations) {
+            registration.unregister();
           }
-        });
+        }
+      });
     }
   }, []);
 
-  const getRoutes = (allRoutes) => allRoutes?.map((route) => {
-    if (route.collapse) {
-      return getRoutes(route.collapse);
-    }
+  const getRoutes = (allRoutes) =>
+    allRoutes?.map((route) => {
+      if (route.collapse) {
+        return getRoutes(route.collapse);
+      }
 
-    if (route.route && (role?.hasOwnProperty(route.role) || route.role === "*")) {
-      return <Route exact path={route.route} element={route.component} key={route.key} />;
-    }
+      if (route.route && (role?.hasOwnProperty(route.role) || route.role === "*")) {
+        return <Route exact path={route.route} element={route.component} key={route.key} />;
+      }
 
-    return null;
-  });
+      return null;
+    });
+
+
+  if (loading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <SuiBox
+          sx={{ height: "50vh" }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <LoadingState />
+        </SuiBox>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider theme={theme}>

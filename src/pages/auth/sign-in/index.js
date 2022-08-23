@@ -64,7 +64,7 @@ function SignIn() {
         </Alert>
       )}
 
-      <SuiBox component="form" role="form">
+      <SuiBox component="form" role="form" onSubmit={handleSubmit}>
         <SuiBox mb={2}>
           <SuiBox mb={1} ml={0.5}>
             <SuiTypography component="label" variant="caption" fontWeight="bold">
@@ -98,11 +98,11 @@ function SignIn() {
         </SuiBox>
         <SuiBox mt={4} mb={1}>
           <SuiButton
+            type="submit"
             fullWidth
             variant="gradient"
             color="info"
             disabled={isSubmitting}
-            onClick={handleSubmit}
           >
             {isSubmitting ? "Loading..." : "Sign In"}
           </SuiButton>

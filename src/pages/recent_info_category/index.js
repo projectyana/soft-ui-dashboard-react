@@ -14,7 +14,6 @@ import {
   Icon
 } from "@mui/material";
 
-import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";
 import SuiTypography from "components/SuiTypography";
 import CreateButton from "components/Custom/Button/CreateButton";
@@ -30,7 +29,7 @@ import ModalCreate from "./components/ModalCreate";
 import ModalEdit from "./components/ModalEdit";
 import ModalDelete from "./components/ModalDelete";
 
-export default function RecentInfoCategoryPage() {
+const RecentInfoCategoryPage = () => {
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [modalConfig, setModalConfig] = useState({
@@ -114,4 +113,6 @@ export default function RecentInfoCategoryPage() {
       {modalConfig.show && modalConfig.type === "delete" && <ModalDelete fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
     </DashboardLayout>
   );
-}
+};
+
+export default RecentInfoCategoryPage;

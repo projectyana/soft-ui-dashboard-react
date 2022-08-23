@@ -15,7 +15,6 @@ import {
   Paper
 } from "@mui/material";
 
-import SuiButton from "components/SuiButton";
 import SuiBox from "components/SuiBox";
 import SuiTypography from "components/SuiTypography";
 import { PageLoading } from "components/Custom/Loading";
@@ -28,7 +27,7 @@ import ModalCreate from "./components/ModalCreate";
 import LivesteamCard from "./components/LivesteamCard";
 import CreateButton from "components/Custom/Button/CreateButton";
 
-export default function LivestreamPage() {
+const LivestreamPage = () => {
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState({});
   const [history, setHistory] = useState([]);
@@ -38,7 +37,7 @@ export default function LivestreamPage() {
   });
 
   const fetchData = () => {
-    setFetchStatus({ loading: true });
+    // setFetchStatus({ loading: true });
 
     LivestreamApi.get()
       .then((res) => setData(res.data.data ?? {}))
@@ -71,15 +70,11 @@ export default function LivestreamPage() {
         {/* Create livestream button */}
         {!data?.url && (
           <CreateButton text="Start" onClick={() => setModalConfig({ show: true, type: 'create' })} />
-          // <SuiButton size="medium" color="info" onClick={() => setModalConfig({ show: true, type: 'create' })}>
-          //   Start
-          // </SuiButton>
         )}
       </SuiBox>
 
       {/* No Streaming Found */}
       {!data?.url && (
-
         <Card sx={{ width: '100%', height: 100 }}>
           <SuiBox display="flex" justifyContent="center" alignItems="center">
             <SuiTypography mt={4} >
@@ -95,7 +90,6 @@ export default function LivestreamPage() {
       <SuiBox mt={4}>
         <SuiTypography mb={1} variant="h5">Stream histories</SuiTypography>
         <TableContainer component={Paper} mt={2}>
-          {/* <SuiTypography mx={2} mt={2} variant="h5">Streams histories</SuiTypography> */}
           <Table aria-label="simple table">
             <TableRow>
               <TableCell>
@@ -137,12 +131,12 @@ export default function LivestreamPage() {
             </TableBody>
           </Table>
         </TableContainer>
-
       </SuiBox>
-
 
       {/* Modal  Create */}
       {modalConfig.show && modalConfig.type === "create" && <ModalCreate fetchData={fetchData} modalConfig={modalConfig} setModalConfig={setModalConfig} />}
     </DashboardLayout >
   );
-}
+};
+
+export default LivestreamPage;

@@ -8,6 +8,7 @@ import SuiButton from "components/SuiButton";
 import SuiInput from "components/SuiInput";
 import CustomModal from "components/Custom/Modal";
 import { Select } from "components/Custom/Select";
+import { LoadingState } from "components/Custom/Loading";
 
 import FileUploadApi from "apis/FileUpload";
 
@@ -18,7 +19,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
   const [dataFile, setDataFile] = useState({});
 
   // Submit to server
-  const formSubmitHandler = async (values, { setSubmitting }) => {
+  const formSubmitHandler = (values, { setSubmitting }) => {
     if (dataFile) {
       const formData = new FormData();
       formData.append("name", values.name);
@@ -105,8 +106,10 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
           mt={2}
           size="medium"
           color="info"
-          onClick={handleSubmit}>
-          Save
+          disabled={isSubmitting}
+          onClick={() => handleSubmit()}
+        >
+          {isSubmitting ? <LoadingState size={16} color="light" /> : "Save"}
         </SuiButton>
       </SuiBox>
     </CustomModal>);
