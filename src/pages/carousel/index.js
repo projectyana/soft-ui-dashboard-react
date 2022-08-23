@@ -8,10 +8,12 @@ import {
   Switch,
   Tooltip,
   CardActions,
-  Grid
+  Grid,
+  Icon
 } from "@mui/material";
 
 import SuiBox from "components/SuiBox";
+import SuiButton from "components/SuiButton";
 import ImageCard from "components/Custom/Card/ImageCard";
 import CreateButton from "components/Custom/Button/CreateButton";
 import EditButton from "components/Custom/Button/EditButton";
@@ -27,8 +29,10 @@ import ModalEdit from "./components/ModalEdit";
 import ModalConfigure from "./components/ModalConfigure";
 import ModalDelete from "./components/ModalDelete";
 
+import handleOrder from "./helpers/handleOrder";
+
 export default function CarouselPage() {
-  const { isAllowWrite, isAllowDelete } = getRolePermissions();
+  const { isAllowWrite } = getRolePermissions();
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);
   const [modalConfig, setModalConfig] = useState({
@@ -66,7 +70,6 @@ export default function CarouselPage() {
 
   useEffect(() => {
     fetchData();
-    console.log(data);
 
     return () => { setData([]); };
   }, []);
@@ -91,7 +94,55 @@ export default function CarouselPage() {
               title={row.title}
               description={row.description}
             >
-              <CardActions>
+              <CardActions sx={{ paddingX: 0 }}>
+                {/* allow user to arrange order if user has ability to write */}
+                {isAllowWrite && (
+                  <SuiBox display="flex" justifyContent="start" alignItems="center">
+                    <Tooltip title="Change order forward">
+                      <SuiButton
+                        visibility="hidden"
+                        iconOnly
+                        circular
+                        variant="contained"
+                        disabled={index === 0}
+                        color="info"
+                        size="small"
+                        sx={{ paddingLeft: 0, marginRight: 1 }}
+                        onClick={() => handleOrder({
+                          data,
+                          setData,
+                          index,
+                          id: row.id,
+                          direction: "up",
+                        })}
+                      >
+                        <Icon>keyboard_arrow_left</Icon>
+                      </SuiButton>
+                    </Tooltip>
+
+                    <Tooltip title="Change order backward">
+                      <SuiButton
+                        iconOnly
+                        circular
+                        variant="contained"
+                        disabled={index === data.length - 1}
+                        color="warning"
+                        size="small"
+                        onClick={() => handleOrder({
+                          data,
+                          setData,
+                          index,
+                          id: row.id,
+                          direction: "down",
+                        })}
+                      >
+                        <Icon>keyboard_arrow_right</Icon>
+                      </SuiButton>
+                    </Tooltip>
+
+                  </SuiBox>
+
+                )}
                 <SuiBox >
                   <Tooltip title={row?.active ? 'Carousel is enabled' : 'Carousel is disabled'}>
                     <Switch

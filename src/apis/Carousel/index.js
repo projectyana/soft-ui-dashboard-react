@@ -21,6 +21,10 @@ class CarouselApi {
   delete(id) {
     return Service.delete(`/bo/carousel/${id}`);
   }
+
+  orderMove(id, direction) {
+    return Service.post(`bo/carousel/${id}/${direction}`);
+  }
 }
 
 
