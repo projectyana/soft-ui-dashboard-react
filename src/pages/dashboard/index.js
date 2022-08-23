@@ -118,7 +118,7 @@ export default function AppDashboard() {
 
                 <Grid item xs={12} sm={6} xl={3}>
                   <MiniStatisticsCard
-                    title={{ text: "Carousel" }}
+                    title={{ text: "Slider" }}
                     count={dashboard?.carousel_count}
                     icon={{ color: "info", component: <Landscape /> }}
                   />

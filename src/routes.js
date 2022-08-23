@@ -120,7 +120,7 @@ const sideNav = [
   },
   {
     type: "collapse",
-    name: "Carousel",
+    name: "Slider",
     key: "carousel",
     icon: <SVG.CarouselIcon />,
     route: "/carousel",
@@ -165,7 +165,7 @@ const sideNav = [
   },
   {
     type: "collapse",
-    name: "Media",
+    name: "Media & File",
     key: "media",
     icon: <SVG.MediaIcon />,
     route: "/media",

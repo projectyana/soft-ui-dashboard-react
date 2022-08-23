@@ -144,7 +144,7 @@ export default function CarouselPage() {
 
                 )}
                 <SuiBox >
-                  <Tooltip title={row?.active ? 'Carousel is enabled' : 'Carousel is disabled'}>
+                  <Tooltip title={row?.active ? 'Slider is enabled' : 'Slider is disabled'}>
                     <Switch
                       disabled={!isAllowWrite}
                       checked={row?.active === 1 ? true : false}

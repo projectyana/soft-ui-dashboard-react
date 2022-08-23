@@ -43,7 +43,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
         .catch(({ response }) => window.alert(response?.data?.message ?? "Unable to perform this action!"));
     }
     else {
-      window.alert("Image carousel is required!");
+      window.alert("Image slider is required!");
       setSubmitting(false);
     }
   };
@@ -65,7 +65,7 @@ const ModalCreate = ({ fetchData, modalConfig, setModalConfig }) => {
 
   return (
     <CustomModal
-      title="Create New Carousel"
+      title="Create New Slider"
       open={modalConfig.show && modalConfig.type === 'create'}
       setModalConfig={setModalConfig}
     >
