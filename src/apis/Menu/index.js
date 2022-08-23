@@ -32,6 +32,10 @@ class MenuApi {
   delete(id) {
     return Service.delete(`/bo/header_nav/${id}`);
   }
+
+  orderMove(id, direction) {
+    return Service.post(`bo/header_nav/${id}/${direction}`);
+  }
 }
 
 export default new MenuApi();

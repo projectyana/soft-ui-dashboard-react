@@ -13,6 +13,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Tooltip,
   Paper,
 } from "@mui/material";
 
@@ -20,6 +21,8 @@ import SuiBox from "components/SuiBox";
 import SuiButton from "components/SuiButton";
 import SuiTypography from "components/SuiTypography";
 import { LoadingState } from "components/Custom/Loading";
+
+import handleOrder from "../helpers/handleOrder";
 
 import MenuApi from "apis/Menu";
 import CustomModal from "components/Custom/Modal";
@@ -36,7 +39,7 @@ const ModalConfigure = ({ fetchPage, modalConfig, setModalConfig }) => {
   const fetchParent = () => {
     setFetchStatus({ loading: true });
     MenuApi.getSingle(id)
-      .then((res) => setSubmenu(res?.data?.data?.content ?? []))
+      .then((res) => setSubmenu(res?.data?.data?.content?.sort((a, b) => a.order - b.order) ?? []))
       .finally(() => setFetchStatus({ loading: false }));
   };
 
@@ -71,6 +74,9 @@ const ModalConfigure = ({ fetchPage, modalConfig, setModalConfig }) => {
             <Table aria-label="simple table">
               <TableRow>
                 <TableCell>
+                  <SuiTypography variant="h6">&nbsp;</SuiTypography>
+                </TableCell>
+                <TableCell>
                   <SuiTypography variant="h6">Sub Menu</SuiTypography>
                 </TableCell>
                 <TableCell>
@@ -86,6 +92,51 @@ const ModalConfigure = ({ fetchPage, modalConfig, setModalConfig }) => {
               <TableBody>
                 {submenu?.length > 0 ? submenu.map((row, index) => (
                   <TableRow key={row.name} >
+                    <TableCell>
+                      <SuiBox display="flex" justifyContent="start" alignItems="center">
+                        <Tooltip title="Change order forward">
+                          <SuiButton
+                            visibility="hidden"
+                            iconOnly
+                            circular
+                            variant="contained"
+                            disabled={index === 0}
+                            color="info"
+                            size="small"
+                            sx={{ marginRight: 1 }}
+                            onClick={() => handleOrder({
+                              index,
+                              id: row.id,
+                              direction: "up",
+                              data: submenu,
+                              setData: setSubmenu
+                            })}
+                          >
+                            <Icon>expand_less</Icon>
+                          </SuiButton>
+                        </Tooltip>
+
+                        <Tooltip title="Change order backward">
+                          <SuiButton
+                            iconOnly
+                            circular
+                            variant="contained"
+                            disabled={index === submenu.length - 1}
+                            color="warning"
+                            size="small"
+                            onClick={() => handleOrder({
+                              index,
+                              id: row.id,
+                              direction: "down",
+                              data: submenu,
+                              setData: setSubmenu
+                            })}
+                          >
+                            <Icon>expand_more</Icon>
+                          </SuiButton>
+                        </Tooltip>
+                      </SuiBox>
+                    </TableCell>
                     <TableCell component="th" scope="row">
                       <SuiTypography variant="caption">
                         {row.type === "link" ? `${row.name} (${row.url})` : row.name}
