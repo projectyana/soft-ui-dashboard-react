@@ -25,16 +25,14 @@ const TextEditor = ({ formik }) => {
   }, [submitCount]);
 
   return (
-    <SuiBox>
-      <SuiBox mb={3} bgColor="#ffffff" borderRadius="md">
-        <EditorJs
-          holder="editorjs"
-          onInitialize={handleInitialize}
-          tools={EDITOR_JS_TOOLS}
-          defaultValue={values.content ? JSON.parse(values.content) : null}
-          onChange={() => handleSave()}
-        />
-      </SuiBox>
+    <SuiBox xs={{ maxWidth: "650px" }} mb={3} bgColor="#ffffff" borderRadius="md" >
+      <EditorJs
+        holder="editorjs"
+        onInitialize={handleInitialize}
+        tools={EDITOR_JS_TOOLS}
+        defaultValue={values.content ? JSON.parse(values.content) : null}
+        onChange={() => handleSave()}
+      />
     </SuiBox>
   );
 };

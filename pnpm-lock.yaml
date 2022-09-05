@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@editorjs/editorjs': ^2.25.0
+  '@editorjs/embed': ^2.5.2
   '@editorjs/header': ^2.6.2
   '@editorjs/image': ^2.6.2
   '@editorjs/link': ^2.4.1
@@ -24,6 +25,8 @@ specifiers:
   axios: ^0.27.2
   chart.js: 3.4.1
   chroma-js: 2.4.2
+  editorjs-inline-font-size-tool: ^1.0.1
+  editorjs-text-alignment-blocktune: ^1.0.3
   eslint: 8.10.0
   eslint-config-airbnb: 19.0.4
   eslint-config-prettier: 8.4.0
@@ -65,6 +68,7 @@ specifiers:
 
 dependencies:
   '@editorjs/editorjs': 2.25.0
+  '@editorjs/embed': 2.5.2
   '@editorjs/header': 2.6.2
   '@editorjs/image': 2.6.2
   '@editorjs/link': 2.4.1
@@ -87,6 +91,8 @@ dependencies:
   axios: 0.27.2
   chart.js: 3.4.1
   chroma-js: 2.4.2
+  editorjs-inline-font-size-tool: 1.0.1
+  editorjs-text-alignment-blocktune: 1.0.3
   file-saver: 2.0.5
   formik: 2.2.9_react@17.0.2
   grapesjs: 0.19.4
@@ -1641,6 +1647,10 @@ packages:
       codex-notifier: 1.1.2
       codex-tooltip: 1.0.5
       nanoid: 3.3.4
+    dev: false
+
+  /@editorjs/embed/2.5.2:
+    resolution: {integrity: sha512-l+knGtiWwmAjasZARGhFJkQZU2A2kGvPN1orJAtNWLOj7r52IKxFQxHE2FfcYX0lTq15p4iUQAxaY1DwZJF+gw==}
     dev: false
 
   /@editorjs/header/2.6.2:
@@ -4741,6 +4751,14 @@ packages:
 
   /duplexer/0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
+    dev: false
+
+  /editorjs-inline-font-size-tool/1.0.1:
+    resolution: {integrity: sha512-ZuwRGaLrPBwPqW9KawMGjWuvyvPGO/tPUReWYBdyqAmFuOB5H5nw8TK1gAVIMFp7Q+vT0pQdscgHwnktj8pd5w==}
+    dev: false
+
+  /editorjs-text-alignment-blocktune/1.0.3:
+    resolution: {integrity: sha512-DAJ2LJP+WjETvU4lVOJCqZ1kZkKHp0GkujkqZgza9DRv7bO46m1M/s2d5Ba5hPFdmqk1vA/ci++MQXgWD7mWYw==}
     dev: false
 
   /ee-first/1.1.1:
