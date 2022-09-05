@@ -50,15 +50,13 @@ const PageEditor = () => {
 
     const finalValue = {
       ...values,
-      tags: selectedTags.map(item => item.value).join(",")
+      tags: selectedTags?.map(item => item.value)?.join(",") ?? ""
     };
 
     if (values.page_type === "editor") {
       // if page_type is editor, then fill html_content with values.content from TextEditor component
       finalValue.html_content = values?.content;
     }
-
-    console.log(finalValue);
 
     action === "create"
       ? PageApi.create(finalValue)

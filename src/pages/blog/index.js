@@ -86,7 +86,7 @@ const BlogMenu = () => {
       {/* Blog Cards */}
       <Grid container spacing={2}>
         {data?.length > 0 && data.map((row, index) => (
-          <Grid key={row.title} item xs={6} md={4}>
+          <Grid key={row.title} item xs={12} md={4}>
             <BlogCard
               alt={row.title}
               image={row.link}

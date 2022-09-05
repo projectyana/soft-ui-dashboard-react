@@ -36,7 +36,7 @@ import ModalDelete from "./components/ModalDelete";
 
 import handleOrder from "./helpers/handleOrder";
 
-export default function RolePage() {
+export default function MenuPage() {
   const { isAllowWrite } = getRolePermissions();
   const [fetchStatus, setFetchStatus] = useState({ loading: true });
   const [data, setData] = useState([]);

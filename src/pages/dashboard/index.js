@@ -131,7 +131,7 @@ export default function AppDashboard() {
                 {dashboard?.recent_blogs?.length > 0 && dashboard?.recent_blogs?.map((row, index) => (
                   <Grid
                     style={{ pointer: 'cursor' }}
-                    key={row.title} item xs={6} md={4}>
+                    key={row.title} item xs={12} md={4}>
                     <BlogCard
                       style={{ marginRight: 2 }}
                       alt={row.title}

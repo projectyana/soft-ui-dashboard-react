@@ -103,7 +103,7 @@ const CategoriesView = ({ modalCreate, setModalCreate }) => {
         : gallery?.length > 0
           ? (<Grid container spacing={2}>
             {gallery?.length > 0 && gallery.map((row, index) => (
-              <Grid key={row.path} item xs={6} md={4}>
+              <Grid key={row.path} item xs={12} md={4}>
                 <GalleryCard
                   image={row.full_path}
                   onDeleteClick={() => setModalConfig({ show: true, type: 'delete', data: { link: row, id: selectedCat }, })}

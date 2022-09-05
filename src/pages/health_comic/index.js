@@ -63,7 +63,7 @@ export default function HealthComicPage() {
 
       <Grid container spacing={2}>
         {data?.length > 0 && data.map((row, index) => (
-          <Grid key={row.title} item xs={6} md={4}>
+          <Grid key={row.title} item xs={12} md={4}>
             <ComicCard
               style={{ marginRight: 2 }}
               alt={row.title}
