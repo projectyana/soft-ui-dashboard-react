@@ -70,6 +70,7 @@ import RecentInfoCategoryPage from "pages/recent_info_category";
 import RecentInfoPage from "pages/recent_info";
 import HealthComicPage from "pages/health_comic";
 import GalleryPage from "pages/gallery";
+import FooterPage from "pages/footer";
 
 // Dashboard sidebar menu
 const sideNav = [
@@ -135,6 +136,15 @@ const sideNav = [
     route: "/menu-configuration",
     component: <MenuConfigurationPage />,
     role: "menu_menuconfiguration"
+  },
+  {
+    type: "collapse",
+    name: "Footer",
+    key: "footer",
+    icon: <SVG.DashboardIcon />,
+    route: "/footer",
+    component: <FooterPage />,
+    role: "menu_dashboard"
   },
   {
     type: "collapse",
